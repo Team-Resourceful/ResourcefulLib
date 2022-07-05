@@ -1,6 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[41,)"
-license = "LGPL-3.0"
+license = "MIT"
+issueTrackerURL="https://github.com/Resourceful-Bees/ResoucefulLib/issues/new/choose"
 
 [[mods]]
     modId = "resoucefullib"
