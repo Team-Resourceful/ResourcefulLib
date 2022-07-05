@@ -60,16 +60,41 @@ components.java {
     }
 }
 
+def ENV = System.getenv()
+
 publishing {
     publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
+        mavenJava(MavenPublication) {
+            artifact remapJar
+
+            artifactId = "$archives_base_name-forge-$minecraft_version"
+
+            pom {
+                name = 'ResourcefulLib'
+                description = 'The library behind Team Resourceful mods and more.'
+                url = 'https://github.com/Resourceful-Bees/ResourcefulLib'
+
+                scm {
+                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulLib.git'
+                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulLib.git'
+                    url = 'https://github.com/Resourceful-Bees/ResourcefulLib'
+                }
+
+                licenses {
+                    license {
+                        name = 'MIT'
+                    }
+                }
+            }
         }
     }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
+        maven {
+            url = "https://maven.resourcefulbees.com/repository/maven-releases/"
+            credentials {
+                username ENV.MAVEN_USER
+                password ENV.MAVEN_PASS
+            }
+        }
     }
 }
