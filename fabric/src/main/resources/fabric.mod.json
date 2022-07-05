@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "resourcefullib",
+  "version": "${version}",
+  "name": "Resourceful Lib",
+  "description": "Library Mod by Team Resourceful",
+  "authors": [
+    "ThatGravyBoat"
+  ],
+  "license": "LGPL-3.0",
+  "environment": "*",
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.19",
+    "architectury": ">=5.6.22"
+  }
+}

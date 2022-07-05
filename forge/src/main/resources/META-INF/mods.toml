@@ -1,0 +1,24 @@
+modLoader = "javafml"
+loaderVersion = "[41,)"
+license = "LGPL-3.0"
+
+[[mods]]
+    modId = "resoucefullib"
+    version = "${version}"
+    displayName = "Resourceful Lib"
+    authors = "ThatGravyBoat"
+    description = "Team Resourceful Library"
+
+[[dependencies.resoucefullib]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "[41,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.resoucefullib]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.19,)"
+    ordering = "NONE"
+    side = "BOTH"
