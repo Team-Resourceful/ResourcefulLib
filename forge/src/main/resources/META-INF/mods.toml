@@ -4,20 +4,20 @@ license = "MIT"
 issueTrackerURL="https://github.com/Resourceful-Bees/ResoucefulLib/issues/new/choose"
 
 [[mods]]
-    modId = "resoucefullib"
+    modId = "resourcefullib"
     version = "${version}"
     displayName = "Resourceful Lib"
     authors = "ThatGravyBoat"
     description = "Team Resourceful Library"
 
-[[dependencies.resoucefullib]]
+[[dependencies.resourcefullib]]
     modId = "forge"
     mandatory = true
     versionRange = "[41,)"
     ordering = "NONE"
     side = "BOTH"
 
-[[dependencies.resoucefullib]]
+[[dependencies.resourcefullib]]
     modId = "minecraft"
     mandatory = true
     versionRange = "[1.19,)"
