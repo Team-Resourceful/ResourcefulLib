@@ -11,9 +11,19 @@ import java.util.Map;
 
 public class YabnParser {
 
-    public static YabnElement parse(SimpleByteReader data) {
-        YabnType type = YabnType.fromId(data.readByte());
-        return getElement(type, data);
+    public static YabnElement parse(SimpleByteReader data) throws YabnException {
+        try {
+            YabnType type = YabnType.fromId(data.readByte());
+            return getElement(type, data);
+        }catch (Exception exception) {
+            if (exception instanceof YabnException) {
+                throw exception;
+            } else if (exception instanceof ArrayIndexOutOfBoundsException) {
+                throw new YabnException("Array index out of bounds, make sure there is an EOD byte at the end of the data that requires it.");
+            } else {
+                throw new YabnException(exception.getMessage());
+            }
+        }
     }
 
     private static YabnElement read(SimpleByteReader data) {
@@ -49,6 +59,7 @@ public class YabnParser {
             case FLOAT -> new YabnPrimitive(new FloatContents(data.readFloat()));
             case DOUBLE -> new YabnPrimitive(new DoubleContents(data.readDouble()));
             case STRING -> new YabnPrimitive(new StringContents(data.readString()));
+            case STRING_EMPTY -> new YabnPrimitive(new StringContents(""));
             case ARRAY -> readArray(data);
             case OBJECT -> read(data);
         };

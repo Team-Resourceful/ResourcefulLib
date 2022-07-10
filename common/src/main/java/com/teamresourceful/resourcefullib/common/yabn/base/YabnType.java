@@ -15,8 +15,9 @@ public enum YabnType {
     DOUBLE(0x08),
     FLOAT(0x09),
     STRING(0x0A),
-    ARRAY(0x0B),
-    OBJECT(0x0C);
+    STRING_EMPTY(0x0B),
+    ARRAY(0x0C),
+    OBJECT(0x0D);
 
     public final byte id;
 
@@ -30,6 +31,6 @@ public enum YabnType {
                 return value;
             }
         }
-        throw new IllegalArgumentException("Invalid YABN type id: " + id);
+        throw new YabnException("Invalid YABN type id: " + id);
     }
 }
