@@ -9,7 +9,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class YabnParser {
+public final class YabnParser {
+
+    private YabnParser() {
+    }
+
+    public static YabnElement parseCompress(SimpleByteReader data) throws YabnException {
+        return YabnCompressor.compress(parse(data));
+    }
 
     public static YabnElement parse(SimpleByteReader data) throws YabnException {
         try {

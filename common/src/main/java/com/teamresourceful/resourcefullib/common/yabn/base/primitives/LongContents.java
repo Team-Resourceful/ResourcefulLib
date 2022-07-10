@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefullib.common.yabn.base.primitives;
 import com.google.common.primitives.Longs;
 import com.teamresourceful.resourcefullib.common.yabn.base.YabnType;
 
-public record LongContents(long value) implements PrimitiveContents {
+public record LongContents(long value) implements NumberPrimitiveContents {
 
     @Override
     public YabnType getId() {
@@ -13,5 +13,10 @@ public record LongContents(long value) implements PrimitiveContents {
     @Override
     public byte[] toData() {
         return Longs.toByteArray(value);
+    }
+
+    @Override
+    public Number getValue() {
+        return value;
     }
 }

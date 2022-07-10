@@ -9,7 +9,10 @@ import com.teamresourceful.resourcefullib.common.yabn.base.primitives.*;
 
 import java.math.BigDecimal;
 
-public class YabnConverter {
+public final class YabnConverter {
+
+    private YabnConverter() {
+    }
 
     public static YabnElement fromJson(JsonElement json) {
         if (json instanceof JsonObject obj) {
@@ -27,14 +30,7 @@ public class YabnConverter {
                 final BigDecimal value = primitive.getAsBigDecimal();
                 try {
                     final long l = value.longValueExact();
-                    if ((byte) l == l) {
-                        return new YabnPrimitive(new ByteContents((byte) l));
-                    } else if ((short) l == l) {
-                        return new YabnPrimitive(new ShortContents((short) l));
-                    } else if ((int) l == l) {
-                        return new YabnPrimitive(new IntContents((int) l));
-                    }
-                    return new YabnPrimitive(new LongContents(l));
+                    return YabnCompressor.compressNonFloatingNumber(l);
                 } catch (final ArithmeticException e) {
                     final double d = value.doubleValue();
                     return new YabnPrimitive((float) d == d ? new FloatContents((float) d) : new DoubleContents(d));
