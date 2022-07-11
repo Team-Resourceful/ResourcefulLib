@@ -35,21 +35,21 @@ public final class YabnParser {
 
     private static YabnElement read(SimpleByteReader data) {
         Map<String, YabnElement> obj = new LinkedHashMap<>();
-        do {
+        while (data.getByte() != YabnElement.EOD) {
             YabnType type = YabnType.fromId(data.readByte());
             String key = data.readString();
             obj.put(key, getElement(type, data));
-        } while (data.getByte() != YabnElement.EOD);
+        }
         data.readByte(); // skip 0x00 because it needs to go to the next elements.
         return new YabnObject(obj);
     }
 
     private static YabnArray readArray(SimpleByteReader data) {
         List<YabnElement> elements = new ArrayList<>();
-        do {
+        while (data.getByte() != YabnElement.EOD) {
             YabnType type = YabnType.fromId(data.readByte());
             elements.add(getElement(type, data));
-        } while (data.getByte() != YabnElement.EOD);
+        }
         data.readByte(); // skip 0x00 because it needs to go to the next elements.
         return new YabnArray(elements);
     }
