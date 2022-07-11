@@ -56,17 +56,17 @@ public final class YabnParser {
 
     private static YabnElement getElement(YabnType type, SimpleByteReader data) {
         return switch (type) {
-            case NULL -> new YabnPrimitive(NullContents.INSTANCE);
-            case BOOLEAN_TRUE -> new YabnPrimitive(new BooleanContents(true));
-            case BOOLEAN_FALSE -> new YabnPrimitive(new BooleanContents(false));
-            case BYTE -> new YabnPrimitive(new ByteContents(data.readByte()));
-            case SHORT -> new YabnPrimitive(new ShortContents(data.readShort()));
-            case INT -> new YabnPrimitive(new IntContents(data.readInt()));
-            case LONG -> new YabnPrimitive(new LongContents(data.readLong()));
-            case FLOAT -> new YabnPrimitive(new FloatContents(data.readFloat()));
-            case DOUBLE -> new YabnPrimitive(new DoubleContents(data.readDouble()));
-            case STRING -> new YabnPrimitive(new StringContents(data.readString()));
-            case STRING_EMPTY -> new YabnPrimitive(new StringContents(""));
+            case NULL -> NullContents.NULL;
+            case BOOLEAN_TRUE -> YabnPrimitive.ofBoolean(true);
+            case BOOLEAN_FALSE -> YabnPrimitive.ofBoolean(false);
+            case BYTE -> YabnPrimitive.ofByte(data.readByte());
+            case SHORT -> YabnPrimitive.ofShort(data.readShort());
+            case INT -> YabnPrimitive.ofInt(data.readInt());
+            case LONG -> YabnPrimitive.ofLong(data.readLong());
+            case FLOAT -> YabnPrimitive.ofFloat(data.readFloat());
+            case DOUBLE -> YabnPrimitive.ofDouble(data.readDouble());
+            case STRING -> YabnPrimitive.ofString(data.readString());
+            case STRING_EMPTY -> YabnPrimitive.ofString("");
             case ARRAY -> readArray(data);
             case OBJECT -> read(data);
         };

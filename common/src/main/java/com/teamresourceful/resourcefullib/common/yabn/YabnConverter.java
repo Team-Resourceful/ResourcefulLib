@@ -24,20 +24,18 @@ public final class YabnConverter {
             arr.forEach(element -> array.add(fromJson(element)));
             return array;
         } else if (json instanceof JsonPrimitive primitive) {
-            if (primitive.isString()) return new YabnPrimitive(new StringContents(primitive.getAsString()));
-            else if (primitive.isBoolean()) return new YabnPrimitive(new BooleanContents(primitive.getAsBoolean()));
+            if (primitive.isString()) return YabnPrimitive.ofString(primitive.getAsString());
+            else if (primitive.isBoolean()) return YabnPrimitive.ofBoolean(primitive.getAsBoolean());
             else if (primitive.isNumber()) {
                 final BigDecimal value = primitive.getAsBigDecimal();
                 try {
-                    final long l = value.longValueExact();
-                    return YabnCompressor.compressNonFloatingNumber(l);
+                    return YabnCompressor.compressNonFloatingNumber(value.longValueExact());
                 } catch (final ArithmeticException e) {
-                    final double d = value.doubleValue();
-                    return new YabnPrimitive((float) d == d ? new FloatContents((float) d) : new DoubleContents(d));
+                    return YabnCompressor.compressFloatingNumber(value.doubleValue());
                 }
             }
         } else if (json.isJsonNull()) {
-            return new YabnPrimitive(NullContents.INSTANCE);
+            return NullContents.NULL;
         }
         throw new IllegalArgumentException("Unsupported json element type: " + json.getClass().getName());
     }

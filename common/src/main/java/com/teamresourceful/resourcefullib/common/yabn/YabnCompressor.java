@@ -28,7 +28,7 @@ public final class YabnCompressor {
             if (primitive.contents() instanceof NumberPrimitiveContents numberContent) {
                 if (numberContent instanceof DoubleContents doubles) {
                     if ((float)doubles.getAsDouble() == doubles.getAsDouble()) {
-                        return new YabnPrimitive(new FloatContents(doubles.getAsFloat()));
+                        return YabnPrimitive.ofFloat(doubles.getAsFloat());
                     }
                 } else if (!(numberContent instanceof FloatContents)) {
                     return compressNonFloatingNumber(numberContent.getAsLong());
@@ -39,10 +39,14 @@ public final class YabnCompressor {
     }
 
     public static YabnElement compressNonFloatingNumber(long l) {
-        if ((byte) l == l) return new YabnPrimitive(new ByteContents((byte) l));
-        else if ((short) l == l) return new YabnPrimitive(new ShortContents((short) l));
-        else if ((int) l == l) return new YabnPrimitive(new IntContents((int) l));
-        return new YabnPrimitive(new LongContents(l));
+        if ((byte) l == l) return YabnPrimitive.ofByte((byte) l);
+        else if ((short) l == l) return YabnPrimitive.ofShort((short) l);
+        else if ((int) l == l) return YabnPrimitive.ofInt((int) l);
+        return YabnPrimitive.ofLong(l);
+    }
+
+    public static YabnElement compressFloatingNumber(double d) {
+        return (float) d == d ? YabnPrimitive.ofFloat((float) d) : YabnPrimitive.ofDouble(d);
     }
 
 }
