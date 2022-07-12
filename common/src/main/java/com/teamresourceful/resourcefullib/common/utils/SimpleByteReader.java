@@ -3,10 +3,6 @@ package com.teamresourceful.resourcefullib.common.utils;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class SimpleByteReader {
 
@@ -29,21 +25,15 @@ public class SimpleByteReader {
     }
 
     public short readShort() {
-        short value = Shorts.fromByteArray(Arrays.copyOfRange(data, index, index+2));
-        index += 2;
-        return value;
+        return Shorts.fromBytes(readByte(), readByte());
     }
 
     public int readInt() {
-        int value = Ints.fromByteArray(Arrays.copyOfRange(data, index, index+4));
-        index += 4;
-        return value;
+        return Ints.fromBytes(readByte(), readByte(), readByte(), readByte());
     }
 
     public long readLong() {
-        long value = Longs.fromByteArray(Arrays.copyOfRange(data, index, index+8));
-        index += 8;
-        return value;
+        return Longs.fromBytes(readByte(), readByte(), readByte(), readByte(), readByte(), readByte(), readByte(), readByte());
     }
 
     public boolean readBoolean() {
@@ -58,13 +48,17 @@ public class SimpleByteReader {
         return Double.longBitsToDouble(readLong());
     }
 
+    public char readChar() {
+        return (char) readByte();
+    }
+
     public String readString() {
-        byte[] stringData = new byte[0];
+        StringBuilder builder = new StringBuilder();
         while (peek() != 0x00) {
-            stringData = ArrayUtils.add(stringData, readByte());
+            builder.append(readChar());
         }
         readByte(); // skip 0x00
-        return new String(stringData, StandardCharsets.UTF_8);
+        return builder.toString();
     }
 
 }
