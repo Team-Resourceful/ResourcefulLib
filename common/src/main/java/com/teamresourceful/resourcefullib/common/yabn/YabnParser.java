@@ -35,7 +35,7 @@ public final class YabnParser {
 
     private static YabnElement read(SimpleByteReader data) {
         Map<String, YabnElement> obj = new LinkedHashMap<>();
-        while (data.getByte() != YabnElement.EOD) {
+        while (data.peek() != YabnElement.EOD) {
             YabnType type = YabnType.fromId(data.readByte());
             String key = data.readString();
             obj.put(key, getElement(type, data));
@@ -46,7 +46,7 @@ public final class YabnParser {
 
     private static YabnArray readArray(SimpleByteReader data) {
         List<YabnElement> elements = new ArrayList<>();
-        while (data.getByte() != YabnElement.EOD) {
+        while (data.peek() != YabnElement.EOD) {
             YabnType type = YabnType.fromId(data.readByte());
             elements.add(getElement(type, data));
         }

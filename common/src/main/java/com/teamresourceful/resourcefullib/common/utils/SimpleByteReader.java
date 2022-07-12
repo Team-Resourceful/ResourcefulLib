@@ -20,7 +20,7 @@ public class SimpleByteReader {
     /**
      * Gives the next byte in data without advancing the index.
      */
-    public byte getByte() {
+    public byte peek() {
         return data[index];
     }
 
@@ -60,7 +60,7 @@ public class SimpleByteReader {
 
     public String readString() {
         byte[] stringData = new byte[0];
-        while (getByte() != 0x00) {
+        while (peek() != 0x00) {
             stringData = ArrayUtils.add(stringData, readByte());
         }
         readByte(); // skip 0x00
