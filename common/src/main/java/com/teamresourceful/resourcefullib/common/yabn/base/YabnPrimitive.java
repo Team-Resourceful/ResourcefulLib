@@ -40,7 +40,7 @@ public record YabnPrimitive(PrimitiveContents contents) implements YabnElement {
 
     @Override
     public byte[] toData(@Nullable String key) {
-        if (key == null) toData();
+        if (key == null) return toData();
         byte[] data = contents.toData();
         if (data.length == 0) {
             return YabnElement.key(contents.getId().id, key);

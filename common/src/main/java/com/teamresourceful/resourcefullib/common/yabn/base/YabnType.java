@@ -15,9 +15,12 @@ public enum YabnType {
     DOUBLE(0x08),
     FLOAT(0x09),
     STRING(0x0A),
-    STRING_EMPTY(0x0B),
+    EMPTY_STRING(0x0B),
     ARRAY(0x0C),
-    OBJECT(0x0D);
+    OBJECT(0x0D),
+    EMPTY_ARRAY(0x0E),
+    EMPTY_OBJECT(0x0F);
+
 
     public final byte id;
 

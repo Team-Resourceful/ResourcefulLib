@@ -19,12 +19,14 @@ public record YabnArray(List<YabnElement> elements) implements YabnElement {
 
     @Override
     public byte[] toData(@Nullable String key) {
-        if (key == null) toData();
+        if (key == null) return toData();
+        if (elements.isEmpty()) return YabnElement.key(YabnType.EMPTY_ARRAY.id, key);
         return ArrayUtils.addAll(YabnElement.key(YabnType.ARRAY.id, key), internalData());
     }
 
     @Override
     public byte[] toData() {
+        if (elements.isEmpty()) return new byte[]{YabnType.EMPTY_ARRAY.id};
         return ArrayUtils.addAll(new byte[]{YabnType.ARRAY.id}, internalData());
     }
 

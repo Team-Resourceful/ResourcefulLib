@@ -66,9 +66,11 @@ public final class YabnParser {
             case FLOAT -> YabnPrimitive.ofFloat(data.readFloat());
             case DOUBLE -> YabnPrimitive.ofDouble(data.readDouble());
             case STRING -> YabnPrimitive.ofString(data.readString());
-            case STRING_EMPTY -> YabnPrimitive.ofString("");
+            case EMPTY_STRING -> YabnPrimitive.ofString("");
             case ARRAY -> readArray(data);
             case OBJECT -> read(data);
+            case EMPTY_ARRAY -> new YabnArray();
+            case EMPTY_OBJECT -> new YabnObject();
         };
     }
 }

@@ -23,12 +23,14 @@ public record YabnObject(Map<String, YabnElement> elements) implements YabnEleme
 
     @Override
     public byte[] toData(@Nullable String key) {
-        if (key == null) toData();
+        if (key == null) return toData();
+        if (elements.isEmpty()) return YabnElement.key(YabnType.EMPTY_OBJECT.id, key);
         return ArrayUtils.addAll(YabnElement.key(YabnType.OBJECT.id, key), internalData());
     }
 
     @Override
     public byte[] toData() {
+        if (elements.isEmpty()) return new byte[]{YabnType.EMPTY_OBJECT.id};
         return ArrayUtils.addAll(new byte[]{YabnType.OBJECT.id}, internalData());
     }
 
