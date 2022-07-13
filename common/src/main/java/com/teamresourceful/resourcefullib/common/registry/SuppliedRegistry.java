@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefullib.common.registry;
 
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -17,11 +15,11 @@ import java.util.function.Supplier;
 @ApiStatus.Experimental
 public class SuppliedRegistry<K, T> {
 
-    private final Map<K, Supplier<? extends T>> needsRegistration = new HashMap<>();
-    protected List<Object<K, ? extends T>> registration = new ArrayList<>();
+    protected final Map<K, Supplier<? extends T>> needsRegistration = new HashMap<>();
+    protected List<Definition<K, ? extends T>> registration = new ArrayList<>();
     protected final String modId;
-    private Function<K, T> registryGetter;
-    private boolean registered = false;
+    protected Function<K, T> registryGetter;
+    protected boolean registered = false;
 
     public SuppliedRegistry(String modId) {
         this.modId = modId;
@@ -31,16 +29,16 @@ public class SuppliedRegistry<K, T> {
         return new SuppliedRegistry<>(modId);
     }
 
-    public static <T> ResourceSuppliedRegistry<T> ofResource(String modId) {
-        return new ResourceSuppliedRegistry<>(modId);
-    }
-
-    public <O extends T> Object<K, T> register(K id, Supplier<? extends O> supplier) {
+    public <O extends T> Definition<K, T> register(K id, Supplier<? extends O> supplier) {
         if (registered) throw new RuntimeException("Cannot register after registration has occurred");
         needsRegistration.put(id, supplier);
-        var obj = new Object<>(this, id);
+        var obj = define(id);
         registration.add(obj);
         return obj;
+    }
+
+    protected Definition<K, T> define(K id) {
+        return new Definition<>(this, id);
     }
 
     public void startRegistration(BiConsumer<K, Supplier<? extends T>> registerer, Function<K, T> getter) {
@@ -52,38 +50,11 @@ public class SuppliedRegistry<K, T> {
         this.registration = Collections.unmodifiableList(registration); // freeze registry!
     }
 
-    public List<Object<K, ? extends T>> getRegistration() {
+    public List<Definition<K, ? extends T>> getRegistration() {
         return registration;
     }
 
     public boolean isFrozen() {
         return this.registered;
-    }
-
-    public static class Object<K, T> implements Supplier<T> {
-
-        private final K id;
-        private final SuppliedRegistry<K, T> supplier;
-
-        private T value;
-        private boolean hasValue = false;
-
-        public Object(SuppliedRegistry<K, T> supplier, K id) {
-            this.id = id;
-            this.supplier = supplier;
-        }
-
-        @Nullable
-        @Override
-        public T get() {
-            if (!hasValue) {
-                if (!supplier.registered) {
-                    throw new RuntimeException("Cannot get value before registration has occurred");
-                }
-                value = supplier.registryGetter.apply(id);
-                hasValue = true;
-            }
-            return value;
-        }
     }
 }

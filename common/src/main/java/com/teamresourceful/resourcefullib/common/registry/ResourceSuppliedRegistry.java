@@ -12,7 +12,11 @@ public class ResourceSuppliedRegistry<T> extends SuppliedRegistry<ResourceLocati
         super(modId);
     }
 
-    public <O extends T> Object<ResourceLocation, T> register(String id, Supplier<? extends O> supplier) {
+    public static <T> ResourceSuppliedRegistry<T> create(String modId) {
+        return new ResourceSuppliedRegistry<>(modId);
+    }
+
+    public <O extends T> Definition<ResourceLocation, T> register(String id, Supplier<? extends O> supplier) {
         return super.register(new ResourceLocation(modId, id), supplier);
     }
 
