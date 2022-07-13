@@ -83,8 +83,10 @@ public class YabnOps implements DynamicOps<YabnElement> {
 
     @Override
     public DataResult<Boolean> getBooleanValue(YabnElement input) {
-        if (input instanceof YabnPrimitive primitive && primitive.contents() instanceof BooleanContents contents) {
-            return DataResult.success(contents.value());
+        if (input instanceof YabnPrimitive primitive) {
+            final PrimitiveContents contents = primitive.contents();
+            if (contents instanceof BooleanContents bool) return DataResult.success(bool.value());
+            if (contents instanceof NumberPrimitiveContents num) return DataResult.success(num.getAsByte() != 0);
         }
         return DataResult.error("Not a boolean: " + input);
     }
@@ -121,8 +123,8 @@ public class YabnOps implements DynamicOps<YabnElement> {
     public DataResult<YabnElement> mergeToList(YabnElement list, List<YabnElement> values) {
         if (!(list instanceof YabnArray) && list != empty()) return DataResult.error("Not a list: " + list);
         final YabnArray array = new YabnArray();
-        if (list instanceof YabnArray oldArray) array.elements().addAll(oldArray.elements());
-        array.elements().addAll(values);
+        if (list instanceof YabnArray oldArray) oldArray.elements().forEach(array::add);
+        values.forEach(array::add);
         return DataResult.success(array);
     }
 
@@ -134,7 +136,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
         }
 
         final YabnObject object = new YabnObject();
-        if (map instanceof YabnObject oldObject) object.elements().putAll(oldObject.elements());
+        if (map instanceof YabnObject oldObject) oldObject.elements().forEach(object::put);
         object.elements().put(getAsString(primitive), value);
         return DataResult.success(object);
     }
@@ -146,7 +148,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
         }
 
         final YabnObject object = new YabnObject();
-        if (map instanceof YabnObject oldObject) object.elements().putAll(oldObject.elements());
+        if (map instanceof YabnObject oldObject) oldObject.elements().forEach(object::put);
 
         final List<YabnElement> missed = Lists.newArrayList();
 

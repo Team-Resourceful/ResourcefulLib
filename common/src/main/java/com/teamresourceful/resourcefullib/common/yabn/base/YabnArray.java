@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.yabn.base;
 
+import com.teamresourceful.resourcefullib.common.yabn.base.primitives.NullContents;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ public record YabnArray(List<YabnElement> elements) implements YabnElement {
     }
 
     public YabnArray add(YabnElement element) {
-        elements.add(element);
+        elements.add(element == null ? NullContents.NULL : element);
         return this;
     }
 
