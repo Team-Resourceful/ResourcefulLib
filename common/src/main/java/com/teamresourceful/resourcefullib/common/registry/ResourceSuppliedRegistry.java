@@ -16,8 +16,13 @@ public class ResourceSuppliedRegistry<T> extends SuppliedRegistry<ResourceLocati
         return new ResourceSuppliedRegistry<>(modId);
     }
 
-    public <O extends T> Definition<ResourceLocation, T> register(String id, Supplier<? extends O> supplier) {
-        return super.register(new ResourceLocation(modId, id), supplier);
+    public <O extends T> ResourceDef<O> register(String id, Supplier<? extends O> supplier) {
+        if (registered) throw new RuntimeException("Cannot register after registration has occurred");
+        ResourceLocation res = new ResourceLocation(modId, id);
+        needsRegistration.put(res, supplier);
+        ResourceDef<? extends T> obj = new ResourceDef<>(this, res);
+        registration.add(obj);
+        //noinspection unchecked
+        return (ResourceDef<O>) obj;
     }
-
 }

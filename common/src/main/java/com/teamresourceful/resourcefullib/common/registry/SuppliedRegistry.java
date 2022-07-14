@@ -29,16 +29,13 @@ public class SuppliedRegistry<K, T> {
         return new SuppliedRegistry<>(modId);
     }
 
-    public <O extends T> Definition<K, T> register(K id, Supplier<? extends O> supplier) {
+    public <O extends T> Definition<K, O> register(K id, Supplier<? extends O> supplier) {
         if (registered) throw new RuntimeException("Cannot register after registration has occurred");
         needsRegistration.put(id, supplier);
-        var obj = define(id);
+        var obj = new Definition<>(this, id);
         registration.add(obj);
-        return obj;
-    }
-
-    protected Definition<K, T> define(K id) {
-        return new Definition<>(this, id);
+        //noinspection unchecked
+        return (Definition<K, O>) obj;
     }
 
     public void startRegistration(BiConsumer<K, Supplier<? extends T>> registerer, Function<K, T> getter) {
