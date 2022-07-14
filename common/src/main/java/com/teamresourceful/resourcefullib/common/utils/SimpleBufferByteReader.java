@@ -1,16 +1,20 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
+import com.teamresourceful.resourcefullib.common.utils.readers.ByteReader;
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
- * This class is used to wrap the vanilla {@link FriendlyByteBuf} class to be able to be used in a YABN parser.
+ * The reason for replcament is that it uses the base byte buf instead of Mojangs friendly byte buf.
+ * @deprecated This has been replaced by {@link com.teamresourceful.resourcefullib.common.utils.readers.ByteBufByteReader}
  */
-public class SimpleBufferByteReader extends SimpleByteReader {
+@Deprecated(since = "1.0.4", forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.19.1")
+public class SimpleBufferByteReader implements ByteReader {
 
     private final FriendlyByteBuf buf;
 
     public SimpleBufferByteReader(FriendlyByteBuf buf) {
-        super(new byte[0]);
         this.buf = buf;
     }
 
@@ -20,23 +24,13 @@ public class SimpleBufferByteReader extends SimpleByteReader {
     }
 
     @Override
+    public void advance() {
+        buf.readByte();
+    }
+
+    @Override
     public byte readByte() {
         return buf.readByte();
-    }
-
-    @Override
-    public short readShort() {
-        return buf.readShort();
-    }
-
-    @Override
-    public int readInt() {
-        return buf.readInt();
-    }
-
-    @Override
-    public long readLong() {
-        return buf.readLong();
     }
 
 }

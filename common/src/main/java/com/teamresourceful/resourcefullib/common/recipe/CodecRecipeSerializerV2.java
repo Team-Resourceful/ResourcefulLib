@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.codecs.yabn.YabnOps;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
-import com.teamresourceful.resourcefullib.common.utils.SimpleBufferByteReader;
+import com.teamresourceful.resourcefullib.common.utils.readers.ByteBufByteReader;
 import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +45,7 @@ public class CodecRecipeSerializerV2<R extends Recipe<?>> implements RecipeSeria
     @Override
     public R fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
         try {
-            return networkCodec.apply(id).parse(YabnOps.COMPRESSED, YabnParser.parse(new SimpleBufferByteReader(buffer)))
+            return networkCodec.apply(id).parse(YabnOps.COMPRESSED, YabnParser.parse(new ByteBufByteReader(buffer)))
                     .result()
                     .orElse(null);
         }catch (Exception e) {

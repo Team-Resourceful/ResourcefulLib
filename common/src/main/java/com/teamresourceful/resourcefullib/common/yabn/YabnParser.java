@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefullib.common.yabn;
 
-import com.teamresourceful.resourcefullib.common.utils.SimpleByteReader;
+import com.teamresourceful.resourcefullib.common.utils.readers.ByteReader;
 import com.teamresourceful.resourcefullib.common.yabn.base.*;
 import com.teamresourceful.resourcefullib.common.yabn.base.primitives.NullContents;
 
@@ -14,11 +14,11 @@ public final class YabnParser {
     private YabnParser() {
     }
 
-    public static YabnElement parseCompress(SimpleByteReader data) throws YabnException {
+    public static YabnElement parseCompress(ByteReader data) throws YabnException {
         return YabnCompressor.compress(parse(data));
     }
 
-    public static YabnElement parse(SimpleByteReader data) throws YabnException {
+    public static YabnElement parse(ByteReader data) throws YabnException {
         try {
             YabnType type = YabnType.fromId(data.readByte());
             return getElement(type, data);
@@ -33,28 +33,28 @@ public final class YabnParser {
         }
     }
 
-    private static YabnElement read(SimpleByteReader data) {
+    private static YabnElement read(ByteReader data) {
         Map<String, YabnElement> obj = new LinkedHashMap<>();
         while (data.peek() != YabnElement.EOD) {
             YabnType type = YabnType.fromId(data.readByte());
             String key = data.readString();
             obj.put(key, getElement(type, data));
         }
-        data.readByte(); // skip 0x00 because it needs to go to the next elements.
+        data.advance(); // skip 0x00 because it needs to go to the next elements.
         return new YabnObject(obj);
     }
 
-    private static YabnArray readArray(SimpleByteReader data) {
+    private static YabnArray readArray(ByteReader data) {
         List<YabnElement> elements = new ArrayList<>();
         while (data.peek() != YabnElement.EOD) {
             YabnType type = YabnType.fromId(data.readByte());
             elements.add(getElement(type, data));
         }
-        data.readByte(); // skip 0x00 because it needs to go to the next elements.
+        data.advance(); // skip 0x00 because it needs to go to the next elements.
         return new YabnArray(elements);
     }
 
-    private static YabnElement getElement(YabnType type, SimpleByteReader data) {
+    private static YabnElement getElement(YabnType type, ByteReader data) {
         return switch (type) {
             case NULL -> NullContents.NULL;
             case BOOLEAN_TRUE -> YabnPrimitive.ofBoolean(true);
