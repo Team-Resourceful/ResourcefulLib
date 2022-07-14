@@ -1,32 +1,15 @@
 package com.teamresourceful.resourcefullib.client.scissor;
 
-public class ClosingScissorBox extends ScissorBox implements AutoCloseable {
+import com.mojang.blaze3d.systems.RenderSystem;
 
-    public ClosingScissorBox(int x, int y, int width, int height) {
-        super(x, y, width, height);
-        super.start();
-    }
+public record ClosingScissorBox(int x, int y, int width, int height) implements AutoCloseable {
 
-    /**
-     * This method is unsupported with a closing scissor box.
-     * @throws UnsupportedOperationException if called, this method is unsupported with a closing scissor box.
-     */
-    @Override
-    public ScissorBox start() {
-        throw new UnsupportedOperationException("Cannot start a closing scissor box");
-    }
-
-    /**
-     * This method is unsupported with a closing scissor box.
-     * @throws UnsupportedOperationException if called, this method is unsupported with a closing scissor box.
-     */
-    @Override
-    public ScissorBox end() {
-        throw new UnsupportedOperationException("Cannot end a closing scissor box");
+    public ClosingScissorBox {
+        RenderSystem.enableScissor(x, y, width, height);
     }
 
     @Override
     public void close() {
-        super.end();
+        RenderSystem.disableScissor();
     }
 }
