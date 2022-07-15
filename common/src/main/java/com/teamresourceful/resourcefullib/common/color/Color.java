@@ -167,7 +167,7 @@ public class Color {
         f[0] = rgbaValue[0];
         f[1] = rgbaValue[1];
         f[2] = rgbaValue[2];
-        f[3] = rgbaValue[4];
+        f[3] = rgbaValue[3];
         return f;
     }
 
