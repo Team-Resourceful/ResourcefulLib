@@ -18,6 +18,9 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 public class Color {
+
+    private static boolean rainbowInitialized = false;
+
     protected static final Map<String, Color> colorsWithNames = new HashMap<>();
 
     public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.value)));
@@ -200,6 +203,8 @@ public class Color {
     //region Rainbow
 
     public static void initRainbow() {
+        if (rainbowInitialized) return;
+        rainbowInitialized = true;
         Scheduling.schedule(() -> {
             if(RAINBOW.r > 0 && RAINBOW.b == 0){
                 RAINBOW.r--;
