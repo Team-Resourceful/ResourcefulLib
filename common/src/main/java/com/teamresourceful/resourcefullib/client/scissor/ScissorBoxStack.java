@@ -9,10 +9,8 @@ public class ScissorBoxStack {
     private final LinkedList<ScissorBox> stack = new LinkedList<>();
 
     public void push(int x, int y, int width, int height) {
-        ScissorBox box = new ScissorBox(x, y, width, height);
-        if (stack.isEmpty()) {
-            box.start();
-        }
+        ScissorBox box = !stack.isEmpty() ? stack.peek().subBox(x, y, width, height) : new ScissorBox(x, y, width, height);
+        box.start();
         stack.push(box);
     }
 
