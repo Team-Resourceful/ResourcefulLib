@@ -86,7 +86,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
         return index < 0 || index >= this.children().size() ? null : this.children().get(index);
     }
 
-    protected void ensureVisible(ListEntry entry) {
+    public void ensureVisible(ListEntry entry) {
         int i = (int) (this.y - this.scrollAmount + this.children().indexOf(entry) * this.itemHeight);
         int j = i - this.y - this.itemHeight;
         if (j < 0) this.setScrollAmount(this.scrollAmount + j);
@@ -150,7 +150,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
         return false;
     }
 
-    protected void setSelected(@Nullable ListEntry entry) {
+    public void setSelected(@Nullable ListEntry entry) {
         this.selected = entry;
         this.onSelection.accept(this.selected);
     }
