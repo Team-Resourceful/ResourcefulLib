@@ -97,7 +97,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseX <= this.x && mouseX >= this.x - this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+        return mouseX <= this.x + this.width && mouseX >= this.x && mouseY <= this.y + this.height && mouseY >= this.y;
     }
 
     @Override
