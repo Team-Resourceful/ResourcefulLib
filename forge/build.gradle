@@ -66,6 +66,9 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact remapJar
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
 
             artifactId = "$archives_base_name-forge-$minecraft_version"
 
