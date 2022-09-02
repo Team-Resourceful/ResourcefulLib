@@ -28,7 +28,7 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
     private static final Map<BlockState, Highlight> STATE_CACHE = new HashMap<>();
     private static final Map<ResourceLocation, Highlight> BOX_CACHE = new HashMap<>();
 
-    public static final Codec<Highlight> HIGHLIGHT_CODEC = ResourceLocation.CODEC.xmap(BOX_CACHE::get, Highlight::id);
+    public static final Codec<Highlight> HIGHLIGHT_CODEC = ResourceLocation.CODEC.xmap(HighlightHandler::getOrThrow, Highlight::id);
 
     public HighlightHandler() {
         super(new Gson(), "resourcefullib/highlights");
@@ -64,5 +64,11 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
             return true;
         }
         return false;
+    }
+
+    private static Highlight getOrThrow(ResourceLocation id) {
+        var highlight = BOX_CACHE.get(id);
+        if (highlight == null) throw new RuntimeException("No highlight with the id '" + id + "' was found!");
+        return highlight;
     }
 }
