@@ -7,6 +7,14 @@
   "authors": [
     "ThatGravyBoat"
   ],
+  "entrypoints": {
+    "client": [
+      "com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabricClient"
+    ]
+  },
+  "mixins": [
+    "resourcefullib.mixins.json"
+  ],
   "license": "MIT",
   "environment": "*",
   "depends": {
