@@ -5,7 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 import java.util.function.Function;
@@ -13,8 +15,17 @@ import java.util.function.ToDoubleFunction;
 
 public final class CodecExtras {
 
+    /**
+     * @deprecated Use {@link #weightedCollection(Codec, ToDoubleFunction) } instead
+     */
+    @Deprecated(since = "1.20", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.20")
     public static <T> Codec<RandomCollection<T>> randomCollection(Codec<T> codec, ToDoubleFunction<T> weighter) {
         return codec.listOf().xmap(set -> RandomCollection.of(set, weighter), collection -> collection.stream().toList());
+    }
+
+    public static <T> Codec<WeightedCollection<T>> weightedCollection(Codec<T> codec, ToDoubleFunction<T> weighter) {
+        return codec.listOf().xmap(set -> WeightedCollection.of(set, weighter), collection -> collection.stream().toList());
     }
 
     public static <T> Codec<Set<T>> set(Codec<T> codec) {

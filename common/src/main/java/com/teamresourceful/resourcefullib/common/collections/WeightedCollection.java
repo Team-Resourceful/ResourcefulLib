@@ -1,6 +1,5 @@
-package com.teamresourceful.resourcefullib.common.utils;
+package com.teamresourceful.resourcefullib.common.collections;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -9,25 +8,20 @@ import java.util.function.ToDoubleFunction;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-/**
- * @deprecated Use {@link com.teamresourceful.resourcefullib.common.collections.WeightedCollection} instead
- */
-@Deprecated(since = "1.20", forRemoval = true)
-@ApiStatus.ScheduledForRemoval(inVersion = "1.20")
-public class RandomCollection<E> implements Collection<E> {
+public class WeightedCollection<E> implements Collection<E> {
     private final NavigableMap<Double, E> map = new TreeMap<>();
     private final Random random;
     private double total = 0;
 
-    public RandomCollection() {
+    public WeightedCollection() {
         this(new Random());
     }
 
-    public RandomCollection(Random random) {
+    public WeightedCollection(Random random) {
         this.random = random;
     }
 
-    public RandomCollection<E> add(double weight, E result) {
+    public WeightedCollection<E> add(double weight, E result) {
         if (weight <= 0) return this;
         total += weight;
         map.put(Math.min(total, Double.MAX_VALUE), result);
@@ -52,7 +46,7 @@ public class RandomCollection<E> implements Collection<E> {
         return weight / total;
     }
 
-    public void forEachWithSelf(BiConsumer<RandomCollection<E>, ? super E> action) {
+    public void forEachWithSelf(BiConsumer<WeightedCollection<E>, ? super E> action) {
         forEach(element -> action.accept(this, element));
     }
 
@@ -135,7 +129,7 @@ public class RandomCollection<E> implements Collection<E> {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        return o instanceof RandomCollection && map.equals(((RandomCollection<?>) o).map);
+        return o instanceof WeightedCollection && map.equals(((WeightedCollection<?>) o).map);
     }
 
     @Override
@@ -143,12 +137,12 @@ public class RandomCollection<E> implements Collection<E> {
         return Objects.hash(total, map);
     }
 
-    public static <T> RandomCollection<T> of(Collection<T> collection, ToDoubleFunction<T> weightGetter) {
+    public static <T> WeightedCollection<T> of(Collection<T> collection, ToDoubleFunction<T> weightGetter) {
         return collection.stream().collect(getCollector(weightGetter));
     }
 
-    public static <T> Collector<T, ?, RandomCollection<T>> getCollector(ToDoubleFunction<T> weightGetter) {
-        return Collector.of(RandomCollection::new, (c, t) -> c.add(weightGetter.applyAsDouble(t), t), (left, right) -> {
+    public static <T> Collector<T, ?, WeightedCollection<T>> getCollector(ToDoubleFunction<T> weightGetter) {
+        return Collector.of(WeightedCollection::new, (c, t) -> c.add(weightGetter.applyAsDouble(t), t), (left, right) -> {
             left.forEach(item -> right.add(weightGetter.applyAsDouble(item), item));
             return right;
         });

@@ -20,17 +20,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class SelectionList extends AbstractContainerEventHandler implements Widget, NarratableEntry, TooltipProvider {
+public class SelectionList<T extends ListEntry> extends AbstractContainerEventHandler implements Widget, NarratableEntry, TooltipProvider {
 
-    private final List<ListEntry> entries = new ArrayList<>();
+    private final List<T> entries = new ArrayList<>();
     private final int x, y, width, height, itemHeight;
-    private final Consumer<@Nullable ListEntry> onSelection;
+    private final Consumer<@Nullable T> onSelection;
 
     @Nullable
-    private ListEntry selected, hovered;
+    private T selected, hovered;
     private double scrollAmount;
 
-    public SelectionList(int x, int y, int width, int height, int itemHeight, Consumer<@Nullable ListEntry> onSelection) {
+    public SelectionList(int x, int y, int width, int height, int itemHeight, Consumer<@Nullable T> onSelection) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -55,15 +55,15 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
     }
 
     @Override
-    public @NotNull List<ListEntry> children() {
+    public @NotNull List<T> children() {
         return this.entries;
     }
 
-    public void addEntry(@NotNull ListEntry entry) {
+    public void addEntry(@NotNull T entry) {
         this.entries.add(entry);
     }
 
-    public boolean removeEntry(ListEntry entry) {
+    public boolean removeEntry(T entry) {
         boolean removed = this.entries.remove(entry);
         if (removed && entry == this.selected) {
             setSelected(null);
@@ -80,13 +80,13 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
     }
 
     @Nullable
-    protected final ListEntry getEntryAtPosition(double mouseX, double mouseY) {
+    protected final T getEntryAtPosition(double mouseX, double mouseY) {
         if (!isMouseOver(mouseX, mouseY)) return null;
         int index = Mth.floor(this.scrollAmount + (mouseY - this.y)) / this.itemHeight;
         return index < 0 || index >= this.children().size() ? null : this.children().get(index);
     }
 
-    public void ensureVisible(ListEntry entry) {
+    public void ensureVisible(T entry) {
         int i = (int) (this.y - this.scrollAmount + this.children().indexOf(entry) * this.itemHeight);
         int j = i - this.y - this.itemHeight;
         if (j < 0) this.setScrollAmount(this.scrollAmount + j);
@@ -102,7 +102,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        ListEntry entry = this.getEntryAtPosition(mouseX, mouseY);
+        T entry = this.getEntryAtPosition(mouseX, mouseY);
         if (entry != null) {
             if (entry.mouseClicked(mouseX, mouseY, button)) {
                 this.setFocused(entry);
@@ -141,7 +141,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
                     return true;
                 }
 
-                ListEntry entry = this.children().get(clampedIndex);
+                T entry = this.children().get(clampedIndex);
                 setSelected(entry);
                 this.ensureVisible(entry);
             }
@@ -150,7 +150,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
         return false;
     }
 
-    public void setSelected(@Nullable ListEntry entry) {
+    public void setSelected(@Nullable T entry) {
         this.selected = entry;
         this.onSelection.accept(this.selected);
     }
@@ -159,7 +159,7 @@ public class SelectionList extends AbstractContainerEventHandler implements Widg
         this.scrollAmount = Mth.clamp(amount, 0.0D, Math.max(0, this.entries.size() * this.itemHeight - height));
     }
 
-    public void updateEntries(List<? extends ListEntry> entries) {
+    public void updateEntries(List<? extends T> entries) {
         this.scrollAmount = 0;
         this.selected = null;
         this.hovered = null;
