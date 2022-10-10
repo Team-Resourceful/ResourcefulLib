@@ -25,12 +25,7 @@ public class Color {
 
     public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.value)));
     public static final Color DEFAULT = defaultColor();
-    public static final Color RAINBOW;
-
-    static {
-        RAINBOW = createRainbowColor();
-        Color.createRainbowColor();
-    }
+    public static final Color RAINBOW = createRainbowColor();
 
     private int r;
     private int g;
