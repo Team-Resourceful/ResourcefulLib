@@ -11,6 +11,6 @@
   "environment": "*",
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.19.1"
+    "minecraft": ">=1.18.2"
   }
 }
