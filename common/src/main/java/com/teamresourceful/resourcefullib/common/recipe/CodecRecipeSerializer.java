@@ -12,12 +12,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class CodecRecipeSerializer<R extends Recipe<?>> implements RecipeSerializer<R> {
+public class CodecRecipeSerializer<R extends Recipe<?>> extends SimpleRecipeSerializer<R> {
 
     private final RecipeType<R> recipeType;
     private final Function<ResourceLocation, Codec<R>> jsonCodec;
@@ -28,6 +29,7 @@ public class CodecRecipeSerializer<R extends Recipe<?>> implements RecipeSeriali
     }
 
     public CodecRecipeSerializer(RecipeType<R> recipeType, Function<ResourceLocation, Codec<R>> jsonCodec, Function<ResourceLocation, Codec<R>> networkCodec) {
+        super(r -> null);
         this.recipeType = recipeType;
         this.jsonCodec = jsonCodec;
         this.networkCodec = networkCodec;
