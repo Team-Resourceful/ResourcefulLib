@@ -4,8 +4,6 @@ import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,15 +19,7 @@ public class PacketChannelHelperImpl {
 
     public static <T extends Packet<T>> void registerS2CPacket(ResourceLocation channel, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
         if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT))
-            clientOnlyRegister(createChannelLocation(channel, id), handler);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static <T extends Packet<T>> void clientOnlyRegister(ResourceLocation location, PacketHandler<T> handler) {
-        ClientPlayNetworking.registerGlobalReceiver(location, (client, handler1, buf, responseSender) -> {
-            T decode = handler.decode(buf);
-            client.execute(() -> handler.handle(decode).apply(client.player, client.level));
-        });
+            com.teamresourceful.resourcefullib.common.networking.fabric.FabricClientPacketHelper.clientOnlyRegister(createChannelLocation(channel, id), handler);
     }
 
     public static <T extends Packet<T>> void registerC2SPacket(ResourceLocation channel, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
@@ -41,14 +31,7 @@ public class PacketChannelHelperImpl {
 
     public static <T extends Packet<T>> void sendToServer(ResourceLocation channel, T packet) {
         if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT))
-            sendToServerClientOnly(channel, packet);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static <T extends Packet<T>> void sendToServerClientOnly(ResourceLocation channel, T packet) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        packet.getHandler().encode(packet, buf);
-        ClientPlayNetworking.send(createChannelLocation(channel, packet.getID()), buf);
+            com.teamresourceful.resourcefullib.common.networking.fabric.FabricClientPacketHelper.sendToServerClientOnly(channel, packet);
     }
 
     public static <T extends Packet<T>> void sendToPlayer(ResourceLocation channel, T packet, Player player) {
