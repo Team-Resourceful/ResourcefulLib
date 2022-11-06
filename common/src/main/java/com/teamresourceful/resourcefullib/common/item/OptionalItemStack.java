@@ -12,15 +12,15 @@ public final class OptionalItemStack {
 
     }
 
-    public Optional<ItemStack> of(ItemStack stack) {
+    public static Optional<ItemStack> of(ItemStack stack) {
         return Objects.requireNonNull(stack).isEmpty() ? Optional.empty() : Optional.of(stack);
     }
 
-    public Optional<ItemStack> ofNullable(@Nullable ItemStack stack) {
+    public static Optional<ItemStack> ofNullable(@Nullable ItemStack stack) {
         return stack == null || stack.isEmpty() ? Optional.empty() : Optional.of(stack);
     }
 
-    public Optional<ItemStack> empty() {
+    public static Optional<ItemStack> empty() {
         return Optional.empty();
     }
 

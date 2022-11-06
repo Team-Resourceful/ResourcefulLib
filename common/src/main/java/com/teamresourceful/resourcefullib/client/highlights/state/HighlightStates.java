@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefullib.client.highlights.state;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.math.Vector3f;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import com.teamresourceful.resourcefullib.client.highlights.base.Highlight;
 import com.teamresourceful.resourcefullib.client.highlights.base.HighlightLine;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,8 +31,7 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
             ROTATION_CODEC.fieldOf("rotation").orElse(BlockModelRotation.X0_Y0).forGetter(ignored -> BlockModelRotation.X0_Y0)
     ).apply(instance, HighlightStates::createBox));
 
-    public static final Codec<Highlight> BOX_CODEC = Codec.either(HighlightHandler.HIGHLIGHT_CODEC, TRANSLATED_BOX_CODEC)
-            .xmap(e -> e.map(p -> p, p -> p), Either::right);
+    public static final Codec<Highlight> BOX_CODEC = CodecExtras.eitherRight(Codec.either(HighlightHandler.HIGHLIGHT_CODEC, TRANSLATED_BOX_CODEC));
 
     public static Codec<HighlightStates> codec(Block block) {
         return RecordCodecBuilder.create(instance -> instance.group(

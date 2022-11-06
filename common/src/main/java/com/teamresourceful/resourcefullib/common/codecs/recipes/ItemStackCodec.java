@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefullib.common.codecs.recipes;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +20,7 @@ public final class ItemStackCodec {
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, ItemStackCodec::createItemStack));
 
-    public static final Codec<ItemStack> CODEC = Codec.either(STRING_EITHER, STACK_CODEC).xmap(e -> e.map(p -> p, p -> p), Either::right);
+    public static final Codec<ItemStack> CODEC = CodecExtras.eitherRight(Codec.either(STRING_EITHER, STACK_CODEC));
 
     private static ItemStack createItemStack(ItemLike item, int count, Optional<CompoundTag> tagOptional) {
         ItemStack stack = new ItemStack(item, count);
