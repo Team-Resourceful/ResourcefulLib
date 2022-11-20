@@ -59,7 +59,7 @@ public final class EnumCodec<T extends Enum<T>> implements Codec<T> {
     private static <T extends Enum<T>> Codec<T> constCodec(Class<T> enumClass) {
         return Codec.STRING.flatXmap(id -> {
             try {
-                return DataResult.success(Enum.valueOf(enumClass, id.toLowerCase(Locale.ROOT)));
+                return DataResult.success(Enum.valueOf(enumClass, id.toUpperCase(Locale.ROOT)));
             } catch (Exception e) {
                 return DataResult.error("Unknown type: " + id);
             }
