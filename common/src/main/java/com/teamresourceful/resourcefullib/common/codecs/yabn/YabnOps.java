@@ -3,12 +3,12 @@ package com.teamresourceful.resourcefullib.common.codecs.yabn;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
-import com.teamresourceful.resourcefullib.common.yabn.YabnCompressor;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnArray;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnElement;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnObject;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnPrimitive;
-import com.teamresourceful.resourcefullib.common.yabn.base.primitives.*;
+import com.teamresourceful.yabn.YabnCompressor;
+import com.teamresourceful.yabn.elements.YabnArray;
+import com.teamresourceful.yabn.elements.YabnElement;
+import com.teamresourceful.yabn.elements.YabnObject;
+import com.teamresourceful.yabn.elements.YabnPrimitive;
+import com.teamresourceful.yabn.elements.primitives.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,7 +29,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
 
     @Override
     public YabnElement empty() {
-        return NullContents.NULL;
+        return YabnPrimitive.ofNull();
     }
 
     @Override
@@ -38,11 +38,11 @@ public class YabnOps implements DynamicOps<YabnElement> {
         else if (input instanceof YabnArray) return convertList(outOps, input);
 
         if (compressed) input = YabnCompressor.compress(input);
+        if (input.isNull()) return outOps.empty();
         if (input instanceof YabnPrimitive primitive) {
             final PrimitiveContents contents = primitive.contents();
             if (contents instanceof StringContents stringContents) return outOps.createString(stringContents.value());
             else if (contents instanceof BooleanContents booleanContents) return outOps.createBoolean(booleanContents.value());
-            else if (contents instanceof NullContents) return outOps.empty();
             else if (contents instanceof ByteContents byteContents) return outOps.createByte(byteContents.value());
             else if (contents instanceof ShortContents shortContents) return outOps.createShort(shortContents.value());
             else if (contents instanceof IntContents intContents) return outOps.createInt(intContents.value());
@@ -58,7 +58,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
     public DataResult<Number> getNumberValue(YabnElement input) {
         if (input instanceof YabnPrimitive primitive) {
             final PrimitiveContents contents = primitive.contents();
-            if (contents instanceof NumberPrimitiveContents num) return DataResult.success(num.getValue());
+            if (contents instanceof PrimitiveNumberContents num) return DataResult.success(num.getValue());
             if (contents instanceof BooleanContents bool) return DataResult.success(bool.value() ? 1 : 0);
             if (compressed && contents instanceof StringContents str) {
                 try {
@@ -86,7 +86,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
         if (input instanceof YabnPrimitive primitive) {
             final PrimitiveContents contents = primitive.contents();
             if (contents instanceof BooleanContents bool) return DataResult.success(bool.value());
-            if (contents instanceof NumberPrimitiveContents num) return DataResult.success(num.getAsByte() != 0);
+            if (contents instanceof PrimitiveNumberContents num) return DataResult.success(num.getAsByte() != 0);
         }
         return DataResult.error("Not a boolean: " + input);
     }
@@ -102,7 +102,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
             if (primitive.contents() instanceof StringContents contents) {
                 return DataResult.success(contents.value());
             }
-            if (compressed && primitive.contents() instanceof NumberPrimitiveContents contents) {
+            if (compressed && primitive.contents() instanceof PrimitiveNumberContents contents) {
                 return DataResult.success(contents.getValue().toString());
             }
         }
@@ -249,7 +249,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
     public static String getAsString(YabnPrimitive primitive) {
         final PrimitiveContents contents = primitive.contents();
         if (contents instanceof StringContents stringContents) return stringContents.value();
-        else if (contents instanceof NumberPrimitiveContents numberContents) return numberContents.getValue().toString();
+        else if (contents instanceof PrimitiveNumberContents numberContents) return numberContents.getValue().toString();
         else if (contents instanceof BooleanContents booleanContents) return booleanContents.value() ? "true" : "false";
         return null;
     }

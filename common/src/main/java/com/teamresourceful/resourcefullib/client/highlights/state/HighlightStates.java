@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefullib.client.highlights.state;
 
-import com.mojang.math.Vector3f;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
@@ -8,8 +7,10 @@ import com.teamresourceful.resourcefullib.client.highlights.base.Highlight;
 import com.teamresourceful.resourcefullib.client.highlights.base.HighlightLine;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import java.util.Optional;
 
 public record HighlightStates(Map<List<BlockState>, Highlight> states) {
 
-    private static final Vector3f CORNER = new Vector3f(-0.5f, 0, -0.5f);
     private static final Vector3f CENTER = new Vector3f(0.5f, 0, 0.5f);
 
     public static final Codec<BlockModelRotation> ROTATION_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -27,7 +27,7 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
 
     public static final Codec<Highlight> TRANSLATED_BOX_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             HighlightHandler.HIGHLIGHT_CODEC.fieldOf("highlight").forGetter(i -> i),
-            Vector3f.CODEC.fieldOf("translation").orElse(Vector3f.ZERO).forGetter(ignored -> Vector3f.ZERO),
+            ExtraCodecs.VECTOR3F.fieldOf("translation").orElse(new Vector3f(0, 0, 0)).forGetter(ignored -> new Vector3f(0, 0, 0)),
             ROTATION_CODEC.fieldOf("rotation").orElse(BlockModelRotation.X0_Y0).forGetter(ignored -> BlockModelRotation.X0_Y0)
     ).apply(instance, HighlightStates::createBox));
 
@@ -40,16 +40,16 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
     }
 
     private static Highlight createBox(Highlight box, Vector3f translation, BlockModelRotation rotation) {
-        if (translation.equals(Vector3f.ZERO) && rotation.equals(BlockModelRotation.X0_Y0)) return box;
+        if (translation.equals(new Vector3f(0, 0, 0)) && rotation.equals(BlockModelRotation.X0_Y0)) return box;
 
         Highlight newBox = box.copy();
         for (HighlightLine line : newBox.lines()) {
 
-            line.start().add(CORNER);
-            line.end().add(CORNER);
+            line.start().sub(CENTER);
+            line.end().sub(CENTER);
 
-            line.start().transform(rotation.getRotation().getLeftRotation());
-            line.end().transform(rotation.getRotation().getLeftRotation());
+            line.start().rotate(rotation.getRotation().getLeftRotation());
+            line.end().rotate(rotation.getRotation().getLeftRotation());
 
             line.start().add(CENTER);
             line.end().add(CENTER);

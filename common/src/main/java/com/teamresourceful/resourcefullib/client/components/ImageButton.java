@@ -20,7 +20,7 @@ public abstract class ImageButton extends AbstractButton {
     @Override
     public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         RenderUtils.bindTexture(getTexture(mouseX, mouseY));
-        blit(stack, this.x, this.y, getU(mouseX, mouseY), getV(mouseX, mouseY), this.width, this.height, this.imageWidth, this.imageHeight);
+        blit(stack, getX(), getY(), getU(mouseX, mouseY), getV(mouseX, mouseY), this.width, this.height, this.imageWidth, this.imageHeight);
     }
 
     public abstract ResourceLocation getTexture(int mouseX, int mouseY);
@@ -28,7 +28,7 @@ public abstract class ImageButton extends AbstractButton {
     public abstract int getV(int mouseX, int mouseY);
 
     @Override
-    public void updateNarration(@NotNull NarrationElementOutput narration) {
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
 
     }
 }

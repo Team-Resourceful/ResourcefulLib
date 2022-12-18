@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,10 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public final class FileUtils {
+
+    private FileUtils() throws UtilityClassException {
+        throw new UtilityClassException();
+    }
 
     private static String failedToLoadSourceError(Path path) {
         return String.format("Failed to load source: %s!", path);

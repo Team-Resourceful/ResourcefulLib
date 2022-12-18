@@ -2,21 +2,24 @@ package com.teamresourceful.resourcefullib.client.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
 import com.teamresourceful.resourcefullib.client.scissor.ClosingScissorBox;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.types.Bound;
 import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.BufferUtils;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
-import java.nio.FloatBuffer;
+public final class RenderUtils {
 
-public class RenderUtils {
+    private RenderUtils() throws UtilityClassException {
+        throw new UtilityClassException();
+    }
 
     /**
      * Binds the given texture to the current render context.
@@ -44,9 +47,8 @@ public class RenderUtils {
      */
     public static Vec2i getTranslation(PoseStack stack) {
         Matrix4f pose = stack.last().pose();
-        FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(16);
-        pose.store(floatBuffer);
-        return Vec2i.of((int)floatBuffer.get(12), (int)floatBuffer.get(13));
+        Vector3f vec = pose.getTranslation(new Vector3f());
+        return Vec2i.of((int) vec.x, (int) vec.y);
     }
 
     /**

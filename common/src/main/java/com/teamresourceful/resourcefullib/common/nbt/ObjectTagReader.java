@@ -2,10 +2,12 @@ package com.teamresourceful.resourcefullib.common.nbt;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@ApiStatus.Experimental
 public class ObjectTagReader<I> implements NbtReader<I, CompoundTag> {
 
     private final boolean defaultReaders;

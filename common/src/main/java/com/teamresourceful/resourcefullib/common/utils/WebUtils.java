@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
@@ -10,14 +10,17 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-public class WebUtils {
+public final class WebUtils {
 
-    private static final Gson GSON = new Gson();
     private static final HttpClient CLIENT = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
             .followRedirects(HttpClient.Redirect.NORMAL)
             .connectTimeout(Duration.ofSeconds(10))
             .build();
+
+    private WebUtils() throws UtilityClassException {
+        throw new UtilityClassException();
+    }
 
     @Nullable
     public static String get(String url) {
@@ -38,12 +41,7 @@ public class WebUtils {
 
     @Nullable
     public static JsonObject getJson(String url) {
-        String data = get(url);
-        if (data == null) return null;
-        try {
-            return GSON.fromJson(data, JsonObject.class);
-        } catch (Exception e) {
-            return null;
-        }
+        return GsonHelpers.parseJson(get(url))
+                .orElse(null);
     }
 }

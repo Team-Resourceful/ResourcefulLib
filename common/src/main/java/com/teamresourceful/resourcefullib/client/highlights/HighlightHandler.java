@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefullib.client.highlights.base.Highlight;
 import com.teamresourceful.resourcefullib.client.highlights.base.Highlightable;
 import com.teamresourceful.resourcefullib.client.highlights.state.HighlightStates;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -45,7 +45,7 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
 
         highlights.forEach((key, value) -> Highlight.codec(key).parse(JsonOps.INSTANCE, value).result().ifPresent(box -> BOX_CACHE.put(key, box)));
 
-        blocks.forEach((key, value) -> Registry.BLOCK.getOptional(key)
+        blocks.forEach((key, value) -> BuiltInRegistries.BLOCK.getOptional(key)
             .flatMap(block -> HighlightStates.codec(block).parse(JsonOps.INSTANCE, value).result())
             .ifPresent(variants -> variants.states().forEach((states, box) -> states.forEach(state -> STATE_CACHE.put(state, box))))
         );

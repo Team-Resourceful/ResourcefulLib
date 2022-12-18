@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefullib.common.codecs.yabn;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.RecordBuilder;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnElement;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnObject;
+import com.teamresourceful.yabn.elements.YabnElement;
+import com.teamresourceful.yabn.elements.YabnObject;
 
 public class YabnRecordBuilder extends RecordBuilder.AbstractStringBuilder<YabnElement, YabnObject> {
 

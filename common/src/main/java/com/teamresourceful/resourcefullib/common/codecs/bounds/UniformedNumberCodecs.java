@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefullib.common.codecs.bounds;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
 
@@ -10,7 +11,9 @@ import java.util.function.Function;
 
 public final class UniformedNumberCodecs {
 
-    private UniformedNumberCodecs() {}
+    private UniformedNumberCodecs() throws UtilityClassException {
+        throw new UtilityClassException();
+    }
 
     public static final Codec<UniformFloat> FLOAT_CODEC = getFloatCodec();
     public static final Codec<UniformInt> INT_CODEC = getIntCodec();

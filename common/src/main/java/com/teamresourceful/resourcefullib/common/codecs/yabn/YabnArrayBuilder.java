@@ -4,8 +4,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.ListBuilder;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnArray;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnElement;
+import com.teamresourceful.yabn.elements.YabnArray;
+import com.teamresourceful.yabn.elements.YabnElement;
 
 import java.util.function.UnaryOperator;
 

@@ -1,12 +1,14 @@
 package com.teamresourceful.resourcefullib.common.nbt;
 
 import net.minecraft.nbt.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@ApiStatus.Experimental
 public class TagReader<I, T extends Tag> implements NbtReader<I, T> {
 
     private final byte type;

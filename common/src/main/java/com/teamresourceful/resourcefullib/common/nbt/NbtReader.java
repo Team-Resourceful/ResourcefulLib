@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefullib.common.nbt;
 
 import net.minecraft.nbt.Tag;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Experimental
 public interface NbtReader<I, T extends Tag> {
 
     /**

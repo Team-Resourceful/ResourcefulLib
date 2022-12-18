@@ -2,14 +2,12 @@ package com.teamresourceful.resourcefullib.client.components.selection;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class SelectionList<T extends ListEntry> extends AbstractContainerEventHandler implements Widget, NarratableEntry, TooltipProvider {
+public class SelectionList<T extends ListEntry> extends AbstractContainerEventHandler implements Renderable, NarratableEntry {
 
     private final List<T> entries = new ArrayList<>();
     private final int x, y, width, height, itemHeight;
@@ -175,10 +173,5 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
     @Override
     public void updateNarration(@NotNull NarrationElementOutput output) {
 
-    }
-
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return TooltipProvider.getTooltips(this.entries, mouseX, mouseY);
     }
 }

@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefullib.client.highlights.base;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import com.mojang.serialization.Codec;
 import net.minecraft.Util;
 import net.minecraft.util.Mth;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
         }
 
         public HighlightLine copy() {
-            return new HighlightLine(start.copy(), end.copy());
+            return new HighlightLine(new Vector3f(start), new Vector3f(end));
         }
 
         public void recalculateNormal() {

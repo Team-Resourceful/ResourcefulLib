@@ -156,4 +156,8 @@ public final class ConstantColors {
     public static final Color yellowgreen = Color.createNamedColor("yellowgreen",0x9acd32);
     //endregion
 
+
+    static void init() {
+        // Load class
+    }
 }

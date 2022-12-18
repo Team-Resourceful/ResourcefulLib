@@ -18,6 +18,10 @@ subprojects {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings loom.officialMojangMappings()
     }
+
+    repositories {
+        maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
+    }
 }
 
 allprojects {

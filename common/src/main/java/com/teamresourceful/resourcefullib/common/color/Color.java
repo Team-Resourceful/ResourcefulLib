@@ -27,6 +27,10 @@ public class Color {
     public static final Color DEFAULT = defaultColor();
     public static final Color RAINBOW = createRainbowColor();
 
+    static {
+        ConstantColors.init();
+    }
+
     private int r;
     private int g;
     private int b;

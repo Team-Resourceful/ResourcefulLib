@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefullib.common.codecs.yabn;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapLike;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnElement;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnObject;
-import com.teamresourceful.resourcefullib.common.yabn.base.YabnPrimitive;
+import com.teamresourceful.yabn.elements.YabnElement;
+import com.teamresourceful.yabn.elements.YabnObject;
+import com.teamresourceful.yabn.elements.YabnPrimitive;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;

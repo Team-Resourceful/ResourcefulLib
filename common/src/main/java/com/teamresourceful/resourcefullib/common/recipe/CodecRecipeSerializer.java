@@ -5,8 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.codecs.yabn.YabnOps;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
-import com.teamresourceful.resourcefullib.common.utils.readers.ByteBufByteReader;
-import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
+import com.teamresourceful.yabn.YabnParser;
+import com.teamresourceful.yabn.reader.ByteReader;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
@@ -59,5 +60,29 @@ public class CodecRecipeSerializer<R extends Recipe<?>> implements RecipeSeriali
 
     public RecipeType<R> type() {
         return recipeType;
+    }
+
+    public static class ByteBufByteReader implements ByteReader {
+
+        protected final ByteBuf buf;
+
+        public ByteBufByteReader(ByteBuf buf) {
+            this.buf = buf;
+        }
+
+        @Override
+        public byte peek() {
+            return buf.getByte(buf.readerIndex());
+        }
+
+        @Override
+        public void advance() {
+            buf.skipBytes(1);
+        }
+
+        @Override
+        public byte readByte() {
+            return buf.readByte();
+        }
     }
 }

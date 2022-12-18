@@ -1,48 +1,76 @@
 package com.teamresourceful.resourcefullib.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
-public class CloseablePoseStack implements AutoCloseable {
+public class CloseablePoseStack extends PoseStack implements AutoCloseable {
 
     private final PoseStack stack;
 
     public CloseablePoseStack(PoseStack stack) {
+        super();
         this.stack = stack;
         this.stack.pushPose();
     }
 
+    public CloseablePoseStack() {
+        this(new PoseStack());
+    }
+
+    @Override
     public void translate(double d, double e, double f) {
         stack.translate(d, e, f);
     }
 
+    @Override
+    public void translate(float f, float g, float h) {
+        stack.translate(f, g, h);
+    }
+
+    @Override
     public void scale(float f, float g, float h) {
         stack.scale(f, g, h);
     }
 
-    public void mulPose(Quaternion quaternion) {
+    @Override
+    public void mulPose(@NotNull Quaternionf quaternion) {
         stack.mulPose(quaternion);
     }
 
+    @Override
     public PoseStack.Pose last() {
         return stack.last();
     }
 
+    @Override
     public boolean clear() {
         return stack.clear();
     }
 
+    @Override
     public void setIdentity() {
         stack.setIdentity();
     }
 
-    public void mulPoseMatrix(Matrix4f matrix4f) {
+    @Override
+    public void mulPoseMatrix(@NotNull Matrix4f matrix4f) {
         stack.mulPoseMatrix(matrix4f);
     }
 
     @Override
     public void close() {
+        stack.popPose();
+    }
+
+    @Override
+    public void pushPose() {
+        stack.pushPose();
+    }
+
+    @Override
+    public void popPose() {
         stack.popPose();
     }
 }

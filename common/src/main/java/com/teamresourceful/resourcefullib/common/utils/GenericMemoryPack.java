@@ -7,25 +7,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public abstract class GenericMemoryPack implements PackResources {
 
-    private final HashMap<ResourceLocation, Supplier<? extends InputStream>> data = new HashMap<>();
+    private final Map<ResourceLocation, IoSupplier<InputStream>> data = new HashMap<>();
 
     private final JsonObject metaData;
     private final PackType allowedType;
@@ -41,7 +39,7 @@ public abstract class GenericMemoryPack implements PackResources {
         return allowedType.equals(type);
     }
 
-    public void putData(PackType type, ResourceLocation location, Supplier<? extends InputStream> supplier){
+    public void putData(PackType type, ResourceLocation location, IoSupplier<InputStream> supplier){
         if (!isTypeAllowed(type)) return;
         data.put(location, supplier);
     }
@@ -51,36 +49,27 @@ public abstract class GenericMemoryPack implements PackResources {
     }
 
     @Override
-    public @NotNull InputStream getRootResource(@NotNull String file) throws IOException {
+    public @Nullable IoSupplier<InputStream> getRootResource(String @NotNull ... files) {
+        String file = String.join("/", files);
         if(file.contains("/") || file.contains("\\")) {
             throw new IllegalArgumentException("Root resources can only be filenames, not paths (no / allowed!)");
         }
-        throw new FileNotFoundException(file);
+        return null;
     }
 
     @Override
-    public @NotNull InputStream getResource(@NotNull PackType type, @NotNull ResourceLocation location) throws IOException {
-        if(this.hasResource(type, location)) return data.get(location).get();
-        throw new FileNotFoundException(location.toString());
+    public @Nullable IoSupplier<InputStream> getResource(@NotNull PackType type, @NotNull ResourceLocation location) {
+        if (!isTypeAllowed(type)) return null;
+        return this.data.getOrDefault(location, null);
     }
 
     @Override
-    public @NotNull Collection<ResourceLocation> getResources(@NotNull PackType type, @NotNull String namespace, @NotNull String path, @NotNull Predicate<ResourceLocation> predicate) {
-        if (!isTypeAllowed(type)) return Collections.emptyList();
-        return data.keySet().stream()
-                .filter(location-> location.getNamespace().equals(namespace))
-                .filter(location-> location.getPath().startsWith(path))
-                .filter(location-> predicate.test(createPath(namespace, location.getPath().substring(Math.max(location.getPath().lastIndexOf('/'), 0)))))
-                .collect(Collectors.toList());
-    }
-
-    private static ResourceLocation createPath(String namespace, String input) {
-        return ResourceLocation.tryParse(namespace + ":" + input);
-    }
-
-    @Override
-    public boolean hasResource(@NotNull PackType type, @NotNull ResourceLocation location) {
-        return isTypeAllowed(type) && data.containsKey(location);
+    public void listResources(@NotNull PackType type, @NotNull String namespace, @NotNull String path, @NotNull ResourceOutput output) {
+        if (!isTypeAllowed(type)) return;
+        this.data.entrySet().stream()
+            .filter(entry -> entry.getKey().getNamespace().equals(namespace))
+            .filter(entry -> entry.getKey().getPath().startsWith(path))
+            .forEach(entry -> output.accept(entry.getKey(), entry.getValue()));
     }
 
     @Override
@@ -97,13 +86,18 @@ public abstract class GenericMemoryPack implements PackResources {
     }
 
     @Override
-    public @NotNull String getName() {
-        return id;
+    public @NotNull String packId() {
+        return this.id;
+    }
+
+    @Override
+    public boolean isBuiltin() {
+        return true;
     }
 
     @Override
     public void close() {
-        for (Supplier<? extends InputStream> value : data.values()) {
+        for (IoSupplier<InputStream> value : data.values()) {
             try {
                 value.get().close();
             } catch (IOException e) {

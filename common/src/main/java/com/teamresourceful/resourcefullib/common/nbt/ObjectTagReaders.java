@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefullib.common.nbt;
 
 import net.minecraft.nbt.Tag;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Experimental
 public class ObjectTagReaders {
 
     public static <I> ObjectTagReader<I> create(boolean defaultReaders) {

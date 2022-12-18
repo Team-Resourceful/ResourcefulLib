@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.item;
 
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,8 +9,8 @@ import java.util.Optional;
 
 public final class OptionalItemStack {
 
-    private OptionalItemStack() {
-
+    private OptionalItemStack() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static Optional<ItemStack> of(ItemStack stack) {

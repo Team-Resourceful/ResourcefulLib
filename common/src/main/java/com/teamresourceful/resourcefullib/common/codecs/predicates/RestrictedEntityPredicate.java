@@ -7,7 +7,7 @@ import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.MobEffectsPredicate;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +26,7 @@ public record RestrictedEntityPredicate(
 ) {
 
     public static final Codec<RestrictedEntityPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Registry.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(RestrictedEntityPredicate::entityType),
+        BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(RestrictedEntityPredicate::entityType),
         CodecExtras.passthrough(LocationPredicate::serializeToJson, LocationPredicate::fromJson).fieldOf("location").orElse(LocationPredicate.ANY).forGetter(RestrictedEntityPredicate::location),
         CodecExtras.passthrough(MobEffectsPredicate::serializeToJson, MobEffectsPredicate::fromJson).fieldOf("effects").orElse(MobEffectsPredicate.ANY).forGetter(RestrictedEntityPredicate::effects),
         NbtPredicate.CODEC.fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedEntityPredicate::nbt),

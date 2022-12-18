@@ -43,7 +43,7 @@ public class HolderSetCodec<E> implements Codec<HolderSet<E>> {
 
     @Override
     public <T> DataResult<T> encode(HolderSet<E> p_206674_, DynamicOps<T> p_206675_, T p_206676_) {
-        if (!p_206674_.isValidInRegistry(registry)) {
+        if (!p_206674_.canSerializeIn(registry.holderOwner())) {
             return DataResult.error("HolderSet " + p_206674_ + " is not valid in current registry set");
         }
 
