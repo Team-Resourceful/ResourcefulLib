@@ -3,18 +3,14 @@ package com.teamresourceful.resourcefullib.common.recipe;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.common.codecs.yabn.YabnOps;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
-import com.teamresourceful.yabn.YabnParser;
-import com.teamresourceful.yabn.reader.ByteReader;
-import io.netty.buffer.ByteBuf;
+import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -36,53 +32,23 @@ public class CodecRecipeSerializer<R extends Recipe<?>> implements RecipeSeriali
 
     @Override
     public @NotNull R fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-        return jsonCodec.apply(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", id));
+        return jsonCodec.apply(id).parse(JsonOps.INSTANCE, json)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", id));
     }
 
-    @Nullable
     @Override
     public R fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
-        try {
-            return networkCodec.apply(id).parse(YabnOps.COMPRESSED, YabnParser.parse(new ByteBufByteReader(buffer)))
-                    .result()
-                    .orElse(null);
-        }catch (Exception e) {
-            return null;
-        }
+        return PacketHelper.readWithYabn(buffer, networkCodec.apply(id), true)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", id));
     }
 
     @Override
     public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull R recipe) {
-        networkCodec.apply(recipe.getId()).encodeStart(YabnOps.COMPRESSED, recipe)
-                .result()
-                .ifPresent(element -> buffer.writeBytes(element.toData()));
+        PacketHelper.writeWithYabn(buffer, networkCodec.apply(recipe.getId()), recipe, true)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", recipe.getId()));
     }
 
     public RecipeType<R> type() {
         return recipeType;
-    }
-
-    public static class ByteBufByteReader implements ByteReader {
-
-        protected final ByteBuf buf;
-
-        public ByteBufByteReader(ByteBuf buf) {
-            this.buf = buf;
-        }
-
-        @Override
-        public byte peek() {
-            return buf.getByte(buf.readerIndex());
-        }
-
-        @Override
-        public void advance() {
-            buf.skipBytes(1);
-        }
-
-        @Override
-        public byte readByte() {
-            return buf.readByte();
-        }
     }
 }

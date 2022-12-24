@@ -6,11 +6,17 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class IngredientCodec {
 
     public static final Codec<Ingredient> CODEC = Codec.PASSTHROUGH.comapFlatMap(IngredientCodec::decodeIngredient, IngredientCodec::encodeIngredient);
+    public static final Codec<Ingredient> NETWORK_CODEC = ItemStackCodec.CODEC.listOf().xmap(IngredientCodec::decodeIngredient, IngredientCodec::encodeIngredientToNetwork);
 
     private IngredientCodec() throws UtilityClassException {
         throw new UtilityClassException();
@@ -27,4 +33,13 @@ public final class IngredientCodec {
     private static Dynamic<JsonElement> encodeIngredient(Ingredient ingredient) {
         return new Dynamic<>(JsonOps.INSTANCE, ingredient.toJson()).convert(JsonOps.COMPRESSED);
     }
+
+    private static Ingredient decodeIngredient(List<ItemStack> stacks) {
+        return Ingredient.of(stacks.stream());
+    }
+
+    private static List<ItemStack> encodeIngredientToNetwork(Ingredient ingredient) {
+        return Arrays.stream(ingredient.getItems()).collect(Collectors.toList());
+    }
+
 }
