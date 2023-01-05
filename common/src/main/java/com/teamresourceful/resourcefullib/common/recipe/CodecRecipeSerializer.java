@@ -3,10 +3,8 @@ package com.teamresourceful.resourcefullib.common.recipe;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.common.codecs.yabn.YabnOps;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
-import com.teamresourceful.resourcefullib.common.utils.readers.ByteBufByteReader;
-import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
+import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
@@ -35,26 +33,21 @@ public class CodecRecipeSerializer<R extends Recipe<?>> implements RecipeSeriali
 
     @Override
     public @NotNull R fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-        return jsonCodec.apply(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", id));
+        return jsonCodec.apply(id).parse(JsonOps.INSTANCE, json)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", id));
     }
 
     @Nullable
     @Override
     public R fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
-        try {
-            return networkCodec.apply(id).parse(YabnOps.COMPRESSED, YabnParser.parse(new ByteBufByteReader(buffer)))
-                    .result()
-                    .orElse(null);
-        }catch (Exception e) {
-            return null;
-        }
+        return PacketHelper.readWithYabn(buffer, networkCodec.apply(id), true)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", id));
     }
 
     @Override
     public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull R recipe) {
-        networkCodec.apply(recipe.getId()).encodeStart(YabnOps.COMPRESSED, recipe)
-                .result()
-                .ifPresent(element -> buffer.writeBytes(element.toData()));
+        PacketHelper.writeWithYabn(buffer, networkCodec.apply(recipe.getId()), recipe, true)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", recipe.getId()));
     }
 
     public RecipeType<R> type() {

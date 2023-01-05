@@ -22,6 +22,12 @@ public final class ItemStackCodec {
 
     public static final Codec<ItemStack> CODEC = CodecExtras.eitherRight(Codec.either(STRING_EITHER, STACK_CODEC));
 
+    public static final Codec<ItemStack> NETWORK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            CodecExtras.registerId(Registry.ITEM).fieldOf("id").forGetter(ItemStack::getItem),
+            Codec.INT.fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
+            CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
+    ).apply(instance, ItemStackCodec::createItemStack));
+
     private static ItemStack createItemStack(ItemLike item, int count, Optional<CompoundTag> tagOptional) {
         ItemStack stack = new ItemStack(item, count);
         tagOptional.ifPresent(stack::setTag);
