@@ -8,6 +8,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.core.Registry;
 
 import java.util.*;
 import java.util.function.Function;
@@ -21,6 +22,16 @@ public final class CodecExtras {
 
     public static <T> Codec<WeightedCollection<T>> weightedCollection(Codec<T> codec, ToDoubleFunction<T> weighter) {
         return codec.listOf().xmap(set -> WeightedCollection.of(set, weighter), collection -> collection.stream().toList());
+    }
+
+    public static <T> Codec<T> registerId(Registry<T> registry) {
+        return Codec.INT.comapFlatMap(value -> {
+            T t = registry.byId(value);
+            if (t == null) {
+                return DataResult.error("Unknown registry value: " + value);
+            }
+            return DataResult.success(t);
+        }, registry::getId);
     }
 
     public static <T> Codec<Set<T>> set(Codec<T> codec) {

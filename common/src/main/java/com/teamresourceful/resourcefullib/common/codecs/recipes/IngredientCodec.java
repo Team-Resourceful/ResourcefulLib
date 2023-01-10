@@ -6,17 +6,18 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.world.item.ItemStack;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.crafting.Ingredient;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class IngredientCodec {
 
     public static final Codec<Ingredient> CODEC = Codec.PASSTHROUGH.comapFlatMap(IngredientCodec::decodeIngredient, IngredientCodec::encodeIngredient);
-    public static final Codec<Ingredient> NETWORK_CODEC = ItemStackCodec.CODEC.listOf().xmap(IngredientCodec::decodeIngredient, IngredientCodec::encodeIngredientToNetwork);
+    public static final Codec<Ingredient> NETWORK_CODEC = Codec.BYTE.listOf().flatXmap(IngredientCodec::decodeIngredientFromNetwork, IngredientCodec::encodeIngredientToNetwork);
 
     private IngredientCodec() throws UtilityClassException {
         throw new UtilityClassException();
@@ -34,12 +35,32 @@ public final class IngredientCodec {
         return new Dynamic<>(JsonOps.INSTANCE, ingredient.toJson()).convert(JsonOps.COMPRESSED);
     }
 
-    private static Ingredient decodeIngredient(List<ItemStack> stacks) {
-        return Ingredient.of(stacks.stream());
+    private static DataResult<Ingredient> decodeIngredientFromNetwork(List<Byte> data) {
+        try {
+            byte[] array = new byte[data.size()];
+            for (int i = 0; i < data.size(); i++) {
+                array[i] = data.get(i);
+            }
+            ByteBuf buffer = Unpooled.wrappedBuffer(array);
+            return DataResult.success(Ingredient.fromNetwork(new FriendlyByteBuf(buffer)));
+        }catch (Exception e){
+            return DataResult.error("Failed to decode ingredient from network: " + e.getMessage());
+        }
     }
 
-    private static List<ItemStack> encodeIngredientToNetwork(Ingredient ingredient) {
-        return Arrays.stream(ingredient.getItems()).collect(Collectors.toList());
+    private static DataResult<List<Byte>> encodeIngredientToNetwork(Ingredient ingredient) {
+        try {
+            ByteBuf buffer = Unpooled.buffer();
+            ingredient.toNetwork(new FriendlyByteBuf(buffer));
+            byte[] array = buffer.array();
+            List<Byte> bytes = new ArrayList<>(array.length);
+            for (byte b : array) {
+                bytes.add(b);
+            }
+            return DataResult.success(bytes);
+        }catch (Exception e){
+            return DataResult.error("Failed to encode ingredient to network: " + e.getMessage());
+        }
     }
 
 }
