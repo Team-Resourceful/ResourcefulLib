@@ -23,7 +23,7 @@ public final class PacketHelper {
         DataResult<YabnElement> result = codec.encodeStart(ops, object);
         Optional<YabnElement> optional = result.result();
         if (optional.isPresent()) {
-            buf.writeBytes(optional.get().toData());
+            buf.writeBytes(optional.get().toFullData());
             return result;
         }
         return result;
