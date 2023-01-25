@@ -1,6 +1,8 @@
 package com.teamresourceful.resourcefullib.common.codecs;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -48,7 +50,7 @@ public final class CodecExtras {
                 return DataResult.success(decoder.apply(jsonElement));
             }
             return DataResult.error("Value was not an instance of JsonElement");
-        }, input -> new Dynamic<>(JsonOps.INSTANCE, encoder.apply(input)));
+        }, input -> new Dynamic<>(JsonOps.INSTANCE, clearNulls(encoder.apply(input))));
     }
 
     public static <S> Codec<S> eitherRight(Codec<Either<S, S>> eitherCodec) {
@@ -57,5 +59,27 @@ public final class CodecExtras {
 
     public static <S> Codec<S> eitherLeft(Codec<Either<S, S>> eitherCodec) {
         return eitherCodec.xmap(e -> e.map(p -> p, p -> p), Either::left);
+    }
+
+    private static JsonElement clearNulls(JsonElement json) {
+        if (json instanceof JsonObject object) {
+            JsonObject newObject = new JsonObject();
+            for (String key : object.keySet()) {
+                JsonElement element = clearNulls(object.get(key));
+                if (element != null) {
+                    newObject.add(key, element);
+                }
+            }
+        } else if (json instanceof JsonArray array) {
+            JsonArray newArray = new JsonArray();
+            for (JsonElement item : array) {
+                JsonElement element = clearNulls(item);
+                if (element != null) {
+                    newArray.add(element);
+                }
+            }
+            return newArray;
+        }
+        return json.isJsonNull() ? null : json;
     }
 }
