@@ -53,7 +53,11 @@ public final class CodecExtras {
     public static <T> Codec<T> passthrough(Function<T, JsonElement> encoder, Function<JsonElement, T> decoder) {
         return Codec.PASSTHROUGH.comapFlatMap(dynamic -> {
             if (dynamic.getValue() instanceof JsonElement jsonElement) {
-                return DataResult.success(decoder.apply(jsonElement));
+                var output = clearNulls(jsonElement);
+                if (output == null) {
+                    return DataResult.error("Value was null for decoder: " + decoder);
+                }
+                return DataResult.success(decoder.apply(output));
             }
             return DataResult.error("Value was not an instance of JsonElement");
         }, input -> new Dynamic<>(JsonOps.INSTANCE, clearNulls(encoder.apply(input))));
@@ -76,6 +80,7 @@ public final class CodecExtras {
                     newObject.add(key, element);
                 }
             }
+            return newObject;
         } else if (json instanceof JsonArray array) {
             JsonArray newArray = new JsonArray();
             for (JsonElement item : array) {
