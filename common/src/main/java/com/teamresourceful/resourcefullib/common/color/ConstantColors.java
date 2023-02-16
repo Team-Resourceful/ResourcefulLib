@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefullib.common.color;
 
+import org.jetbrains.annotations.ApiStatus;
+
 @SuppressWarnings("unused")
 public final class ConstantColors {
 
@@ -156,4 +158,8 @@ public final class ConstantColors {
     public static final Color yellowgreen = Color.createNamedColor("yellowgreen",0x9acd32);
     //endregion
 
+    @ApiStatus.Internal
+    public static void init() {
+        //Used to load the class so the map is populated.
+    }
 }
