@@ -34,10 +34,10 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
 
     @Override
     public void write(JsonObject json, FabricIngredient<T> ingredient) {
-        JsonElement element = serializer.codec().encodeStart(JsonOps.INSTANCE, ingredient.getIngredient())
+        JsonElement element = serializer.codec().encodeStart(JsonOps.INSTANCE, ingredient.ingredient())
                 .getOrThrow(false, Constants.LOGGER::error);
         if (!element.isJsonObject()) {
-            Constants.LOGGER.error("Could not parse {}", ingredient.getIngredient());
+            Constants.LOGGER.error("Could not parse {}", ingredient.ingredient());
             Constants.LOGGER.error("Element is not a JsonObject");
             return;
         }
@@ -55,7 +55,7 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
 
     @Override
     public void write(FriendlyByteBuf buf, FabricIngredient<T> ingredient) {
-        PacketHelper.writeWithYabn(buf, serializer.network(), ingredient.getIngredient(), true)
-                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", ingredient.getIngredient()));
+        PacketHelper.writeWithYabn(buf, serializer.network(), ingredient.ingredient(), true)
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", ingredient.ingredient()));
     }
 }

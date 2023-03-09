@@ -4,17 +4,11 @@ import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredie
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-public class FabricIngredient<T extends CodecIngredient<T>> implements CustomIngredient {
-
-    private final T ingredient;
-    private List<ItemStack> stacks;
-
-    public FabricIngredient(T ingredient) {
-        this.ingredient = ingredient;
-    }
+public record FabricIngredient<T extends CodecIngredient<T>>(T ingredient) implements CustomIngredient {
 
     @Override
     public boolean test(ItemStack stack) {
@@ -23,10 +17,7 @@ public class FabricIngredient<T extends CodecIngredient<T>> implements CustomIng
 
     @Override
     public List<ItemStack> getMatchingStacks() {
-        if (stacks == null) {
-            stacks = ingredient.getStacks();
-        }
-        return stacks;
+        return ingredient.getStacks();
     }
 
     @Override
@@ -39,6 +30,11 @@ public class FabricIngredient<T extends CodecIngredient<T>> implements CustomIng
         return FabricIngredientHelper.get(ingredient.serializer().id());
     }
 
+    /**
+     * @deprecated Use {@link #ingredient()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.19.4")
     public T getIngredient() {
         return ingredient;
     }
