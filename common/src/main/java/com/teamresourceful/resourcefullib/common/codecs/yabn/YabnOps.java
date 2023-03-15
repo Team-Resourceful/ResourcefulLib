@@ -64,11 +64,11 @@ public class YabnOps implements DynamicOps<YabnElement> {
                 try {
                     return DataResult.success(Integer.parseInt(str.value()));
                 } catch (final NumberFormatException e) {
-                    return DataResult.error("Not a number: " + e + " " + input);
+                    return DataResult.error(() -> "Not a number: " + e + " " + input);
                 }
             }
         }
-        return DataResult.error("Not a number: " + input);
+        return DataResult.error(() -> "Not a number: " + input);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
             if (contents instanceof BooleanContents bool) return DataResult.success(bool.value());
             if (contents instanceof PrimitiveNumberContents num) return DataResult.success(num.getAsByte() != 0);
         }
-        return DataResult.error("Not a boolean: " + input);
+        return DataResult.error(() -> "Not a boolean: " + input);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
                 return DataResult.success(contents.getValue().toString());
             }
         }
-        return DataResult.error("Not a string: " + input);
+        return DataResult.error(() -> "Not a string: " + input);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
 
     @Override
     public DataResult<YabnElement> mergeToList(YabnElement list, List<YabnElement> values) {
-        if (!(list instanceof YabnArray) && list != empty()) return DataResult.error("Not a list: " + list);
+        if (!(list instanceof YabnArray) && list != empty()) return DataResult.error(() -> "Not a list: " + list);
         final YabnArray array = new YabnArray();
         if (list instanceof YabnArray oldArray) oldArray.elements().forEach(array::add);
         values.forEach(array::add);
@@ -130,9 +130,9 @@ public class YabnOps implements DynamicOps<YabnElement> {
 
     @Override
     public DataResult<YabnElement> mergeToMap(YabnElement map, YabnElement key, YabnElement value) {
-        if (!(map instanceof YabnObject) && map != empty()) return DataResult.error("Not a map: " + map, map);
+        if (!(map instanceof YabnObject) && map != empty()) return DataResult.error(() -> "Not a map: " + map, map);
         if (!(key instanceof YabnPrimitive primitive) || primitive.isNull() || !(primitive.contents() instanceof StringContents) && !compressed) {
-            return DataResult.error("key is not a string: " + key, map);
+            return DataResult.error(() -> "key is not a string: " + key, map);
         }
 
         final YabnObject object = new YabnObject();
@@ -144,7 +144,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
     @Override
     public DataResult<YabnElement> mergeToMap(YabnElement map, MapLike<YabnElement> values) {
         if (!(map instanceof YabnObject) && map != empty()) {
-            return DataResult.error("Not a map: " + map, map);
+            return DataResult.error(() -> "Not a map: " + map, map);
         }
 
         final YabnObject object = new YabnObject();
@@ -161,7 +161,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
             object.put(getAsString(primitive), entry.getSecond());
         });
 
-        return !missed.isEmpty() ? DataResult.error("some keys are not strings: " + missed, object) : DataResult.success(object);
+        return !missed.isEmpty() ? DataResult.error(() -> "some keys are not strings: " + missed, object) : DataResult.success(object);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
                     .map(entry -> Pair.of(createString(entry.getKey()), entry.getValue().getOrNull()));
             return DataResult.success(output);
         }
-        return DataResult.error("Not a YABN Object: " + input);
+        return DataResult.error(() -> "Not a YABN Object: " + input);
     }
 
     @Override
@@ -181,12 +181,12 @@ public class YabnOps implements DynamicOps<YabnElement> {
         if (input instanceof YabnObject object) {
             return DataResult.success(c -> object.elements().forEach((key, value) -> c.accept(createString(key), value.getOrNull())));
         }
-        return DataResult.error("Not a YABN Object: " + input);
+        return DataResult.error(() -> "Not a YABN Object: " + input);
     }
 
     @Override
     public DataResult<MapLike<YabnElement>> getMap(YabnElement input) {
-        return input instanceof YabnObject object ? DataResult.success(new YabnObjectMapLike(object)) : DataResult.error("Not a YABN Object: " + input);
+        return input instanceof YabnObject object ? DataResult.success(new YabnObjectMapLike(object)) : DataResult.error(() -> "Not a YABN Object: " + input);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
         if (input instanceof YabnArray array) {
             return DataResult.success(array.elements().stream().map(YabnElement::getOrNull));
         }
-        return DataResult.error("Not a YABN Array: " + input);
+        return DataResult.error(() -> "Not a YABN Array: " + input);
     }
 
     @Override
@@ -210,7 +210,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
         if (input instanceof YabnArray array) {
             return DataResult.success(c -> array.elements().forEach(e -> c.accept(e.getOrNull())));
         }
-        return DataResult.error("Not a YABN Array: " + input);
+        return DataResult.error(() -> "Not a YABN Array: " + input);
     }
 
     @Override

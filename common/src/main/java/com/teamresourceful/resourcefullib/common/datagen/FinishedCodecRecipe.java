@@ -24,11 +24,13 @@ public record FinishedCodecRecipe<C extends Container, T extends CodecRecipe<C>>
             .ifPresent(data -> data.entrySet().forEach(entry -> json.add(entry.getKey(), entry.getValue())));
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return recipe.getId();
     }
 
+    @NotNull
     @Override
     public RecipeSerializer<?> getType() {
         return recipe.getSerializer();

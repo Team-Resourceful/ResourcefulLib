@@ -45,7 +45,7 @@ public class YabnArrayBuilder implements ListBuilder<YabnElement> {
     public DataResult<YabnElement> build(final YabnElement prefix) {
         final DataResult<YabnElement> result = builder.flatMap(b -> {
             if (!(prefix instanceof YabnArray) && prefix != ops().empty()) {
-                return DataResult.error("Cannot append a list to not a list: " + prefix, prefix);
+                return DataResult.error(() -> "Cannot append a list to not a list: " + prefix, prefix);
             }
 
             final YabnArray array = new YabnArray();

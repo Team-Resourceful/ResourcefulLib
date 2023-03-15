@@ -39,6 +39,7 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
         stack.mulPose(quaternion);
     }
 
+    @NotNull
     @Override
     public PoseStack.Pose last() {
         return stack.last();

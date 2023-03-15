@@ -51,7 +51,7 @@ public final class EnumCodec<T extends Enum<T>> implements Codec<T> {
                 if (ordinal >= 0 && ordinal < values.length) {
                     return DataResult.success(values[ordinal]);
                 }
-                return DataResult.error("Unknown enum ordinal: " + ordinal);
+                return DataResult.error(() -> "Unknown enum ordinal: " + ordinal);
             }, value -> DataResult.success(value.ordinal())
         );
     }
@@ -61,7 +61,7 @@ public final class EnumCodec<T extends Enum<T>> implements Codec<T> {
             try {
                 return DataResult.success(Enum.valueOf(enumClass, id.toUpperCase(Locale.ROOT)));
             } catch (Exception e) {
-                return DataResult.error("Unknown type: " + id);
+                return DataResult.error(() -> "Unknown type: " + id);
             }
         }, value -> DataResult.success(value.name()));
     }
@@ -69,7 +69,7 @@ public final class EnumCodec<T extends Enum<T>> implements Codec<T> {
     private static <T extends Enum<T> & StringRepresentable> Codec<T> representableCodec(Function<String, @Nullable T> getter) {
         return Codec.STRING.flatXmap(id -> {
             T value = getter.apply(id);
-            return value != null ? DataResult.success(value) : DataResult.error("Unknown type: " + id);
+            return value != null ? DataResult.success(value) : DataResult.error(() -> "Unknown type: " + id);
         }, value -> DataResult.success(value.getSerializedName()));
     }
 }

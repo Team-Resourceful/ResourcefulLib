@@ -9,6 +9,7 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 public class WeightedCollection<E> implements Collection<E> {
+
     private final NavigableMap<Double, E> map = new TreeMap<>();
     private final Random random;
     private double total = 0;

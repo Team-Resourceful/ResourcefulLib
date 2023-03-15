@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.common.recipe;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -25,13 +26,13 @@ public interface CodecRecipe<C extends Container> extends Recipe<C> {
 
     @Override
     @NotNull
-    default ItemStack assemble(@NotNull C pContainer) {
+    default ItemStack assemble(@NotNull C container, @NotNull RegistryAccess access) {
         return ItemStack.EMPTY;
     }
 
     @Override
     @NotNull
-    default ItemStack getResultItem() {
+    default ItemStack getResultItem(@NotNull RegistryAccess access) {
         return ItemStack.EMPTY;
     }
 

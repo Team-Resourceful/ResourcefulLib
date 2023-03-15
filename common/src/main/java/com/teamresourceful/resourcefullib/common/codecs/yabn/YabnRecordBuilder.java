@@ -32,6 +32,6 @@ public class YabnRecordBuilder extends RecordBuilder.AbstractStringBuilder<YabnE
             builder.elements().forEach(result::put);
             return DataResult.success(result);
         }
-        return DataResult.error("mergeToMap called with not a map: " + prefix, prefix);
+        return DataResult.error(() -> "mergeToMap called with not a map: " + prefix, prefix);
     }
 }

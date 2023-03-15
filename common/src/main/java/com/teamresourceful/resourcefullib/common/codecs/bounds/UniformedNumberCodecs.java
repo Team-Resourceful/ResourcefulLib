@@ -25,7 +25,7 @@ public final class UniformedNumberCodecs {
         ).apply(instance, UniformFloat::of));
         return codec.comapFlatMap(uniformFloat -> {
             if (uniformFloat.getMaxValue() < uniformFloat.getMinValue()) {
-                return DataResult.error("Max must be at least min, min: " + uniformFloat.getMinValue()+ ", max: " + uniformFloat.getMaxValue());
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformFloat.getMinValue()+ ", max: " + uniformFloat.getMaxValue());
             }
             return DataResult.success(uniformFloat);
         }, Function.identity());
@@ -38,7 +38,7 @@ public final class UniformedNumberCodecs {
         ).apply(instance, UniformInt::of));
         return codec.comapFlatMap(uniformInt -> {
             if (uniformInt.getMaxValue() < uniformInt.getMinValue()) {
-                return DataResult.error("Max must be at least min, min: " + uniformInt.getMinValue() + ", max: " + uniformInt.getMaxValue());
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformInt.getMinValue() + ", max: " + uniformInt.getMaxValue());
             }
             return DataResult.success(uniformInt);
         }, Function.identity());
@@ -51,7 +51,7 @@ public final class UniformedNumberCodecs {
         ).apply(instance, UniformInt::of));
         return codec.comapFlatMap(uniformInt -> {
             if (uniformInt.getMaxValue() < uniformInt.getMinValue()) {
-                return DataResult.error("Max must be at least min, min: " + uniformInt.getMinValue() + ", max: " + uniformInt.getMaxValue());
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformInt.getMinValue() + ", max: " + uniformInt.getMaxValue());
             }
             return DataResult.success(uniformInt);
         }, Function.identity());
@@ -64,7 +64,7 @@ public final class UniformedNumberCodecs {
         ).apply(instance, UniformFloat::of));
         return codec.comapFlatMap(uniformFloat -> {
             if (uniformFloat.getMaxValue() < uniformFloat.getMinValue()) {
-                return DataResult.error("Max must be at least min, min: " + uniformFloat.getMinValue()+ ", max: " + uniformFloat.getMaxValue());
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformFloat.getMinValue()+ ", max: " + uniformFloat.getMaxValue());
             }
             return DataResult.success(uniformFloat);
         }, Function.identity());

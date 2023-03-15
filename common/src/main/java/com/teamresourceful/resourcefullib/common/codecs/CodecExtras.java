@@ -26,11 +26,11 @@ public final class CodecExtras {
         return codec.listOf().xmap(set -> WeightedCollection.of(set, weighter), collection -> collection.stream().toList());
     }
 
-    public static <T> Codec<T> registerId(Registry<T> registry) {
+    public static <T> Codec<T> registryId(Registry<T> registry) {
         return Codec.INT.comapFlatMap(value -> {
             T t = registry.byId(value);
             if (t == null) {
-                return DataResult.error("Unknown registry value: " + value);
+                return DataResult.error(() -> "Unknown registry value: " + value);
             }
             return DataResult.success(t);
         }, registry::getId);
@@ -49,11 +49,11 @@ public final class CodecExtras {
             if (dynamic.getValue() instanceof JsonElement jsonElement) {
                 var output = clearNulls(jsonElement);
                 if (output == null) {
-                    return DataResult.error("Value was null for decoder: " + decoder);
+                    return DataResult.error(() -> "Value was null for decoder: " + decoder);
                 }
                 return DataResult.success(decoder.apply(output));
             }
-            return DataResult.error("Value was not an instance of JsonElement");
+            return DataResult.error(() -> "Value was not an instance of JsonElement");
         }, input -> new Dynamic<>(JsonOps.INSTANCE, clearNulls(encoder.apply(input))));
     }
 

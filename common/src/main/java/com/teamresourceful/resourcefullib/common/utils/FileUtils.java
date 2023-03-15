@@ -26,13 +26,13 @@ public final class FileUtils {
         return f.toString().endsWith(".zip");
     }
 
-    private static boolean isJson(@NotNull Path f) {
+    public static boolean isJson(@NotNull Path f) {
         return f.toString().endsWith(".json");
     }
 
-    public static void streamFilesAndParse(Path source, BiConsumer<Reader, String> parser) {
-        streamFiles(source, FileUtils::isJson, path -> readFileAndParse(path, parser));
-        streamFiles(source, FileUtils::isZip, path -> openZipAndParse(path, parser));
+    public static void streamFilesAndParse(Path source, BiConsumer<Reader, String> parser, Predicate<Path> filter) {
+        streamFiles(source, filter, path -> readFileAndParse(path, parser));
+        streamFiles(source, FileUtils::isZip, path -> openZipAndParse(path, parser, filter));
     }
 
     private static void streamFiles(Path source, Predicate<Path> filter, Consumer<Path> handler) {
@@ -43,9 +43,9 @@ public final class FileUtils {
         }
     }
 
-    private static void openZipAndParse(Path source, BiConsumer<Reader, String> parser) {
+    private static void openZipAndParse(Path source, BiConsumer<Reader, String> parser, Predicate<Path> filter) {
         try(FileSystem zip = FileSystems.newFileSystem(source)) {
-            zip.getRootDirectories().forEach(rootPath -> streamFiles(rootPath, FileUtils::isJson, path -> readFileAndParse(path, parser)));
+            zip.getRootDirectories().forEach(rootPath -> streamFiles(rootPath, filter, path -> readFileAndParse(path, parser)));
         } catch (IOException e) {
             Constants.LOGGER.error(failedToLoadSourceError(source), e);
         }
@@ -61,15 +61,15 @@ public final class FileUtils {
         }
     }
 
-    public static void copyDefaultFiles(String dataPath, Path targetPath, Path modRoot) {
+    public static void copyDefaultFiles(String dataPath, Path targetPath, Path modRoot, Predicate<Path> filter) {
         if (Files.isRegularFile(modRoot)) {
             try(FileSystem fileSystem = FileSystems.newFileSystem(modRoot)) {
-                streamFiles(fileSystem.getPath(dataPath), FileUtils::isJson, path -> copyFile(targetPath, path));
+                streamFiles(fileSystem.getPath(dataPath), filter, path -> copyFile(targetPath, path));
             } catch (IOException e) {
                 Constants.LOGGER.error(failedToLoadSourceError(modRoot), e);
             }
         } else if (Files.isDirectory(modRoot)) {
-            streamFiles(Paths.get(modRoot.toString(), dataPath), FileUtils::isJson, path1 -> copyFile(targetPath, path1));
+            streamFiles(Paths.get(modRoot.toString(), dataPath), filter, path1 -> copyFile(targetPath, path1));
         }
     }
 
@@ -81,15 +81,15 @@ public final class FileUtils {
         }
     }
 
-    public static void setupDevResources(@NotNull String devPath, @NotNull BiConsumer<Reader, String> parser, Path modRoot) {
+    public static void setupDevResources(@NotNull String devPath, @NotNull BiConsumer<Reader, String> parser, Path modRoot, Predicate<Path> filter) {
         if (Files.isRegularFile(modRoot)) { //production
             try(FileSystem fileSystem = FileSystems.newFileSystem(modRoot)) {
-                streamFilesAndParse(fileSystem.getPath(devPath), parser);
+                streamFilesAndParse(fileSystem.getPath(devPath), parser, filter);
             } catch (IOException e) {
                 Constants.LOGGER.error(failedToLoadSourceError(modRoot), e);
             }
         } else if (Files.isDirectory(modRoot)) { //userDev
-            streamFilesAndParse(Paths.get(modRoot.toString(), devPath), parser);
+            streamFilesAndParse(Paths.get(modRoot.toString(), devPath), parser, filter);
         }
     }
 }

@@ -18,7 +18,7 @@ public abstract class ImageButton extends AbstractButton {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         RenderUtils.bindTexture(getTexture(mouseX, mouseY));
         blit(stack, getX(), getY(), getU(mouseX, mouseY), getV(mouseX, mouseY), this.width, this.height, this.imageWidth, this.imageHeight);
     }

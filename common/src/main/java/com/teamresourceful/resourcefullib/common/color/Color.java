@@ -97,7 +97,7 @@ public class Color {
         return new Color(parseColor(color));
     }
 
-    public static int parseColor(String color){
+    public static int parseColor(String color) {
         Objects.requireNonNull(color);
         if (color.startsWith("0x") || color.startsWith("#"))
             return Long.decode(color).intValue();
@@ -110,7 +110,7 @@ public class Color {
 
     //region updaters
 
-    private void updateFloats(){
+    private void updateFloats() {
         rgbaValue = new float[4];
         rgbaValue[0] = this.getFloatRed();
         rgbaValue[1] = this.getFloatGreen();
@@ -118,7 +118,7 @@ public class Color {
         rgbaValue[3] = this.getFloatAlpha();
     }
 
-    private void updateValue(){
+    private void updateValue() {
         this.value = (this.a << 24) | (this.r << 16) | (this.g << 8) | this.b;
     }
 
@@ -128,35 +128,59 @@ public class Color {
 
     //region Float Getters
 
-    public float getFloatRed() { return r / 255f; }
+    public float getFloatRed() {
+        return r / 255f;
+    }
 
-    public float getFloatGreen() { return g / 255f; }
+    public float getFloatGreen() {
+        return g / 255f;
+    }
 
-    public float getFloatBlue() { return b / 255f; }
+    public float getFloatBlue() {
+        return b / 255f;
+    }
 
-    public float getFloatAlpha() { return a / 255f; }
+    public float getFloatAlpha() {
+        return a / 255f;
+    }
 
     //endregion
 
     //region Int Getters
 
-    public int getIntRed() { return r; }
+    public int getIntRed() {
+        return r;
+    }
 
-    public int getIntGreen() { return g; }
+    public int getIntGreen() {
+        return g;
+    }
 
-    public int getIntBlue() { return b; }
+    public int getIntBlue() {
+        return b;
+    }
 
-    public int getIntAlpha() { return a; }
+    public int getIntAlpha() {
+        return a;
+    }
 
     //endregion
 
-    public TextColor getTextColor() { return TextColor.fromRgb(value); }
+    public TextColor getTextColor() {
+        return TextColor.fromRgb(value);
+    }
 
-    public int getValue() { return value; }
+    public int getValue() {
+        return value;
+    }
 
-    public boolean isDefault(){ return defaultValue; }
+    public boolean isDefault() {
+        return defaultValue;
+    }
 
-    public boolean isRainbow(){ return isRainbow; }
+    public boolean isRainbow() {
+        return isRainbow;
+    }
 
     @Override
     public String toString() {
@@ -181,11 +205,11 @@ public class Color {
 
     //region Codec utils
 
-    public static final Codec<Color> COLOR_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("r").orElse(255).forGetter(Color::getIntRed),
-        Codec.INT.fieldOf("g").orElse(255).forGetter(Color::getIntGreen),
-        Codec.INT.fieldOf("b").orElse(255).forGetter(Color::getIntBlue),
-        Codec.INT.fieldOf("a").orElse(255).forGetter(Color::getIntAlpha)
+    public static final Codec<Color> RGB_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("r").orElse(255).forGetter(Color::getIntRed),
+            Codec.INT.fieldOf("g").orElse(255).forGetter(Color::getIntGreen),
+            Codec.INT.fieldOf("b").orElse(255).forGetter(Color::getIntBlue),
+            Codec.INT.fieldOf("a").orElse(255).forGetter(Color::getIntAlpha)
     ).apply(instance, Color::new));
 
     public static DataResult<Color> decodeColor(Dynamic<?> dynamic) {
@@ -194,8 +218,8 @@ public class Color {
         } else if (dynamic.asString().result().isPresent()) {
             return DataResult.success(Color.parse(dynamic.asString("WHITE")));
         }
-        return COLOR_CODEC.parse(dynamic).result().map(DataResult::success)
-                .orElse(DataResult.error("Color input not valid!"));
+        return RGB_CODEC.parse(dynamic).result().map(DataResult::success)
+                .orElse(DataResult.error(() -> "Color input not valid!"));
     }
     //endregion
 
@@ -205,15 +229,15 @@ public class Color {
         if (rainbowInitialized) return;
         rainbowInitialized = true;
         Scheduling.schedule(() -> {
-            if(RAINBOW.r > 0 && RAINBOW.b == 0){
+            if (RAINBOW.r > 0 && RAINBOW.b == 0) {
                 RAINBOW.r--;
                 RAINBOW.g++;
             }
-            if(RAINBOW.g > 0 && RAINBOW.r == 0){
+            if (RAINBOW.g > 0 && RAINBOW.r == 0) {
                 RAINBOW.g--;
                 RAINBOW.b++;
             }
-            if(RAINBOW.b > 0 && RAINBOW.g == 0){
+            if (RAINBOW.b > 0 && RAINBOW.g == 0) {
                 RAINBOW.r++;
                 RAINBOW.b--;
             }

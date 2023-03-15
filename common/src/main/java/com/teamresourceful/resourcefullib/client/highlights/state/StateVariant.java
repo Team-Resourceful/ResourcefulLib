@@ -22,12 +22,12 @@ public final class StateVariant {
 
     public static Codec<List<BlockState>> stateCodec(Block block) {
         StateDefinition<Block, BlockState> stateDefinition = block.getStateDefinition();
-        return Codec.STRING.flatXmap(string -> getStates(stateDefinition, string), state -> DataResult.error("State variants can not be encoded back to a string."));
+        return Codec.STRING.flatXmap(string -> getStates(stateDefinition, string), state -> DataResult.error(() -> "State variants can not be encoded back to a string."));
     }
 
     private static DataResult<List<BlockState>> getStates(StateDefinition<Block, BlockState> definition, String input) {
         var states = definition.getPossibleStates().stream().filter(predicate(definition, input)).toList();
-        return states.isEmpty() ? DataResult.error("No states found for " + input) : DataResult.success(states);
+        return states.isEmpty() ? DataResult.error(() -> "No states found for " + input) : DataResult.success(states);
     }
 
     private static Predicate<BlockState> predicate(StateDefinition<Block, BlockState> state, String stateString) {

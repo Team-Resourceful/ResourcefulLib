@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefullib.common.codecs.predicates;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
+import com.teamresourceful.resourcefullib.common.codecs.bounds.DefaultBoundCodecs;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -16,8 +16,8 @@ public record RestrictedItemPredicate(Item item, NbtPredicate nbt, MinMaxBounds.
     public static final Codec<RestrictedItemPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.ITEM.byNameCodec().fieldOf("id").forGetter(RestrictedItemPredicate::item),
             NbtPredicate.CODEC.fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedItemPredicate::nbt),
-            CodecExtras.passthrough(MinMaxBounds.Ints::serializeToJson, MinMaxBounds.Ints::fromJson).fieldOf("durability").orElse(MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::durability),
-            CodecExtras.passthrough(MinMaxBounds.Ints::serializeToJson, MinMaxBounds.Ints::fromJson).fieldOf("count").orElse(MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::count)
+            DefaultBoundCodecs.INT.fieldOf("durability").orElse(net.minecraft.advancements.critereon.MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::durability),
+            DefaultBoundCodecs.INT.fieldOf("count").orElse(net.minecraft.advancements.critereon.MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::count)
     ).apply(instance, RestrictedItemPredicate::new));
 
     public Optional<CompoundTag> getTag() {

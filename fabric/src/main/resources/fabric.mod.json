@@ -4,8 +4,14 @@
   "version": "${version}",
   "name": "Resourceful Lib",
   "description": "Library Mod by Team Resourceful",
+  "contact": {
+    "issues": "https://github.com/Team-Resourceful/ResourcefulLib/issues/new/choose",
+    "sources": "https://github.com/Team-Resourceful/ResourcefulLib",
+    "homepage": "https://resourcefulbees.com"
+  },
   "authors": [
-    "ThatGravyBoat"
+    "ThatGravyBoat",
+    "Epic_Oreo"
   ],
   "entrypoints": {
     "client": [
@@ -19,6 +25,6 @@
   "environment": "*",
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.19.3"
+    "minecraft": ">=1.19.4"
   }
 }

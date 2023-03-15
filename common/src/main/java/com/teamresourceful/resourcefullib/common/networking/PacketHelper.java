@@ -34,7 +34,7 @@ public final class PacketHelper {
             YabnOps ops = compressed ? YabnOps.COMPRESSED : YabnOps.INSTANCE;
             return codec.parse(ops, YabnParser.parse(new ByteBufByteReader(buf)));
         } catch (Exception e) {
-            return DataResult.error(e.getMessage());
+            return DataResult.error(e::getMessage);
         }
     }
 

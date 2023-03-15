@@ -42,12 +42,12 @@ public class HolderSetCodec<E> implements Codec<HolderSet<E>> {
     }
 
     @Override
-    public <T> DataResult<T> encode(HolderSet<E> p_206674_, DynamicOps<T> p_206675_, T p_206676_) {
-        if (!p_206674_.canSerializeIn(registry.holderOwner())) {
-            return DataResult.error("HolderSet " + p_206674_ + " is not valid in current registry set");
+    public <T> DataResult<T> encode(HolderSet<E> set, DynamicOps<T> ops, T prefix) {
+        if (!set.canSerializeIn(registry.holderOwner())) {
+            return DataResult.error(() -> "HolderSet " + set + " is not valid in current registry set");
         }
 
-        return this.holderCodec.encode(p_206674_.unwrap().mapRight(List::copyOf), p_206675_, p_206676_);
+        return this.holderCodec.encode(set.unwrap().mapRight(List::copyOf), ops, prefix);
     }
 }
 

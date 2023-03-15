@@ -16,12 +16,12 @@ public interface PropertyMatcher {
             .flatXmap(
                 either -> DataResult.success(either.map(p -> p, p -> p)),
                 matcher -> {
-                    if (matcher instanceof ExactPropertyMatcher) {
-                        return DataResult.success(Either.left((ExactPropertyMatcher) matcher));
-                    } else if (matcher instanceof RangePropertyMatcher) {
-                        return DataResult.success(Either.right((RangePropertyMatcher) matcher));
+                    if (matcher instanceof ExactPropertyMatcher exactMatcher) {
+                        return DataResult.success(Either.left(exactMatcher));
+                    } else if (matcher instanceof RangePropertyMatcher rangeMatcher) {
+                        return DataResult.success(Either.right(rangeMatcher));
                     }
-                    return DataResult.error("Unknown PropertyMatcher type");
+                    return DataResult.error(() -> "Unknown PropertyMatcher type");
                 }
             );
 

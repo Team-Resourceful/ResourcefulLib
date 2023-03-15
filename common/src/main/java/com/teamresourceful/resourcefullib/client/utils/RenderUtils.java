@@ -7,12 +7,13 @@ import com.teamresourceful.resourcefullib.client.scissor.ClosingScissorBox;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.types.Bound;
-import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
 import org.joml.Vector3f;
 
 public final class RenderUtils {
@@ -36,7 +37,7 @@ public final class RenderUtils {
      */
     public static Bound getScissorBounds(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
         float guiScale = (float) minecraft.getWindow().getGuiScale();
-        Vec2i translation = getTranslation(stack);
+        Vector2ic translation = getTranslation(stack);
         float translationX = translation.x() * guiScale;
         float translationY = translation.y() * guiScale;
         return new Bound((int) (translationX + x * guiScale), (int) (Minecraft.getInstance().getWindow().getHeight() - y * guiScale - translationY - height * guiScale), (int) (width * guiScale), (int) (height * guiScale));
@@ -45,18 +46,19 @@ public final class RenderUtils {
     /**
      * @return returns the point of the current translation of the stack.
      */
-    public static Vec2i getTranslation(PoseStack stack) {
+    public static Vector2ic getTranslation(PoseStack stack) {
         Matrix4f pose = stack.last().pose();
         Vector3f vec = pose.getTranslation(new Vector3f());
-        return Vec2i.of((int) vec.x, (int) vec.y);
+        return new Vector2i((int) vec.x, (int) vec.y);
     }
 
     /**
      * Renders a given item at a position using the translation of a given stack.
+     * @deprecated use {@link net.minecraft.client.renderer.entity.ItemRenderer#renderGuiItem(PoseStack, ItemStack, int, int)} instead.
      */
+    @Deprecated
     public static void renderItem(PoseStack stack, ItemStack item, int x, int y) {
-        Vec2i translation = getTranslation(stack);
-        Minecraft.getInstance().getItemRenderer().renderGuiItem(item, translation.x() + x, translation.y() + y);
+        Minecraft.getInstance().getItemRenderer().renderGuiItem(stack, item, x, y);
     }
 
     /**

@@ -17,7 +17,6 @@ public class BoundCodec<T extends Number, B extends MinMaxBounds<T>> implements 
     private final Codec<B> singleCodec;
     private final Codec<B> minMaxCodec;
 
-
     public BoundCodec(Codec<T> typeCodec, BoundsFactory<T, B> factory) {
         this.singleCodec = createSingle(typeCodec, factory);
         this.minMaxCodec = createMinMax(typeCodec, factory);

@@ -26,7 +26,7 @@ public record NbtPredicate(CompoundTag tag) {
         return tag == null ? this == ANY : this.tag == null || NbtUtils.compareNbt(this.tag, tag, true);
     }
 
-    public static CompoundTag getEntityTagToCompare(Entity entity) {
+    private static CompoundTag getEntityTagToCompare(Entity entity) {
         CompoundTag compoundtag = entity.saveWithoutId(new CompoundTag());
         if (entity instanceof Player player) {
             ItemStack itemstack = player.getInventory().getSelected();

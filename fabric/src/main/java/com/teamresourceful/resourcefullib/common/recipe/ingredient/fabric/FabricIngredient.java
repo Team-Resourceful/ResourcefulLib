@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredie
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -28,14 +27,5 @@ public record FabricIngredient<T extends CodecIngredient<T>>(T ingredient) imple
     @Override
     public CustomIngredientSerializer<?> getSerializer() {
         return FabricIngredientHelper.get(ingredient.serializer().id());
-    }
-
-    /**
-     * @deprecated Use {@link #ingredient()} instead.
-     */
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.19.4")
-    public T getIngredient() {
-        return ingredient;
     }
 }

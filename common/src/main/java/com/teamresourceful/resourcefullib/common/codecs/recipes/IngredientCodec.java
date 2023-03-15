@@ -28,7 +28,7 @@ public final class IngredientCodec {
         if (object instanceof JsonElement jsonElement) {
             return DataResult.success(Ingredient.fromJson(jsonElement));
         }
-        return DataResult.error("Value was not an instance of JsonElement");
+        return DataResult.error(() -> "Value was not an instance of JsonElement");
     }
 
     private static Dynamic<JsonElement> encodeIngredient(Ingredient ingredient) {
@@ -44,7 +44,7 @@ public final class IngredientCodec {
             ByteBuf buffer = Unpooled.wrappedBuffer(array);
             return DataResult.success(Ingredient.fromNetwork(new FriendlyByteBuf(buffer)));
         }catch (Exception e){
-            return DataResult.error("Failed to decode ingredient from network: " + e.getMessage());
+            return DataResult.error(() -> "Failed to decode ingredient from network: " + e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public final class IngredientCodec {
             }
             return DataResult.success(bytes);
         }catch (Exception e){
-            return DataResult.error("Failed to encode ingredient to network: " + e.getMessage());
+            return DataResult.error(() -> "Failed to encode ingredient to network: " + e.getMessage());
         }
     }
 
