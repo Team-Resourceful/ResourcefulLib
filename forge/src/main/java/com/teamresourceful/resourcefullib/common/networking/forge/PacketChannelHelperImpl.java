@@ -29,7 +29,7 @@ public class PacketChannelHelperImpl {
     public static <T extends Packet<T>> void registerS2CPacket(ResourceLocation name, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
         Channel channel = CHANNELS.get(name);
         if (channel == null) {
-            throw new IllegalStateException("Channel " + name + " not registered");
+            throw new IllegalStateException("Channel " + name + " not registered, Available channels: " + CHANNELS.keySet());
         }
         channel.channel.registerMessage(++channel.packets, packetClass, handler::encode, handler::decode, (msg, ctx) -> {
             NetworkEvent.Context context = ctx.get();
@@ -44,7 +44,7 @@ public class PacketChannelHelperImpl {
     public static <T extends Packet<T>> void registerC2SPacket(ResourceLocation name, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
         Channel channel = CHANNELS.get(name);
         if (channel == null) {
-            throw new IllegalStateException("Channel " + name + " not registered");
+            throw new IllegalStateException("Channel " + name + " not registered, Available channels: " + CHANNELS.keySet());
         }
         channel.channel.registerMessage(++channel.packets, packetClass, handler::encode, handler::decode, (msg, ctx) -> {
             NetworkEvent.Context context = ctx.get();
@@ -64,7 +64,7 @@ public class PacketChannelHelperImpl {
     public static <T extends Packet<T>> void sendToServer(ResourceLocation name, T packet) {
         Channel channel = CHANNELS.get(name);
         if (channel == null) {
-            throw new IllegalStateException("Channel " + name + " not registered");
+            throw new IllegalStateException("Channel " + name + " not registered, Available channels: " + CHANNELS.keySet());
         }
         channel.channel.sendToServer(packet);
     }
@@ -72,7 +72,7 @@ public class PacketChannelHelperImpl {
     public static <T extends Packet<T>> void sendToPlayer(ResourceLocation name, T packet, Player player) {
         Channel channel = CHANNELS.get(name);
         if (channel == null) {
-            throw new IllegalStateException("Channel " + name + " not registered");
+            throw new IllegalStateException("Channel " + name + " not registered, Available channels: " + CHANNELS.keySet());
         }
         if (player instanceof ServerPlayer serverPlayer) {
             channel.channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
