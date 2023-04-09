@@ -23,18 +23,24 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
     private final List<T> entries = new ArrayList<>();
     private final int x, y, width, height, itemHeight;
     private final Consumer<@Nullable T> onSelection;
+    private final boolean relativeClicks;
 
     @Nullable
     private T selected, hovered;
     private double scrollAmount;
 
     public SelectionList(int x, int y, int width, int height, int itemHeight, Consumer<@Nullable T> onSelection) {
+        this(x, y, width, height, itemHeight, onSelection, false);
+    }
+
+    public SelectionList(int x, int y, int width, int height, int itemHeight, Consumer<@Nullable T> onSelection, boolean relativeClicks) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.itemHeight = itemHeight;
         this.onSelection = onSelection;
+        this.relativeClicks = relativeClicks;
     }
 
     @Override
@@ -102,6 +108,11 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         T entry = this.getEntryAtPosition(mouseX, mouseY);
         if (entry != null) {
+            if (relativeClicks) {
+                int scrollY = this.y - (int) this.scrollAmount + this.children().indexOf(entry) * this.itemHeight;
+                mouseX -= this.x;
+                mouseY -= scrollY;
+            }
             if (entry.mouseClicked(mouseX, mouseY, button)) {
                 this.setFocused(entry);
                 this.setDragging(true);
@@ -114,10 +125,17 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (this.getFocused() != null) {
-            this.getFocused().mouseReleased(mouseX, mouseY, button);
+        for (int i = 0; i < this.entries.size(); i++) {
+            int scrollY = this.y - (int) this.scrollAmount + i * this.itemHeight;
+            T entry = this.entries.get(i);
+            if (relativeClicks) {
+                if (entry.mouseReleased(mouseX - this.x, mouseY - scrollY, button)) {
+                    return true;
+                }
+            } else if (entry.mouseReleased(mouseX, mouseY, button)) {
+                return true;
+            }
         }
-
         return false;
     }
 
@@ -173,5 +191,17 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
     @Override
     public void updateNarration(@NotNull NarrationElementOutput output) {
 
+    }
+
+    public T getSelected() {
+        return selected;
+    }
+
+    public T getHovered() {
+        return hovered;
+    }
+
+    public double getScrollAmount() {
+        return scrollAmount;
     }
 }

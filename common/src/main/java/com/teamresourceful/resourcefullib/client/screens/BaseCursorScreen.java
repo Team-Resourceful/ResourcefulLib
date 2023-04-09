@@ -2,18 +2,16 @@ package com.teamresourceful.resourcefullib.client.screens;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractContainerCursorScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements CursorScreen {
+public abstract class BaseCursorScreen extends Screen implements CursorScreen {
 
     private Cursor cursor = Cursor.DEFAULT;
 
-    public AbstractContainerCursorScreen(T abstractContainerMenu, Inventory inventory, Component component) {
-        super(abstractContainerMenu, inventory, component);
+    protected BaseCursorScreen(Component component) {
+        super(component);
     }
 
     @Override

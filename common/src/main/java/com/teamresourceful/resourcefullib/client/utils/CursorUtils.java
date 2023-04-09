@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.client.utils;
 
 
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
@@ -60,6 +61,12 @@ public final class CursorUtils {
 
     public static void setResizeAll() {
         GLFW.glfwSetCursor(Minecraft.getInstance().getWindow().getWindow(), CursorUtils.RESIZE_ALL_CURSOR);
+    }
+
+    public static void setCursor(boolean state, CursorScreen.Cursor cursor) {
+        if (Minecraft.getInstance().screen instanceof CursorScreen cursorScreen && state) {
+            cursorScreen.setCursor(cursor);
+        }
     }
 
 }
