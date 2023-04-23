@@ -1,22 +1,16 @@
 architectury {
-    common(rootProject.enabled_platforms.split(","))
+    common(enabled_platforms.split(","))
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
 }
-
-def ENV = System.getenv()
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact remapJar
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-
-            artifactId = "$archives_base_name-common-$minecraft_version"
+            artifactId = "$archives_base_name-$project.name-$minecraft_version"
+            from components.java
 
             pom {
                 name = 'ResourcefulLib'
@@ -39,7 +33,7 @@ publishing {
     }
     repositories {
         maven {
-            url = "https://maven.resourcefulbees.com/repository/maven-releases/"
+            url = repoUrl
             credentials {
                 username ENV.MAVEN_USER
                 password ENV.MAVEN_PASS
