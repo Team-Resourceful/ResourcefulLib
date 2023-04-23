@@ -6,20 +6,24 @@ on:
         description: "Patch version"
         required: true
         type: string
-      postfix:
-        description: "Version postfix"
-        required: false
+      release-type:
+        description: "Release Type"
+        required: true
         type: choice
         options:
           - release
           - alpha
           - beta
-      postfix-build:
-        description: "Postfix build"
-        required: false
+          - pre
+          - rc
+        default: release
+      build:
+        description: "Build"
+        required: true
         type: string
+        default: "0"
 jobs:
-  publish:
+  publish-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -43,7 +47,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Update Mod Version
-        run: ./gradlew updateModVersion --patchVersion=${{ inputs.patch }} --versionPostfix=${{ inputs.postfix }} --postfixBuild=${{ inputs.postfix-build }}
+        run: ./gradlew updateModVersion --patch=${{ inputs.patch }} --releaseType=${{ inputs.release-type }} --build=${{ inputs.build }}
 
       - name: Get Mod Version
         id: version
@@ -65,7 +69,7 @@ jobs:
           MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
 
-      ### Need to duplicate this block for fabric or abuse the files-secondary field
+      ### Need to duplicate this block for fabric
       - name: Upload Forge Releases (Curse/Modrinth/Github)
         uses: Kir-Antipov/mc-publish@v3.2
         with:
