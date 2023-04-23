@@ -1,10 +1,16 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+    id "architectury-plugin" version "3.4+"
+    id "dev.architectury.loom" version "1.1.+" apply false
+    id "com.teamresourceful.resourcefulgradle"
 }
 
 architectury {
-    minecraft = rootProject.minecraft_version
+    minecraft = minecraft_version
+}
+
+ext {
+    repoUrl = nightly.toBoolean() ? "https://nexus.resourcefulbees.com/repository/maven-nightly/" : "https://nexus.resourcefulbees.com/repository/maven-releases/"
+    ENV = System.getenv()
 }
 
 subprojects {
@@ -15,7 +21,7 @@ subprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "com.mojang:minecraft:$minecraft_version"
         mappings loom.officialMojangMappings()
     }
 
@@ -29,9 +35,9 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    archivesBaseName = rootProject.archives_base_name
-    version = rootProject.mod_version
-    group = rootProject.maven_group
+    archivesBaseName = archives_base_name
+    version = libs.versions.mod.version.get()
+    group = maven_group
 
     repositories {
         // Add repositories to retrieve artifacts from in here.
@@ -48,5 +54,32 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+}
+
+resourcefulGradle {
+    templates {
+        //I have no idea how to get rid of the warnings in idea. switching from interface to abstract
+        //gets rid of *some* warnings. so we just have to live with them as they are now since that's how
+        //the gradle docs say to make a plugin with nested DSL
+
+        readme {
+            source = file("templates/README.md.template")
+            injectedValues = [
+                    "version"            : libs.versions.mod.version.get(),
+                    "mc_version"         : minecraft_version
+            ]
+        }
+        discordEmbed {
+            injectedValues = [
+                    "version"      : libs.versions.mod.version.get(),
+                    "mc_version"   : minecraft_version,
+                    "forge_version": forge_version,
+                    "fabric_version": fabric_loader_version
+            ]
+
+            def template = nightly.toBoolean() ? "nightly_embed.json.template" : "release_embed.json.template"
+            source = file("templates/$template")
+        }
     }
 }

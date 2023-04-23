@@ -16,7 +16,7 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+    forge "net.minecraftforge:forge:$forge_version"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -25,10 +25,10 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", version
 
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+        expand "version": version
     }
 }
 
@@ -37,17 +37,20 @@ shadowJar {
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    archiveAppendix.set "$project.name-$minecraft_version"
+    archiveClassifier.set "dev-shadow"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier null
+    archiveAppendix.set "$project.name-$minecraft_version"
+    archiveClassifier.set null
 }
 
 jar {
-    classifier "dev"
+    archiveAppendix.set "$project.name-$minecraft_version"
+    archiveClassifier.set "dev"
 }
 
 sourcesJar {
@@ -62,17 +65,11 @@ components.java {
     }
 }
 
-def ENV = System.getenv()
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact remapJar
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-
-            artifactId = "$archives_base_name-forge-$minecraft_version"
+            artifactId = "$archives_base_name-$project.name-$minecraft_version"
+            from components.java
 
             pom {
                 name = 'ResourcefulLib'
@@ -95,7 +92,7 @@ publishing {
     }
     repositories {
         maven {
-            url = "https://maven.resourcefulbees.com/repository/maven-releases/"
+            url = repoUrl
             credentials {
                 username ENV.MAVEN_USER
                 password ENV.MAVEN_PASS
