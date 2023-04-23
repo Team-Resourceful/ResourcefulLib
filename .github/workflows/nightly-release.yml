@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 3 * * *"
 jobs:
-  publish:
+  publish-nightly:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
