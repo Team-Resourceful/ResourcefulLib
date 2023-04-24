@@ -22,7 +22,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    include implementation("com.teamresourceful:yabn:${rootProject.yabn_version}")
+    include implementation("com.teamresourceful:yabn:$yabn_version")
 }
 
 processResources {
