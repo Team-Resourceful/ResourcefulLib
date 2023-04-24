@@ -8,11 +8,6 @@ architectury {
     minecraft = minecraft_version
 }
 
-ext {
-    repoUrl = nightly.toBoolean() ? "https://nexus.resourcefulbees.com/repository/maven-nightly/" : "https://nexus.resourcefulbees.com/repository/maven-releases/"
-    ENV = System.getenv()
-}
-
 subprojects {
     apply plugin: "dev.architectury.loom"
 
@@ -50,6 +45,48 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+
+    publishing {
+        if (project != rootProject) {
+            publications {
+                mavenJava(MavenPublication) {
+                    artifactId = "$archives_base_name-$project.name-$minecraft_version"
+                    from components.java
+
+                    pom {
+                        name = 'ResourcefulLib'
+                        description = 'The library behind Team Resourceful mods and more.'
+                        url = 'https://github.com/Team-Resourceful/ResourcefulLib'
+
+                        scm {
+                            connection = 'git:https://github.com/Team-Resourceful/ResourcefulLib.git'
+                            developerConnection = 'git:https://github.com/Team-Resourceful/ResourcefulLib.git'
+                            url = 'https://github.com/Team-Resourceful/ResourcefulLib'
+                        }
+
+                        licenses {
+                            license {
+                                name = 'MIT'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = nightly.toBoolean()
+                        ? "https://nexus.resourcefulbees.com/repository/maven-nightly/"
+                        : "https://nexus.resourcefulbees.com/repository/maven-releases/"
+                credentials {
+                    def ENV = System.getenv()
+                    username ENV.MAVEN_USER
+                    password ENV.MAVEN_PASS
+                }
+            }
+        }
     }
 }
 
