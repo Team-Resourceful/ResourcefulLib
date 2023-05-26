@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefullib.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,9 +17,9 @@ public abstract class AbstractContainerCursorScreen<T extends AbstractContainerM
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int i, int j, float f) {
+    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
         setCursor(Cursor.DEFAULT);
-        super.render(stack, i, j, f);
+        super.render(graphics, i, j, f);
         setCursor(children());
 
         switch (cursor) {

@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -13,6 +14,10 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
         super();
         this.stack = stack;
         this.stack.pushPose();
+    }
+
+    public CloseablePoseStack(GuiGraphics graphics) {
+        this(graphics.pose());
     }
 
     public CloseablePoseStack() {

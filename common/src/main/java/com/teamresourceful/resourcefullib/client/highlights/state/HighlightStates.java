@@ -14,7 +14,6 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public record HighlightStates(Map<List<BlockState>, Highlight> states) {
 
@@ -23,7 +22,7 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
     public static final Codec<BlockModelRotation> ROTATION_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("x").orElse(0).forGetter(ignored -> 0),
             Codec.INT.fieldOf("y").orElse(0).forGetter(ignored -> 0)
-    ).apply(instance, (x, y) -> Optional.ofNullable(BlockModelRotation.by(x, y)).orElse(BlockModelRotation.X0_Y0)));
+    ).apply(instance, BlockModelRotation::by));
 
     public static final Codec<Highlight> TRANSLATED_BOX_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             HighlightHandler.HIGHLIGHT_CODEC.fieldOf("highlight").forGetter(i -> i),

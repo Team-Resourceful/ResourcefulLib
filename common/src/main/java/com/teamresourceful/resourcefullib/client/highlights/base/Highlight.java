@@ -32,11 +32,14 @@ public record Highlight(ResourceLocation id, List<HighlightLine> lines) {
         return new Highlight(null, this.lines.stream().map(HighlightLine::copy).toList());
     }
 
-    public void render(VertexConsumer consumer, PoseStack poseStack, Vec3 cameraPos, BlockPos blockPos) {
+    public void render(VertexConsumer consumer, PoseStack poseStack, Vec3 cameraPos, Vec3 offset, BlockPos blockPos) {
         try (var ignored = new CloseablePoseStack(poseStack)) {
             float x = (float) (blockPos.getX() - cameraPos.x());
             float y = (float) (blockPos.getY() - cameraPos.y());
             float z = (float) (blockPos.getZ() - cameraPos.z());
+            x += (float) offset.x();
+            y += (float) offset.y();
+            z += (float) offset.z();
 
             for (HighlightLine line : lines) line.render(poseStack, consumer, x, y, z);
         }

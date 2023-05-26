@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefullib.client.components;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -37,9 +37,9 @@ public abstract class ParentWidget extends AbstractContainerEventHandler impleme
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         for (Renderable renderable : renderables) {
-            renderable.render(stack, mouseX, mouseY, partialTicks);
+            renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
     }
 

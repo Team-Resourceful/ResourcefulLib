@@ -12,6 +12,8 @@ plugins {
     id 'com.teamresourceful.resourcefulsettings' version '0.0.5'
 }
 
-include("common", "fabric", "forge")
+include("common")
+include("fabric")
+//include("forge")
 
 rootProject.name = "Resourceful Lib"

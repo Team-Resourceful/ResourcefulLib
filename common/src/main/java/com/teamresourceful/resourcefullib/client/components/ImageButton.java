@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefullib.client.components;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.CommonComponents;
@@ -18,9 +17,14 @@ public abstract class ImageButton extends AbstractButton {
     }
 
     @Override
-    public void renderWidget(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(getTexture(mouseX, mouseY));
-        blit(stack, getX(), getY(), getU(mouseX, mouseY), getV(mouseX, mouseY), this.width, this.height, this.imageWidth, this.imageHeight);
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.blit(
+            getTexture(mouseX, mouseY),
+            getX(), getY(),
+            getU(mouseX, mouseY), getV(mouseX, mouseY),
+            this.width, this.height,
+            this.imageWidth, this.imageHeight
+        );
     }
 
     public abstract ResourceLocation getTexture(int mouseX, int mouseY);

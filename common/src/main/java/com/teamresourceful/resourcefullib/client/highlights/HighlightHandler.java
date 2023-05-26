@@ -53,14 +53,14 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
 
     public static boolean onBlockHighlight(Vec3 cameraPos, Entity cameraEntity, PoseStack stack, BlockPos blockPos, BlockState state, VertexConsumer consumer) {
         if (state.getBlock() instanceof Highlightable highlightable) {
-            var highlight = highlightable.getHighlight(cameraEntity.level, blockPos, state);
+            var highlight = highlightable.getHighlight(cameraEntity.level(), blockPos, state);
             if (highlight != null) {
-                highlight.render(consumer, stack, cameraPos, blockPos);
+                highlight.render(consumer, stack, cameraPos, state.getOffset(cameraEntity.level(), blockPos), blockPos);
                 return true;
             }
         }
         if (STATE_CACHE.containsKey(state)) {
-            STATE_CACHE.get(state).render(consumer, stack, cameraPos, blockPos);
+            STATE_CACHE.get(state).render(consumer, stack, cameraPos, state.getOffset(cameraEntity.level(), blockPos), blockPos);
             return true;
         }
         return false;
