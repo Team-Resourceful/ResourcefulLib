@@ -61,7 +61,7 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./gradle.properties"
-          properties: "mc_version"
+          properties: "minecraft_version"
 
       - name: Publish package
         run: ./gradlew publish --info
