@@ -77,7 +77,7 @@ jobs:
 
       ### Need to duplicate this block for fabric
       - name: Upload Forge Releases (Curse/Modrinth/Github)
-        if: contains(steps.props.outputs.enabled_platforms, "forge")
+        if: contains(steps.props.outputs.enabled_platforms, 'forge')
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
@@ -98,7 +98,7 @@ jobs:
           version-resolver: exact
 
       - name: Upload Fabric Releases (Curse/Modrinth/Github)
-        if: contains(steps.props.outputs.enabled_platforms, "fabric")
+        if: contains(steps.props.outputs.enabled_platforms, 'fabric')
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
