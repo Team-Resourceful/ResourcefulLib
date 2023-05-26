@@ -5,7 +5,7 @@ plugins {
 }
 
 architectury {
-    minecraft = minecraft_version
+    minecraft = mc_version
 }
 
 subprojects {
@@ -16,7 +16,7 @@ subprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:$minecraft_version"
+        minecraft "com.mojang:minecraft:$mc_version"
         mappings loom.officialMojangMappings()
     }
 
@@ -55,7 +55,7 @@ allprojects {
         if (project != rootProject) {
             publications {
                 mavenJava(MavenPublication) {
-                    artifactId = "$archives_base_name-$project.name-$minecraft_version"
+                    artifactId = "$archives_base_name-$project.name-$mc_version"
                     from components.java
 
                     pom {
@@ -104,13 +104,13 @@ resourcefulGradle {
             source = file("templates/README.md.template")
             injectedValues = [
                     "version"            : libs.versions.mod.version.get(),
-                    "mc_version"         : minecraft_version
+                    "mc_version"         : mc_version
             ]
         }
         discordEmbed {
             injectedValues = [
                     "version"      : libs.versions.mod.version.get(),
-                    "mc_version"   : minecraft_version,
+                    "mc_version"   : mc_version,
                     "forge_version": forge_version,
                     "fabric_version": fabric_loader_version
             ]

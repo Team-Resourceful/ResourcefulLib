@@ -37,7 +37,7 @@ shadowJar {
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    archiveAppendix.set "$project.name-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
     archiveClassifier.set "dev-shadow"
 }
 
@@ -45,12 +45,12 @@ remapJar {
     injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveAppendix.set "$project.name-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
     archiveClassifier.set null
 }
 
 jar {
-    archiveAppendix.set "$project.name-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
     archiveClassifier.set "dev"
 }
 
