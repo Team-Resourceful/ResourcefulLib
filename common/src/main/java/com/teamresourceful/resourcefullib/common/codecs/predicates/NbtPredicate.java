@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefullib.common.codecs.predicates;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
@@ -15,17 +16,23 @@ public record NbtPredicate(CompoundTag tag) {
     public static final Codec<NbtPredicate> CODEC = CompoundTag.CODEC.xmap(NbtPredicate::new, NbtPredicate::tag);
 
     public boolean matches(ItemStack pStack) {
-        return this == ANY || this.matches(pStack.getTag());
+        if (this == ANY || isEmpty(this.tag)) return true;
+        return this.matches(pStack.getTag());
     }
 
     public boolean matches(Entity pEntity) {
-        return this == ANY || this.matches(getEntityTagToCompare(pEntity));
+        if (this == ANY || isEmpty(this.tag)) return true;
+        return this.matches(getEntityTagToCompare(pEntity));
     }
 
     public boolean matches(@Nullable Tag tag) {
-        return tag == null ? this == ANY : this.tag == null || NbtUtils.compareNbt(this.tag, tag, true);
+        if (this == ANY || isEmpty(this.tag)) return true;
+        return isEmpty(tag) ? isEmpty(this.tag) : NbtUtils.compareNbt(this.tag, tag, true);
     }
 
+    public static boolean isEmpty(Tag tag) {
+        return tag == null || (tag instanceof CompoundTag compoundTag && compoundTag.isEmpty()) || (tag instanceof ListTag list && list.isEmpty());
+    }
     private static CompoundTag getEntityTagToCompare(Entity entity) {
         CompoundTag compoundtag = entity.saveWithoutId(new CompoundTag());
         if (entity instanceof Player player) {

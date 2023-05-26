@@ -11,6 +11,7 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.Registry;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -22,6 +23,9 @@ public final class CodecExtras {
         throw new UtilityClassException();
     }
 
+    public static <O, A> Function<O, Optional<A>> optionalFor(final Function<O, @Nullable A> getter) {
+        return o -> Optional.ofNullable(getter.apply(o));
+    }
     public static <T> Codec<WeightedCollection<T>> weightedCollection(Codec<T> codec, ToDoubleFunction<T> weighter) {
         return codec.listOf().xmap(set -> WeightedCollection.of(set, weighter), collection -> collection.stream().toList());
     }
