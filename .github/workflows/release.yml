@@ -56,12 +56,12 @@ jobs:
           path: "./version.properties"
           properties: "version"
 
-      - name: Get MC Version
-        id: mc_version
+      - name: Get MC Version and Platforms
+        id: props
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./gradle.properties"
-          properties: "mc_version"
+          properties: "mc_version enabled_platforms"
 
       - name: Publish package
         run: ./gradlew publish --info
@@ -77,6 +77,7 @@ jobs:
 
       ### Need to duplicate this block for fabric
       - name: Upload Forge Releases (Curse/Modrinth/Github)
+        if: contains(steps.props.outputs.enabled_platforms, "forge")
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
@@ -93,10 +94,11 @@ jobs:
           version: ${{ steps.version.outputs.version }}
           changelog-file: changelog.md
           loaders: forge
-          game-versions: ${{ steps.mc_version.outputs.mc_version }}
+          game-versions: ${{ steps.props.outputs.mc_version }}
           version-resolver: exact
 
       - name: Upload Fabric Releases (Curse/Modrinth/Github)
+        if: contains(steps.props.outputs.enabled_platforms, "fabric")
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
@@ -113,7 +115,7 @@ jobs:
           version: ${{ steps.version.outputs.version }}
           changelog-file: changelog.md
           loaders: fabric
-          game-versions: ${{ steps.mc_version.outputs.mc_version }}
+          game-versions: ${{ steps.props.outputs.mc_version }}
           version-resolver: exact
 
       - name: Update Readme
