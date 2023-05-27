@@ -4,6 +4,8 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,13 @@ public final class ScreenUtils {
 
     private ScreenUtils() throws UtilityClassException {
         throw new UtilityClassException();
+    }
+
+    public static void setTooltip(ItemStack stack) {
+        setTooltip(stack.getTooltipLines(
+            Minecraft.getInstance().player,
+            Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL
+        ));
     }
 
     public static void setTooltip(Component component) {
