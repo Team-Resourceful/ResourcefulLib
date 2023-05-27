@@ -62,9 +62,16 @@ public final class RenderUtils {
 
     /**
      * Returns a scissor box stack using the stack's translation and the given bounds.
+     * @deprecated use {@link #createScissor(GuiGraphics, int, int, int, int)} instead.
      */
     public static GuiCloseableScissor createScissor(Minecraft minecraft, GuiGraphics graphics, int x, int y, int width, int height) {
-        Bound bound = getScissorBounds(minecraft, graphics.pose(), x, y, width, height);
-        return new GuiCloseableScissor(graphics, bound.x(), bound.y(), bound.width(), bound.height());
+        return new GuiCloseableScissor(graphics, x, y, width, height);
+    }
+
+    /**
+     * Returns a scissor box stack using the stack's translation and the given bounds.
+     */
+    public static GuiCloseableScissor createScissor(GuiGraphics graphics, int x, int y, int width, int height) {
+        return new GuiCloseableScissor(graphics, x, y, width, height);
     }
 }
