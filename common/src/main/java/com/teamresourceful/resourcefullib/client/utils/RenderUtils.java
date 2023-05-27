@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefullib.client.utils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
 import com.teamresourceful.resourcefullib.client.scissor.ClosingScissorBox;
-import com.teamresourceful.resourcefullib.client.scissor.GuiCloseableScissor;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.types.Bound;
@@ -62,16 +61,9 @@ public final class RenderUtils {
 
     /**
      * Returns a scissor box stack using the stack's translation and the given bounds.
-     * @deprecated use {@link #createScissor(GuiGraphics, int, int, int, int)} instead.
      */
-    public static GuiCloseableScissor createScissor(Minecraft minecraft, GuiGraphics graphics, int x, int y, int width, int height) {
-        return new GuiCloseableScissor(graphics, x, y, width, height);
-    }
-
-    /**
-     * Returns a scissor box stack using the stack's translation and the given bounds.
-     */
-    public static GuiCloseableScissor createScissor(GuiGraphics graphics, int x, int y, int width, int height) {
-        return new GuiCloseableScissor(graphics, x, y, width, height);
+    public static CloseableScissorStack createScissor(Minecraft minecraft, GuiGraphics graphics, int x, int y, int width, int height) {
+        Bound bound = getScissorBounds(minecraft, graphics.pose(), x, y, width, height);
+        return new CloseableScissorStack(new ScissorBoxStack(), bound.x(), bound.y(), bound.width(), bound.height());
     }
 }

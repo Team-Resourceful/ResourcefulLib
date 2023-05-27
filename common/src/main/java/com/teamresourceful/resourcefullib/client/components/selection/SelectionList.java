@@ -46,12 +46,12 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         this.hovered = this.getEntryAtPosition(mouseX, mouseY);
 
-        try (var scissorStack = RenderUtils.createScissor(graphics, x, y, width, height)) {
+        try (var scissorStack = RenderUtils.createScissor(Minecraft.getInstance(), graphics, x, y, width, height)) {
             for (int i = 0; i < this.entries.size(); i++) {
                 int scrollY = this.y - (int) this.scrollAmount + i * this.itemHeight;
                 if (scrollY + this.itemHeight >= this.y && scrollY <= this.y + this.height) {
                     ListEntry entry = this.entries.get(i);
-                    entry.render(scissorStack.graphics(), i, this.x, scrollY, width, itemHeight, mouseX, mouseY, isHoveredItem(i), partialTicks, isSelectedItem(i));
+                    entry.render(scissorStack.stack(), i, this.x, scrollY, width, itemHeight, mouseX, mouseY, isHoveredItem(i), partialTicks, isSelectedItem(i));
                 }
             }
         }
