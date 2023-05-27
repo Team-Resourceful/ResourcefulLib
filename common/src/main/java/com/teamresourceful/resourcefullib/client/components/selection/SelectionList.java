@@ -51,7 +51,7 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
                 int scrollY = this.y - (int) this.scrollAmount + i * this.itemHeight;
                 if (scrollY + this.itemHeight >= this.y && scrollY <= this.y + this.height) {
                     ListEntry entry = this.entries.get(i);
-                    entry.render(scissorStack.stack(), i, this.x, scrollY, width, itemHeight, mouseX, mouseY, isHoveredItem(i), partialTicks, isSelectedItem(i));
+                    entry.render(graphics, scissorStack.stack(), i, this.x, scrollY, width, itemHeight, mouseX, mouseY, isHoveredItem(i), partialTicks, isSelectedItem(i));
                 }
             }
         }
