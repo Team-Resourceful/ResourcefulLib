@@ -1,46 +1,54 @@
 package com.teamresourceful.resourcefullib.common.item.tabs.forge;
 
 import com.teamresourceful.resourcefullib.common.item.tabs.ResourcefulCreativeTab;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ResourcefulCreativeTabImpl {
 
+    private static final Map<String, DeferredRegister<CreativeModeTab>> CREATIVE_TABS = new HashMap<>();
+
     public static Supplier<CreativeModeTab> create(ResourcefulCreativeTab tab) {
-        final Entry group = new Entry(tab);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(group::build);
-        return group;
+        return Entry.of(tab);
     }
 
-    private static class Entry implements Supplier<CreativeModeTab> {
+    private static RegistryObject<CreativeModeTab> register(ResourceLocation id, Supplier<CreativeModeTab> tab) {
+        var register = CREATIVE_TABS.computeIfAbsent(id.getNamespace(), namespace -> {
+            var registry = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, namespace);
+            registry.register(FMLJavaModLoadingContext.get().getModEventBus());
+            return registry;
+        });
+        return register.register(id.getPath(), tab);
+    }
 
-        private final ResourcefulCreativeTab tab;
-        private CreativeModeTab builtTab;
+    private record Entry(RegistryObject<CreativeModeTab> builtTab) implements Supplier<CreativeModeTab> {
 
-        public Entry(ResourcefulCreativeTab tab) {
-            this.tab = tab;
-        }
-
-        public void build(CreativeModeTabEvent.Register event) {
-            builtTab = event.registerCreativeModeTab(tab.id, builder -> {
-                builder.icon(tab.icon);
-                builder.title(Component.translatable("itemGroup." + tab.id.getNamespace() + "." + tab.id.getPath()));
-                if (tab.hideScrollBar) builder.noScrollBar();
-                if (tab.hideTitle) builder.hideTitle();
-                builder.displayItems((params, output) -> {
-                    tab.registries.forEach(registry -> registry.boundStream().forEach(output::accept));
-                    tab.stacks.stream().map(Supplier::get).forEach(output::accept);
-                });
+        public static Entry of(ResourcefulCreativeTab tab) {
+            var creativeTab = CreativeModeTab.builder()
+                .icon(() -> tab.icon.get())
+                .title(Component.translatable("itemGroup." + tab.id.getNamespace() + "." + tab.id.getPath()));
+            if (tab.hideScrollBar) creativeTab.noScrollBar();
+            if (tab.hideTitle) creativeTab.hideTitle();
+            creativeTab.displayItems((params, output) -> {
+                tab.registries.forEach(registry -> registry.boundStream().forEach(output::accept));
+                tab.stacks.stream().map(Supplier::get).forEach(output::accept);
             });
+            return new Entry(register(tab.id, creativeTab::build));
         }
 
         @Override
         public CreativeModeTab get() {
-            return builtTab;
+            return builtTab.get();
         }
     }
 }

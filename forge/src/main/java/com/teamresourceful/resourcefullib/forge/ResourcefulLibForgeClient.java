@@ -20,7 +20,7 @@ public class ResourcefulLibForgeClient {
     }
 
     public static void onHighlight(RenderHighlightEvent.Block event) {
-        BlockState state = event.getCamera().getEntity().level.getBlockState(event.getTarget().getBlockPos());
+        BlockState state = event.getCamera().getEntity().level().getBlockState(event.getTarget().getBlockPos());
         event.setCanceled(HighlightHandler.onBlockHighlight(event.getCamera().getPosition(), event.getCamera().getEntity(), event.getPoseStack(), event.getTarget().getBlockPos(), state, event.getMultiBufferSource().getBuffer(RenderType.lines())));
     }
 }

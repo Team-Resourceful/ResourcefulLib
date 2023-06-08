@@ -1,4 +1,3 @@
-# -----{ 2.0.1 }-----
+# -----{ 2.0.5 }-----
 
-- Fix invalid version range on fabric
-- Add ItemStack setTooltip method
+- Full 1.20 release
