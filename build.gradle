@@ -34,14 +34,6 @@ allprojects {
     version = libs.versions.mod.version.get()
     group = maven_group
 
-    repositories {
-        // Add repositories to retrieve artifacts from in here.
-        // You should only use this when depending on other mods because
-        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-        // for more information about repositories.
-    }
-
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
         options.release = 17
@@ -96,10 +88,6 @@ allprojects {
 
 resourcefulGradle {
     templates {
-        //I have no idea how to get rid of the warnings in idea. switching from interface to abstract
-        //gets rid of *some* warnings. so we just have to live with them as they are now since that's how
-        //the gradle docs say to make a plugin with nested DSL
-
         readme {
             source = file("templates/README.md.template")
             injectedValues = [

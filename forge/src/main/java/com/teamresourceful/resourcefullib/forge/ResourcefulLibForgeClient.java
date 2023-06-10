@@ -11,8 +11,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class ResourcefulLibForgeClient {
 
     public static void init() {
+        ForgeResourcePackHandler.load();
         MinecraftForge.EVENT_BUS.addListener(ResourcefulLibForgeClient::onHighlight);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ResourcefulLibForgeClient::onClientReloadListeners);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeResourcePackHandler::onRegisterPackFinders);
     }
 
     public static void onClientReloadListeners(RegisterClientReloadListenersEvent event) {
