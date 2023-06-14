@@ -19,6 +19,8 @@ public class ResourcefulCreativeTabImpl {
         group.displayItems((params, output) -> {
             tab.registries.forEach(registry -> registry.boundStream().forEach(output::accept));
             tab.stacks.stream().map(Supplier::get).forEach(output::accept);
+
+            tab.contents.stream().flatMap(Supplier::get).forEach(output::accept);
         });
         CreativeModeTab tab1 = group.build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, tab.id, tab1);

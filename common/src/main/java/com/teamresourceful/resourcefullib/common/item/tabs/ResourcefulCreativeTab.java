@@ -7,10 +7,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class ResourcefulCreativeTab {
 
@@ -19,8 +21,14 @@ public class ResourcefulCreativeTab {
     public boolean hideScrollBar;
     public boolean hideTitle;
 
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     public final List<ResourcefulRegistry<ItemLike>> registries = new ArrayList<>();
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     public final List<Supplier<ItemStack>> stacks = new ArrayList<>();
+
+    public final List<Supplier<Stream<ItemStack>>> contents = new ArrayList<>();
 
     public ResourcefulCreativeTab(ResourceLocation id) {
         this.id = id;
@@ -45,24 +53,24 @@ public class ResourcefulCreativeTab {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     public <I extends ItemLike, T extends ResourcefulRegistry<I>> ResourcefulCreativeTab addRegistry(T registry) {
-        this.registries.add((ResourcefulRegistry<ItemLike>) registry);
-        return this;
+        return addContent(() -> registry.boundStream().map(ItemStack::new));
     }
 
     public ResourcefulCreativeTab addStack(Supplier<ItemStack> stack) {
-        this.stacks.add(stack);
-        return this;
+        return addContent(() -> Stream.of(stack.get()));
     }
 
     public ResourcefulCreativeTab addStack(ItemStack stack) {
-        this.stacks.add(() -> stack);
-        return this;
+        return addStack(() -> stack);
     }
 
     public ResourcefulCreativeTab addStack(ItemLike item) {
-        this.stacks.add(() -> new ItemStack(item));
+        return addStack(new ItemStack(item));
+    }
+
+    public ResourcefulCreativeTab addContent(Supplier<Stream<ItemStack>> content) {
+        this.contents.add(content);
         return this;
     }
 

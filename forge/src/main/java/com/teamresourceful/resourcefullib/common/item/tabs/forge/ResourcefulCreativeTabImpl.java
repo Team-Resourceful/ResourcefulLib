@@ -5,7 +5,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -42,6 +41,8 @@ public class ResourcefulCreativeTabImpl {
             creativeTab.displayItems((params, output) -> {
                 tab.registries.forEach(registry -> registry.boundStream().forEach(output::accept));
                 tab.stacks.stream().map(Supplier::get).forEach(output::accept);
+
+                tab.contents.stream().flatMap(Supplier::get).forEach(output::accept);
             });
             return new Entry(register(tab.id, creativeTab::build));
         }
