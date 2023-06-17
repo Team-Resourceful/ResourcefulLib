@@ -1,3 +1,8 @@
+# -----{ 2.1.0 }-----
+
+Breaking change: changed IntContainerData#size to IntContainerData#getSize to fix conflict with yarn mappings
+Added ResourcefulCreativeTab#addContent for ability to add a dynamic amount of itemstacks
+
 # -----{ 2.0.8 }-----
 
 Added ResourcefulCreativeTab#addContent for ability to add a dynamic amount of itemstacks
