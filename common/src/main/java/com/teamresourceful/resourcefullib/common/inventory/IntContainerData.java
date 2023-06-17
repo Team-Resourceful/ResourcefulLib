@@ -103,7 +103,7 @@ public class IntContainerData implements ContainerData {
      *
      * @return The size that was passed in when the object was created.
      */
-    public final int size() {
+    public final int getSize() {
         return data.length / 2;
     }
 }
