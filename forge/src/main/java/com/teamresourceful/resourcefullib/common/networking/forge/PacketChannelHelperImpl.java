@@ -15,14 +15,15 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 
 public class PacketChannelHelperImpl {
 
     public static final Map<ResourceLocation, Channel> CHANNELS = new HashMap<>();
 
-    public static void registerChannel(ResourceLocation name, int protocolVersion) {
+    public static void registerChannel(ResourceLocation name, int protocolVersion, BooleanSupplier optional) {
         String version = Integer.toString(protocolVersion);
-        Channel channel = new Channel(0, NetworkRegistry.newSimpleChannel(name, () -> version, version::equals, version::equals));
+        Channel channel = new Channel(0, NetworkRegistry.newSimpleChannel(name, () -> version, v -> v.equals(version) || optional.getAsBoolean(), v -> v.equals(version) || optional.getAsBoolean()));
         CHANNELS.put(name, channel);
     }
 
@@ -77,6 +78,14 @@ public class PacketChannelHelperImpl {
         if (player instanceof ServerPlayer serverPlayer) {
             channel.channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
         }
+    }
+
+    public static boolean canSendPlayerPackets(ResourceLocation name, Player player) {
+        Channel channel = CHANNELS.get(name);
+        if (channel != null && player instanceof ServerPlayer serverPlayer) {
+            return channel.channel.isRemotePresent(serverPlayer.connection.connection);
+        }
+        return false;
     }
 
     private static final class Channel {

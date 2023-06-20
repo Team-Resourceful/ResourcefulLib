@@ -12,15 +12,48 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import java.util.Collection;
+import java.util.function.BooleanSupplier;
 
 public class NetworkChannel {
 
     private final ResourceLocation channel;
 
+    /**
+     * Creates a new network channel.
+     * @param modid The modid of the mod.
+     * @param protocolVersion The protocol version of the mod.
+     * @param channel The channel name.
+     */
     public NetworkChannel(String modid, int protocolVersion, String channel) {
         this.channel = new ResourceLocation(modid, channel);
 
-        PacketChannelHelper.registerChannel(this.channel, protocolVersion);
+        PacketChannelHelper.registerChannel(this.channel, protocolVersion, () -> false);
+    }
+
+    /**
+     * Creates a new network channel.
+     * @param modid The modid of the mod.
+     * @param protocolVersion The protocol version of the mod.
+     * @param channel The channel name.
+     * @param optional If the channel is optional. Note: This is only for forge as fabric all channels are optional.
+     */
+    public NetworkChannel(String modid, int protocolVersion, String channel, boolean optional) {
+        this.channel = new ResourceLocation(modid, channel);
+
+        PacketChannelHelper.registerChannel(this.channel, protocolVersion, () -> optional);
+    }
+
+    /**
+     * Creates a new network channel.
+     * @param modid The modid of the mod.
+     * @param protocolVersion The protocol version of the mod.
+     * @param channel The channel name.
+     * @param optional If the channel is optional. Note: This is only for forge as fabric all channels are optional.
+     */
+    public NetworkChannel(String modid, int protocolVersion, String channel, BooleanSupplier optional) {
+        this.channel = new ResourceLocation(modid, channel);
+
+        PacketChannelHelper.registerChannel(this.channel, protocolVersion, optional);
     }
 
     public final <T extends Packet<T>> void registerPacket(NetworkDirection direction, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
@@ -64,6 +97,10 @@ public class NetworkChannel {
                 sendToPlayer(packet, player);
             }
         }
+    }
+
+    public final boolean canSendPlayerPackets(Player player) {
+        return PacketChannelHelper.canSendPlayerPackets(this.channel, player);
     }
 
 

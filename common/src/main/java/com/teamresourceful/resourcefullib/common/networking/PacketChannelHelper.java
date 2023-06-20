@@ -8,6 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * DO NOT USE THIS DIRECTLY USE {@link NetworkChannel}
  */
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.ApiStatus;
 public class PacketChannelHelper {
 
     @ExpectPlatform
-    public static void registerChannel(ResourceLocation channel, int protocolVersion) {
+    public static void registerChannel(ResourceLocation channel, int protocolVersion, BooleanSupplier optional) {
         throw new NotImplementedException();
     }
 
@@ -39,7 +41,10 @@ public class PacketChannelHelper {
         throw new NotImplementedException();
     }
 
-
+    @ExpectPlatform
+    public static boolean canSendPlayerPackets(ResourceLocation channel, Player player) {
+        throw new NotImplementedException();
+    }
 
 
 }

@@ -11,9 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.function.BooleanSupplier;
+
 public class PacketChannelHelperImpl {
 
-    public static void registerChannel(ResourceLocation channel, int protocolVersion) {
+    public static void registerChannel(ResourceLocation channel, int protocolVersion, BooleanSupplier optional) {
         //Do nothing as fabric uses the custom packet channel.
     }
 
@@ -44,6 +46,17 @@ public class PacketChannelHelperImpl {
 
     private static ResourceLocation createChannelLocation(ResourceLocation channel, ResourceLocation id) {
         return new ResourceLocation(channel.getNamespace(), channel.getPath() + "/" + id.getNamespace() + "/" + id.getPath());
+    }
+
+    public static boolean canSendPlayerPackets(ResourceLocation channel, Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            for (ResourceLocation location : ServerPlayNetworking.getSendable(serverPlayer.connection)) {
+                if (location.getNamespace().equals(channel.getNamespace()) && location.getPath().startsWith(channel.getPath())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
