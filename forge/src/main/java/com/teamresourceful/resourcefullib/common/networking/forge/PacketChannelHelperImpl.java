@@ -37,6 +37,7 @@ public class PacketChannelHelperImpl {
             if (player != null) {
                 context.enqueueWork(() -> handler.handle(msg).apply(player, player.level));
             }
+            context.setPacketHandled(true);
         });
     }
 
@@ -51,6 +52,7 @@ public class PacketChannelHelperImpl {
             if (player != null) {
                 context.enqueueWork(() -> handler.handle(msg).apply(player, player.level));
             }
+            context.setPacketHandled(true);
         });
     }
 
