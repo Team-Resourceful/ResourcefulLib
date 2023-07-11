@@ -5,6 +5,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
+import java.util.List;
+
 public class ModInfoUtilsImpl {
     @Nullable
     public static ModInfo getModInfo(String id) {
@@ -29,6 +32,10 @@ public class ModInfoUtilsImpl {
         @Override
         public String version() {
             return container.getMetadata().getVersion().getFriendlyString();
+        }
+
+        public List<Path> getPaths() {
+            return List.copyOf(container.getRootPaths());
         }
     }
 }
