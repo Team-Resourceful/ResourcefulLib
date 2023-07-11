@@ -15,10 +15,10 @@ public abstract class BaseCursorScreen extends Screen implements CursorScreen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
         setCursor(Cursor.DEFAULT);
-        super.render(graphics, i, j, f);
-        setCursor(children());
+        actuallyRender(graphics, mouseX, mouseY, f);
+        setCursor(children(), mouseX, mouseY);
 
         switch (cursor) {
             case DEFAULT -> CursorUtils.setDefault();
@@ -32,6 +32,10 @@ public abstract class BaseCursorScreen extends Screen implements CursorScreen {
             case RESIZE_NWSE -> CursorUtils.setResizeNorthWestSouthEast();
             case RESIZE_ALL -> CursorUtils.setResizeAll();
         }
+    }
+
+    public void actuallyRender(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        super.render(graphics, i, j, f);
     }
 
     @Override

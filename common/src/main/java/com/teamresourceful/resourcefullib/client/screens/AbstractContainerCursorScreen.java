@@ -17,10 +17,10 @@ public abstract class AbstractContainerCursorScreen<T extends AbstractContainerM
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
         setCursor(Cursor.DEFAULT);
-        super.render(graphics, i, j, f);
-        setCursor(children());
+        super.render(graphics, mouseX, mouseY, f);
+        setCursor(children(), mouseX, mouseY);
 
         switch (cursor) {
             case DEFAULT -> CursorUtils.setDefault();
