@@ -1,3 +1,12 @@
+# -----{ 2.1.2 }-----
+
+Add map tag and map collection methods for tags.
+Add replace versions of tooltip set methods and add clear tooltip method.
+Add mod file paths to mod info and add pretty gson.
+Register ingredients properly on forge.
+Add CursorWidget and allow for better cursor setting on base screens
+Added NetworkChannel#canSendPlayerPackets and NetworkChannel now accept an 'optional' parameter to determine if connections should be refused if channel does not exist on the other side
+
 # -----{ 2.1.1 }-----
 
 Added NetworkChannel#canSendPlayerPackets and NetworkChannel now accept an 'optional' parameter to determine if connections should be refused if channel does not exist on the other side
