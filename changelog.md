@@ -1,3 +1,8 @@
+# -----{ 2.1.1 }-----
+
+Added NetworkChannel#canSendPlayerPackets and NetworkChannel now accept an 'optional' parameter to determine if connections should be refused if channel does not exist on the other side
+Breaking change: changed IntContainerData#size to IntContainerData#getSize to fix conflict with yarn mappings
+
 # -----{ 2.1.0 }-----
 
 Breaking change: changed IntContainerData#size to IntContainerData#getSize to fix conflict with yarn mappings
