@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefullib.common.recipe.ingredient.fabric;
 
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -16,6 +17,8 @@ public final class FabricIngredientHelper {
     }
 
     public static <T extends CodecIngredient<T>> void register(CodecIngredientSerializer<T> serializer) {
-        SERIALIZERS.put(serializer.id(), new FabricIngredientSerializer<>(serializer));
+        FabricIngredientSerializer<T> fabricSerializer = new FabricIngredientSerializer<>(serializer);
+        SERIALIZERS.put(serializer.id(), fabricSerializer);
+        CustomIngredientSerializer.register(fabricSerializer);
     }
 }
