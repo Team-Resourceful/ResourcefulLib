@@ -1,3 +1,7 @@
+# -----{ 2.1.3 }-----
+
+Add enumbuilder, fix fabric ingredients, add unsafe methods
+
 # -----{ 2.1.2 }-----
 
 Add map tag and map collection methods for tags.
