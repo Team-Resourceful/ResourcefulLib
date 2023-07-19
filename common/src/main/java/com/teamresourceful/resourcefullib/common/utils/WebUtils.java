@@ -26,7 +26,7 @@ public final class WebUtils {
     @Nullable
     public static String get(String url, boolean onlySuccess) {
         return get(url, HttpResponse.BodyHandlers.ofString())
-            .filter(response -> !onlySuccess || response.statusCode() / 200 == 0)
+            .filter(response -> !onlySuccess || (response.statusCode() >= 200 && response.statusCode() < 300))
             .map(HttpResponse::body)
             .orElse(null);
     }
