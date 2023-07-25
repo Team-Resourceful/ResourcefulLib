@@ -9,13 +9,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class ResourcefulCreativeTabImpl {
 
-    private static final Map<String, DeferredRegister<CreativeModeTab>> CREATIVE_TABS = new HashMap<>();
+    private static final Map<String, DeferredRegister<CreativeModeTab>> CREATIVE_TABS = new ConcurrentHashMap<>();
 
     public static Supplier<CreativeModeTab> create(ResourcefulCreativeTab tab) {
         return Entry.of(tab);
