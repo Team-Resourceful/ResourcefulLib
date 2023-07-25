@@ -1,3 +1,8 @@
+# -----{ 2.1.4 }-----
+
+Add dataless packet handler, fix web responses not being correct in WebUtils
+Add enumbuilder, fix fabric ingredients, add unsafe methods
+
 # -----{ 2.1.3 }-----
 
 Add enumbuilder, fix fabric ingredients, add unsafe methods
