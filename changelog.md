@@ -1,3 +1,7 @@
+# -----{ 2.1.6 }-----
+
+Added new experimental ByteCodec packets
+
 # -----{ 2.1.5 }-----
 
 Fix CME in creative tabs
