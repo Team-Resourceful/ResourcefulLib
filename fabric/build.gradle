@@ -23,6 +23,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
     include implementation("com.teamresourceful:yabn:$yabn_version")
+    include implementation("com.teamresourceful:bytecodecs:$bytecodecs_version")
 }
 
 processResources {

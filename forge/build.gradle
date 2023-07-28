@@ -22,6 +22,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     include implementation("com.teamresourceful:yabn:$yabn_version")
+    include implementation("com.teamresourceful:bytecodecs:$bytecodecs_version")
 }
 
 processResources {
