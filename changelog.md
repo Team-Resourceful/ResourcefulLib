@@ -1,3 +1,7 @@
+# -----{ 2.1.7 }-----
+
+Added more ByteCodec types
+
 # -----{ 2.1.6 }-----
 
 Added new experimental ByteCodec packets
