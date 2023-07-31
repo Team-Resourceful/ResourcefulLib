@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Predicate;
@@ -28,11 +29,9 @@ public final class CommonUtils {
      */
     public static Component serverTranslatable(String key, Object... args) {
         if (args.length == 0) {
-            Component component = Component.translatable(key);
-            return Component.translatableWithFallback(key, component.getString());
+            return Component.translatableWithFallback(key, Language.getInstance().getOrDefault(key, key));
         } else {
-            Component component = Component.translatable(key, args);
-            return Component.translatableWithFallback(key, component.getString(), args);
+            return Component.translatableWithFallback(key, Language.getInstance().getOrDefault(key, key), args);
         }
     }
 }
