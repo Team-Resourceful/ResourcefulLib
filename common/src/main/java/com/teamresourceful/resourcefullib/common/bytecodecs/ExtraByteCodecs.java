@@ -7,6 +7,7 @@ import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -46,6 +47,9 @@ public final class ExtraByteCodecs {
     public static final ByteCodec<CompoundTag> NONNULL_COMPOUND_TAG = CompoundTagByteCodec.INSTANCE
             .map(Optional::orElseThrow, Optional::of);
     public static final ByteCodec<Optional<CompoundTag>> COMPOUND_TAG = CompoundTagByteCodec.INSTANCE;
+
+    public static final ByteCodec<Component> COMPONENT = ByteCodec.STRING_COMPONENT
+            .map(Component.Serializer::fromJson, Component.Serializer::toJson);
 
     public static final ByteCodec<Item> ITEM = registry(BuiltInRegistries.ITEM);
     public static final ByteCodec<ItemStack> ITEM_STACK = ItemStackByteCodec.CODEC;
