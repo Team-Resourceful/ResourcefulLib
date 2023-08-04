@@ -1,3 +1,7 @@
+# -----{ 2.1.8 }-----
+
+Fixed server translations not pulling value properly.
+
 # -----{ 2.1.7 }-----
 
 Added more ByteCodec types
