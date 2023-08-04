@@ -1,3 +1,8 @@
+# -----{ 2.1.9 }-----
+
+Added component bytecodec and update bytecodec version.
+Fixed server translations not pulling value properly.
+
 # -----{ 2.1.8 }-----
 
 Fixed server translations not pulling value properly.
