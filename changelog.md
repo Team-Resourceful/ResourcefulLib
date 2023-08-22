@@ -1,3 +1,7 @@
+# -----{ 2.1.10 }-----
+
+Added Fabric-Loom-Remap to manifest file
+
 # -----{ 2.1.9 }-----
 
 Added component bytecodec and update bytecodec version.
