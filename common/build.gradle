@@ -5,6 +5,12 @@ architectury {
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
 
-    implementation "com.teamresourceful:yabn:$yabn_version"
-    api "com.teamresourceful:bytecodecs:$bytecodecs_version"
+    api "com.teamresourceful:yabn:$yabn_version"
+    api("com.teamresourceful:bytecodecs:$bytecodecs_version") transitive false
+}
+
+jar {
+    manifest {
+        attributes 'Fabric-Loom-Remap': true
+    }
 }
