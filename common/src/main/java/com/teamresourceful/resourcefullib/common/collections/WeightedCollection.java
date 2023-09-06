@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.collections;
 
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
 public class WeightedCollection<E> implements Collection<E> {
 
     private final NavigableMap<Double, E> map = new TreeMap<>();
-    private final Random random;
+    private WeightedCollectionRandom random;
     private double total = 0;
 
     public WeightedCollection() {
@@ -19,6 +20,14 @@ public class WeightedCollection<E> implements Collection<E> {
     }
 
     public WeightedCollection(Random random) {
+        this(random::nextDouble);
+    }
+
+    public WeightedCollection(RandomSource random) {
+        this(random::nextDouble);
+    }
+
+    public WeightedCollection(WeightedCollectionRandom random) {
         this.random = random;
     }
 
@@ -40,7 +49,11 @@ public class WeightedCollection<E> implements Collection<E> {
     }
 
     public NavigableMap<Double, E> getMap(){
-        return map;
+        return this.map;
+    }
+
+    public double getTotal() {
+        return this.total;
     }
 
     public double getAdjustedWeight(double weight) {
@@ -51,6 +64,23 @@ public class WeightedCollection<E> implements Collection<E> {
         forEach(element -> action.accept(this, element));
     }
 
+    //region Setters
+    public void setRandom(WeightedCollectionRandom random) {
+        this.random = random;
+    }
+
+    public void setRandom(Random random) {
+        setRandom(random::nextDouble);
+    }
+
+    public void setRandom(RandomSource random) {
+        setRandom(random::nextDouble);
+    }
+    //endregion
+
+    //region Collection Overrides
+
+    @Override
     public Stream<E> stream() {
         return map.values().stream();
     }
@@ -138,6 +168,8 @@ public class WeightedCollection<E> implements Collection<E> {
         return Objects.hash(total, map);
     }
 
+    //endregion
+
     public static <T> WeightedCollection<T> of(Collection<T> collection, ToDoubleFunction<T> weightGetter) {
         return collection.stream().collect(getCollector(weightGetter));
     }
@@ -147,5 +179,10 @@ public class WeightedCollection<E> implements Collection<E> {
             left.forEach(item -> right.add(weightGetter.applyAsDouble(item), item));
             return right;
         });
+    }
+
+    @FunctionalInterface
+    public interface WeightedCollectionRandom {
+        double nextDouble();
     }
 }
