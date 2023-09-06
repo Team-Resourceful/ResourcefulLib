@@ -1,3 +1,8 @@
+# -----{ 2.1.11 }-----
+
+Added ability to set random and get total to WeightedCollection, should allow for more deterministic responses
+Added Fabric-Loom-Remap to manifest file
+
 # -----{ 2.1.10 }-----
 
 Added Fabric-Loom-Remap to manifest file
