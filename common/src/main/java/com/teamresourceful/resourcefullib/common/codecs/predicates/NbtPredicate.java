@@ -41,8 +41,8 @@ public record NbtPredicate(CompoundTag tag) {
         } else if (tag == null || tag2 == null) {
             return true;
         } else if (tag instanceof NumericTag num1 && tag2 instanceof NumericTag num2) {
-            BigDecimal bigDecimal = new BigDecimal(num1.toString());
-            BigDecimal bigDecimal2 = new BigDecimal(num2.toString());
+            BigDecimal bigDecimal = new BigDecimal(num1.getAsNumber().toString());
+            BigDecimal bigDecimal2 = new BigDecimal(num2.getAsNumber().toString());
             return bigDecimal.compareTo(bigDecimal2) == 0;
         } else if (!tag.getClass().equals(tag2.getClass())) {
             return false;
