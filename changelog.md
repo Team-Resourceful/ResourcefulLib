@@ -1,3 +1,8 @@
+# -----{ 2.1.13 }-----
+
+Fixed crash in nbt predicates
+Added strict mode for nbt predicates
+
 # -----{ 2.1.12 }-----
 
 Added strict mode for nbt predicates
