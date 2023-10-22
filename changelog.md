@@ -1,3 +1,8 @@
+# -----{ 2.1.12 }-----
+
+Added strict mode for nbt predicates
+Added ability to set random and get total to WeightedCollection, should allow for more deterministic responses
+
 # -----{ 2.1.11 }-----
 
 Added ability to set random and get total to WeightedCollection, should allow for more deterministic responses
