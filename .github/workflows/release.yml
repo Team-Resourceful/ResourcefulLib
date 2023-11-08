@@ -77,6 +77,7 @@ jobs:
 
       ### Need to duplicate this block for fabric
       - name: Upload Forge Releases (Curse/Modrinth/Github)
+        id: forge_release
         if: contains(steps.props.outputs.enabled_platforms, 'forge')
         uses: Kir-Antipov/mc-publish@v3.2
         with:
@@ -98,6 +99,7 @@ jobs:
           version-resolver: exact
 
       - name: Upload Fabric Releases (Curse/Modrinth/Github)
+        id: fabric_release
         if: contains(steps.props.outputs.enabled_platforms, 'fabric')
         uses: Kir-Antipov/mc-publish@v3.2
         with:
@@ -125,6 +127,9 @@ jobs:
 
       - name: Create Discord Embed
         run: ./gradlew injectDiscordEmbed
+        env:
+          FORGE_RELEASE_URL: ${{ steps.forge_release.outputs.modrinth-url }}
+          FABRIC_RELEASE_URL: ${{ steps.fabric_release.outputs.modrinth-url }}
 
       - name: Send Discord Webhook
         uses: tsickert/discord-webhook@v5.3.0
