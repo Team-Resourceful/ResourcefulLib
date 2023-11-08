@@ -28,7 +28,8 @@ public interface CursorScreen {
     @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     default void setCursor(List<? extends GuiEventListener> listeners) {
         for (GuiEventListener child : listeners) {
-            if (child instanceof AbstractWidget widget && widget.isHovered()) {
+            if (child instanceof CursorWidget) continue;
+            if (child instanceof AbstractWidget widget && widget.isHovered() && widget.visible) {
                 if (widget.active) {
                     setCursor(widget instanceof EditBox || widget instanceof MultiLineEditBox ? Cursor.TEXT : Cursor.POINTER);
                 } else {
