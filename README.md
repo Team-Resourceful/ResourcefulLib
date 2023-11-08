@@ -32,7 +32,7 @@ You can then add our mod as a dependency:
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.20.1:2.1.15")
+    implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.20.1:2.1.16")
 }
 ```
 
@@ -40,7 +40,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    implementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.20.1:2.1.15"
+    implementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.20.1:2.1.16"
 }
 ```
 
@@ -50,7 +50,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-1.20.1:2.1.15"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-1.20.1:2.1.16"
 }
 ```
 
@@ -58,7 +58,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.20.1:2.1.15"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.20.1:2.1.16"
 }
 ```
 
@@ -66,7 +66,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-forge-1.20.1:2.1.15"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-forge-1.20.1:2.1.16"
 }
 ```
 

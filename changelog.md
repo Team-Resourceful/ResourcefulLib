@@ -1,3 +1,8 @@
+# -----{ 2.1.16 }-----
+
+Added codec metadata section serializer
+Added context menus widget
+
 # -----{ 2.1.15 }-----
 
 Added context menus widget
