@@ -1,3 +1,7 @@
+# -----{ 2.1.14 }-----
+
+Fixed issue where hidden widgets could have cursors shown
+
 # -----{ 2.1.13 }-----
 
 Fixed crash in nbt predicates
