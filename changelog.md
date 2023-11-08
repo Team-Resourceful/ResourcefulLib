@@ -1,3 +1,7 @@
+# -----{ 2.1.15 }-----
+
+Added context menus widget
+
 # -----{ 2.1.14 }-----
 
 Fixed issue where hidden widgets could have cursors shown
