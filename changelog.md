@@ -1,3 +1,7 @@
+# -----{ 2.2.0 }-----
+
+1.20.2 Update
+
 # -----{ 2.1.16 }-----
 
 Added codec metadata section serializer
