@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefullib.common.codecs.predicates;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefullib.common.codecs.bounds.DefaultBoundCodecs;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.Holder;
@@ -17,7 +16,7 @@ public record EnchantmentPredicate(HolderSet<Enchantment> enchantments, MinMaxBo
     public static final EnchantmentPredicate ANY = new EnchantmentPredicate(HolderSet.direct(), MinMaxBounds.Ints.ANY);
     public static final Codec<EnchantmentPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             HolderSetCodec.of(BuiltInRegistries.ENCHANTMENT).fieldOf("enchantments").orElse(HolderSet.direct()).forGetter(EnchantmentPredicate::enchantments),
-            DefaultBoundCodecs.INT.fieldOf("level").orElse(MinMaxBounds.Ints.ANY).forGetter(EnchantmentPredicate::level)
+            MinMaxBounds.Ints.CODEC.fieldOf("level").orElse(MinMaxBounds.Ints.ANY).forGetter(EnchantmentPredicate::level)
     ).apply(instance, EnchantmentPredicate::new));
 
     public boolean matches(Enchantment enchantment) {

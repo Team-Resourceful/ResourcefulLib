@@ -17,6 +17,10 @@ public class ModInfoUtilsImpl {
             .orElse(null);
     }
 
+    public static int getLoadedMods() {
+        return FabricLoader.getInstance().getAllMods().size();
+    }
+
     private record Info(ModContainer container) implements ModInfo {
 
         @Override

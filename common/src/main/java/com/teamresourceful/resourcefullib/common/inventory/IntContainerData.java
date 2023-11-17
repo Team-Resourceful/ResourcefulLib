@@ -11,7 +11,7 @@ import net.minecraft.world.inventory.ContainerData;
  * <p>
  * The Set and Get methods are made final and marked as deprecated to maintain compatibility,
  * instead being replaced by setInt and getInt. getCount is also made final and marked as
- * deprecated with size() as its replacement.
+ * deprecated with getSize() as its replacement.
  * <p>
  * These new methods take into account the doubled array size so that standard indexing can be used
  * the same as it would with ContainerData and SimpleContainerData.

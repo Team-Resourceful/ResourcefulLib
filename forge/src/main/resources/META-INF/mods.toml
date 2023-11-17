@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[46,)"
+loaderVersion = "[48,)"
 license = "MIT"
 issueTrackerURL="https://github.com/Team-Resourceful/ResoucefulLib/issues/new/choose"
 
@@ -13,13 +13,13 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResoucefulLib/issues/new/ch
 [[dependencies.resourcefullib]]
     modId = "forge"
     mandatory = true
-    versionRange = "[46,)"
+    versionRange = "[48,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.resourcefullib]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.20,)"
+    versionRange = "[1.20.2,)"
     ordering = "NONE"
     side = "BOTH"

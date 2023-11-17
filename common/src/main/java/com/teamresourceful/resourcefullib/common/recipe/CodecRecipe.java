@@ -1,23 +1,13 @@
 package com.teamresourceful.resourcefullib.common.recipe;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public interface CodecRecipe<C extends Container> extends Recipe<C> {
-
-    @NotNull
-    ResourceLocation id();
-
-    @Override
-    @NotNull
-    default ResourceLocation getId() {
-        return id();
-    }
 
     @Override
     default boolean isSpecial() {
@@ -41,18 +31,12 @@ public interface CodecRecipe<C extends Container> extends Recipe<C> {
         return true;
     }
 
-    /**
-     * Gets the codec used to serialize this recipe to json.
-     */
-    default <T extends CodecRecipe<C>> Codec<T> jsonCodec(ResourceLocation id) {
-        throw new UnsupportedOperationException("Serialization codec not implemented for " + id);
+    @Override
+    @NotNull
+    default RecipeSerializer<?> getSerializer() {
+        return serializer();
     }
 
-    /**
-     * Gets the codec used to serialize this recipe to network.
-     */
-    default <T extends CodecRecipe<C>> Codec<T> networkCodec(ResourceLocation id) {
-        return jsonCodec(id);
-    }
+    <T extends CodecRecipe<C>> CodecRecipeSerializer<T> serializer();
 }
 

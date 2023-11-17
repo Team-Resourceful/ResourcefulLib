@@ -20,4 +20,9 @@ public final class ModInfoUtils {
     public static ModInfo getModInfo(String id) {
         throw new NotImplementedException();
     }
+
+    @ExpectPlatform
+    public static int getLoadedMods() {
+        throw new NotImplementedException();
+    }
 }

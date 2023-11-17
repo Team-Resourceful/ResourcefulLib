@@ -1,20 +1,15 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient.forge;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.AbstractIngredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class ForgeIngredient<T extends CodecIngredient<T>> extends AbstractIngredient {
+public class ForgeIngredient<T extends CodecIngredient<T>> extends Ingredient {
 
     private final T ingredient;
     @Nullable private ItemStack[] stacks;
@@ -57,19 +52,5 @@ public class ForgeIngredient<T extends CodecIngredient<T>> extends AbstractIngre
         }
         return this.stackingIds;
     }
-
-    @Override
-    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return ForgeIngredientHelper.get(this.ingredient.serializer().id());
-    }
-
-    @Override
-    public @NotNull JsonElement toJson() {
-        return this.ingredient.serializer()
-                .codec()
-                .encodeStart(JsonOps.INSTANCE, this.ingredient)
-                .getOrThrow(false, Constants.LOGGER::error);
-    }
-
 
 }

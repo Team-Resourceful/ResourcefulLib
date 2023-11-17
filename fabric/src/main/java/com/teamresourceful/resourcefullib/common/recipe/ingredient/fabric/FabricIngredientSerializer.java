@@ -1,24 +1,20 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient.fabric;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
-import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
+import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.Map;
-
 public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements CustomIngredientSerializer<FabricIngredient<T>> {
 
     private final CodecIngredientSerializer<T> serializer;
+    private final Codec<FabricIngredient<T>> codec;
 
     public FabricIngredientSerializer(CodecIngredientSerializer<T> serializer) {
         this.serializer = serializer;
+        this.codec = serializer.codec().xmap(FabricIngredient::new, FabricIngredient::ingredient);
     }
 
     @Override
@@ -27,35 +23,19 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
     }
 
     @Override
-    public FabricIngredient<T> read(JsonObject json) {
-        T ingredient = serializer.codec().parse(JsonOps.INSTANCE, json).getOrThrow(false, Constants.LOGGER::error);
-        return new FabricIngredient<>(ingredient);
-    }
-
-    @Override
-    public void write(JsonObject json, FabricIngredient<T> ingredient) {
-        JsonElement element = serializer.codec().encodeStart(JsonOps.INSTANCE, ingredient.ingredient())
-                .getOrThrow(false, Constants.LOGGER::error);
-        if (!element.isJsonObject()) {
-            Constants.LOGGER.error("Could not parse {}", ingredient.ingredient());
-            Constants.LOGGER.error("Element is not a JsonObject");
-            return;
-        }
-        for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
-            json.add(entry.getKey(), entry.getValue());
-        }
+    public Codec<FabricIngredient<T>> getCodec(boolean allowEmpty) {
+        return this.codec;
     }
 
     @Override
     public FabricIngredient<T> read(FriendlyByteBuf buf) {
-        T ingredient = PacketHelper.readWithYabn(buf, serializer.network(), true)
-                .getOrThrow(false, Constants.LOGGER::error);
-        return new FabricIngredient<>(ingredient);
+        return new FabricIngredient<>(this.serializer.network().decode(buf));
     }
 
     @Override
     public void write(FriendlyByteBuf buf, FabricIngredient<T> ingredient) {
-        PacketHelper.writeWithYabn(buf, serializer.network(), ingredient.ingredient(), true)
-                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", ingredient.ingredient()));
+        this.serializer.network().encode(ingredient.ingredient(), buf);
     }
+
+
 }

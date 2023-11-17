@@ -1,22 +1,21 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient.forge;
 
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
-import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
+import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class ForgeIngredientSerializer<T extends CodecIngredient<T>> implements IIngredientSerializer<ForgeIngredient<T>> {
 
     private final CodecIngredientSerializer<T> serializer;
+    private final Codec<ForgeIngredient<T>> codec;
 
     public ForgeIngredientSerializer(CodecIngredientSerializer<T> serializer) {
         this.serializer = serializer;
+        this.codec = this.serializer.codec().xmap(ForgeIngredient::new, ForgeIngredient::getIngredient);
     }
 
     public ResourceLocation id() {
@@ -24,21 +23,17 @@ public class ForgeIngredientSerializer<T extends CodecIngredient<T>> implements 
     }
 
     @Override
-    public @NotNull ForgeIngredient<T> parse(@NotNull JsonObject json) {
-        T ingredient = serializer.codec().parse(JsonOps.INSTANCE, json).getOrThrow(false, Constants.LOGGER::error);
-        return new ForgeIngredient<>(ingredient);
+    public Codec<? extends ForgeIngredient<T>> codec() {
+        return codec;
     }
 
     @Override
-    public @NotNull ForgeIngredient<T> parse(@NotNull FriendlyByteBuf buf) {
-        T ingredient = PacketHelper.readWithYabn(buf, serializer.network(), true)
-                .getOrThrow(false, Constants.LOGGER::error);
-        return new ForgeIngredient<>(ingredient);
+    public ForgeIngredient<T> read(FriendlyByteBuf buf) {
+        return new ForgeIngredient<>(serializer.network().decode(buf));
     }
 
     @Override
     public void write(@NotNull FriendlyByteBuf buf, @NotNull ForgeIngredient<T> ingredient) {
-        PacketHelper.writeWithYabn(buf, serializer.network(), ingredient.getIngredient(), true)
-                .getOrThrow(false, s -> Constants.LOGGER.error("Could not parse {}", ingredient.getIngredient()));
+        serializer.network().encode(ingredient.getIngredient(), buf);
     }
 }

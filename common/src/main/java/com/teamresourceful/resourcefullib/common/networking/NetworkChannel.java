@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefullib.common.networking;
 
-import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
@@ -56,8 +56,8 @@ public class NetworkChannel {
         PacketChannelHelper.registerChannel(this.channel, protocolVersion, optional);
     }
 
-    public final <T extends Packet<T>> void registerPacket(NetworkDirection direction, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
-        if (direction == NetworkDirection.CLIENT_TO_SERVER) {
+    public final <T extends Packet<T>> void registerPacket(PacketFlow direction, ResourceLocation id, PacketHandler<T> handler, Class<T> packetClass) {
+        if (direction == PacketFlow.SERVERBOUND) {
             PacketChannelHelper.registerC2SPacket(this.channel, id, handler, packetClass);
         } else {
             PacketChannelHelper.registerS2CPacket(this.channel, id, handler, packetClass);

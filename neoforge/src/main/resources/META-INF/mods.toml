@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+issueTrackerURL="https://github.com/Team-Resourceful/ResoucefulLib/issues/new/choose"
+
+[[mods]]
+    modId = "resourcefullib"
+    version = "${version}"
+    displayName = "Resourceful Lib"
+    authors = "ThatGravyBoat, Epic_Oreo"
+    description = "Team Resourceful Library"
+
+[[dependencies.resourcefullib]]
+    modId = "neoforge"
+    mandatory = true
+    versionRange = "[20.2,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.resourcefullib]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.20.2,)"
+    ordering = "NONE"
+    side = "BOTH"

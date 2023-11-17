@@ -2,27 +2,29 @@ package com.teamresourceful.resourcefullib.common.codecs.predicates;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefullib.common.codecs.bounds.DefaultBoundCodecs;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public record RestrictedItemPredicate(Item item, NbtPredicate nbt, MinMaxBounds.Ints durability, MinMaxBounds.Ints count) {
+public record RestrictedItemPredicate(
+        Item item, Optional<NbtPredicate> nbt, MinMaxBounds.Ints durability, MinMaxBounds.Ints count
+) {
 
     public static final Codec<RestrictedItemPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.ITEM.byNameCodec().fieldOf("id").forGetter(RestrictedItemPredicate::item),
-            NbtPredicate.CODEC.fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedItemPredicate::nbt),
-            DefaultBoundCodecs.INT.fieldOf("durability").orElse(net.minecraft.advancements.critereon.MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::durability),
-            DefaultBoundCodecs.INT.fieldOf("count").orElse(net.minecraft.advancements.critereon.MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::count)
+            ExtraCodecs.strictOptionalField(NbtPredicate.CODEC,"nbt").forGetter(RestrictedItemPredicate::nbt),
+            MinMaxBounds.Ints.CODEC.fieldOf("durability").orElse(MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::durability),
+            MinMaxBounds.Ints.CODEC.fieldOf("count").orElse(MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::count)
     ).apply(instance, RestrictedItemPredicate::new));
 
     public Optional<CompoundTag> getTag() {
-        if (nbt() == null) return Optional.empty();
-        return Optional.ofNullable(nbt().tag());
+        return nbt().map(NbtPredicate::tag);
     }
 
     public boolean matches(ItemStack stack) {
@@ -37,6 +39,6 @@ public record RestrictedItemPredicate(Item item, NbtPredicate nbt, MinMaxBounds.
         } else if (!this.count.matches(stack.getCount())) {
             return false;
         }
-        return this.nbt.matches(stack);
+        return this.nbt.isEmpty() || this.nbt.get().matches(stack);
     }
 }

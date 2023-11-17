@@ -12,4 +12,8 @@ public class ModInfoUtilsImpl {
             .map(modContainer -> new ForgeModInfo(modContainer.getModInfo()))
             .orElse(null);
     }
+
+    public static int getLoadedMods() {
+        return ModList.get().size();
+    }
 }

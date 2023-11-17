@@ -4,12 +4,12 @@ import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
-import net.minecraftforge.resource.PathPackResources;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -66,9 +66,9 @@ public final class ForgeResourcePackHandler {
                     .getFile().findResource("resourcepacks/" + resourcePack.name());
 
                 final Pack pack = Pack.readMetaAndCreate(
-                    "builtin/add_pack_finders_test", Component.translatable(resourcePack.description()),
+                        "builtin/" + resourcePack.mod.getModId(), Component.translatable(resourcePack.description()),
                     false,
-                    (path) -> new PathPackResources(path, false, resourcePath),
+                    new PathPackResources.PathResourcesSupplier(resourcePath, false),
                     PackType.CLIENT_RESOURCES, Pack.Position.TOP, new PackSource() {
                         @Override
                         public @NotNull Component decorate(@NotNull Component arg) {

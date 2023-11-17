@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+/**
+ * @deprecated Use {@link ResourcefulCreativeModeTab} instead.
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = "1.21")
 public class ResourcefulCreativeTab {
 
     public final ResourceLocation id;
