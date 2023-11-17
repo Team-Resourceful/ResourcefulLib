@@ -111,7 +111,7 @@ jobs:
           github-tag: "v${{ steps.version.outputs.version }}"
           github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
-          files: ./forge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
+          files: ./neoforge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
           name: "[NeoForge] Resourceful Lib ${{ steps.version.outputs.version }}"
           version: ${{ steps.version.outputs.version }}
           changelog-file: changelog.md
