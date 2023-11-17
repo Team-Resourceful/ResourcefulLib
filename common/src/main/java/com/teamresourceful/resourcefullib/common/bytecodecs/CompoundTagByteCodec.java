@@ -39,7 +39,7 @@ public final class CompoundTagByteCodec implements ByteCodec<Optional<CompoundTa
             buffer.readerIndex(i);
 
             try {
-                return Optional.of(NbtIo.read(new ByteBufInputStream(buffer), new NbtAccounter(2097152L)));
+                return Optional.of(NbtIo.read(new ByteBufInputStream(buffer), NbtAccounter.create(2097152L)));
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
