@@ -2,13 +2,13 @@ package com.teamresourceful.resourcefullib.common.registry.neoforge;
 
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
-public class NeoForgeRegistryEntry<T> implements RegistryEntry<T> {
+public class NeoForgeRegistryEntry<R, T extends R> implements RegistryEntry<T> {
 
-    private final RegistryObject<T> object;
+    private final DeferredHolder<R, T> object;
 
-    public NeoForgeRegistryEntry(RegistryObject<T> object) {
+    public NeoForgeRegistryEntry(DeferredHolder<R, T> object) {
         this.object = object;
     }
 

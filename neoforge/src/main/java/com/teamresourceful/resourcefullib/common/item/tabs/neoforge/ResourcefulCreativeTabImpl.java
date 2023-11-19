@@ -6,8 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.RegistryObject;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,7 @@ public class ResourcefulCreativeTabImpl {
         return Entry.of(tab);
     }
 
-    private static RegistryObject<CreativeModeTab> register(ResourceLocation id, Supplier<CreativeModeTab> tab) {
+    private static DeferredHolder<CreativeModeTab, CreativeModeTab> register(ResourceLocation id, Supplier<CreativeModeTab> tab) {
         var register = CREATIVE_TABS.computeIfAbsent(id.getNamespace(), namespace -> {
             var registry = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, namespace);
             registry.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -30,7 +30,7 @@ public class ResourcefulCreativeTabImpl {
         return register.register(id.getPath(), tab);
     }
 
-    private record Entry(RegistryObject<CreativeModeTab> builtTab) implements Supplier<CreativeModeTab> {
+    private record Entry(DeferredHolder<CreativeModeTab, CreativeModeTab> builtTab) implements Supplier<CreativeModeTab> {
 
         public static Entry of(ResourcefulCreativeTab tab) {
             var creativeTab = CreativeModeTab.builder()
