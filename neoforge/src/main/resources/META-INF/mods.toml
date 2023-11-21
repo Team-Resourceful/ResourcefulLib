@@ -13,7 +13,7 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResoucefulLib/issues/new/ch
 [[dependencies.resourcefullib]]
     modId = "neoforge"
     mandatory = true
-    versionRange = "[20.2.59,)"
+    versionRange = "[20.2.59-beta,)"
     ordering = "NONE"
     side = "BOTH"
 
