@@ -1,3 +1,7 @@
+# -----{ 2.1.17 }-----
+
+Fixed scroll list scrolling on different axis
+
 # -----{ 2.1.16 }-----
 
 Added codec metadata section serializer
