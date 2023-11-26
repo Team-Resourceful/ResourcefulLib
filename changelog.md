@@ -1,3 +1,8 @@
+# -----{ 2.2.4 }-----
+
+Fixed scroll list scrolling on different axis
+Fix neoforge not loading
+
 # -----{ 2.2.3 }-----
 
 Fix neoforge not loading
