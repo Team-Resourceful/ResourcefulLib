@@ -139,8 +139,8 @@ public class SelectionList<T extends ListEntry> extends AbstractContainerEventHa
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount, double horizontalScroll) {
-        this.setScrollAmount(this.scrollAmount - scrollAmount * (double)this.itemHeight / 2.0D);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalScroll, double verticalScroll) {
+        this.setScrollAmount(this.scrollAmount - verticalScroll * (double)this.itemHeight / 2.0D);
         return true;
     }
 
