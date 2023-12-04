@@ -6,12 +6,19 @@ import com.teamresourceful.resourcefullib.common.network.base.Networking;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public record FabricClientNetworking(ResourceLocation channel) implements Networking {
+    
+    @Environment(EnvType.CLIENT)
+    public static FabricClientNetworking of(ResourceLocation channel) {
+        return new FabricClientNetworking(channel);
+    }
 
     @Override
     public <T extends Packet<T>> void register(ClientboundPacketType<T> type) {

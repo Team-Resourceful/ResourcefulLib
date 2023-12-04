@@ -2,18 +2,25 @@ package com.teamresourceful.resourcefullib.common.network.fabric;
 
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
+import com.teamresourceful.resourcefullib.common.network.base.DummyNetworking;
 import com.teamresourceful.resourcefullib.common.network.base.Networking;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public class FabricNetworking implements Networking {
 
-    private final FabricClientNetworking client;
-    private final FabricServerNetworking server;
+    private final Networking client;
+    private final Networking server;
 
     public FabricNetworking(String modid, int protocolVersion, String channel) {
-        this.client = new FabricClientNetworking(new ResourceLocation(modid, channel + "/v" + protocolVersion));
+        if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
+            this.client = FabricClientNetworking.of(new ResourceLocation(modid, channel + "/v" + protocolVersion));
+        } else {
+            this.client = DummyNetworking.INSTANCE;
+        }
         this.server = new FabricServerNetworking(new ResourceLocation(modid, channel + "/v" + protocolVersion));
     }
 
