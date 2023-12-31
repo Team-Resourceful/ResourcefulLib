@@ -4,10 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.*;
+import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.Registry;
@@ -22,6 +20,11 @@ public final class CodecExtras {
     private CodecExtras() throws UtilityClassException {
         throw new UtilityClassException();
     }
+
+    public static final PrimitiveCodec<Number> NUMBER = PrimitiveCodecHelper.create(
+            DynamicOps::getNumberValue, DynamicOps::createNumeric,
+            "Number"
+    );
 
     public static <O, A> Function<O, Optional<A>> optionalFor(final Function<O, @Nullable A> getter) {
         return o -> Optional.ofNullable(getter.apply(o));
