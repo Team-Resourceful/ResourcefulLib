@@ -18,7 +18,7 @@ public class ResourcefulLibNeoForge {
     public ResourcefulLibNeoForge(IEventBus bus) {
         ResourcefulLib.init();
         if (FMLLoader.getDist().isClient()) {
-            ResourcefulLibNeoForgeClient.init();
+            ResourcefulLibNeoForgeClient.init(bus);
         }
 
         ResourcefulLibNeoForge.setBus(bus);

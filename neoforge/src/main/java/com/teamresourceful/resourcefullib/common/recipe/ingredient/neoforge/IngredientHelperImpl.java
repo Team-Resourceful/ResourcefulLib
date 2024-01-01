@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefullib.common.recipe.ingredient.neoforge;
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
+import com.teamresourceful.resourcefullib.neoforge.ResourcefulLibNeoForge;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -19,7 +19,7 @@ public class IngredientHelperImpl {
     private static DeferredRegister<IngredientType<?>> getOrCreate(String namespace) {
         return REGISTRIES.computeIfAbsent(namespace, s -> {
             var registry = DeferredRegister.create(NeoForgeRegistries.INGREDIENT_TYPES, s);
-            registry.register(FMLJavaModLoadingContext.get().getModEventBus());
+            ResourcefulLibNeoForge.listen(registry::register);
             return registry;
         });
     }

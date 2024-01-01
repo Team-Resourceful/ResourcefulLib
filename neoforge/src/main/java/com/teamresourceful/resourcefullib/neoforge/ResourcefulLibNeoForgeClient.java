@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
@@ -15,12 +15,12 @@ import net.neoforged.neoforge.common.NeoForge;
 
 public class ResourcefulLibNeoForgeClient {
 
-    public static void init() {
+    public static void init(IEventBus modEventBus) {
         NeoForgeResourcePackHandler.load();
         NeoForge.EVENT_BUS.addListener(ResourcefulLibNeoForgeClient::onHighlight);
         NeoForge.EVENT_BUS.addListener(ResourcefulLibNeoForgeClient::onClientCommandRegister);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ResourcefulLibNeoForgeClient::onClientReloadListeners);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(NeoForgeResourcePackHandler::onRegisterPackFinders);
+        modEventBus.addListener(ResourcefulLibNeoForgeClient::onClientReloadListeners);
+        modEventBus.addListener(NeoForgeResourcePackHandler::onRegisterPackFinders);
     }
 
     public static void onClientReloadListeners(RegisterClientReloadListenersEvent event) {
