@@ -8,6 +8,8 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import com.teamresourceful.resourcefullib.common.utils.types.Bound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -21,13 +23,27 @@ public final class RenderUtils {
 
     /**
      * Get the current bounds for a GL scissor.
+     * @deprecated Use {@link #getScissorRect(Minecraft, PoseStack, int, int, int, int)} instead.
      */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     public static Bound getScissorBounds(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
         float guiScale = (float) minecraft.getWindow().getGuiScale();
         Vector2ic translation = getTranslation(stack);
         float translationX = translation.x() * guiScale;
         float translationY = translation.y() * guiScale;
         return new Bound((int) (translationX + x * guiScale), (int) (Minecraft.getInstance().getWindow().getHeight() - y * guiScale - translationY - height * guiScale), (int) (width * guiScale), (int) (height * guiScale));
+    }
+
+    /**
+     * Get the current bounds for a GL scissor.
+     */
+    public static Rect2i getScissorRect(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
+        float guiScale = (float) minecraft.getWindow().getGuiScale();
+        Vector2ic translation = getTranslation(stack);
+        float translationX = translation.x() * guiScale;
+        float translationY = translation.y() * guiScale;
+        return new Rect2i((int) (translationX + x * guiScale), (int) (Minecraft.getInstance().getWindow().getHeight() - y * guiScale - translationY - height * guiScale), (int) (width * guiScale), (int) (height * guiScale));
     }
 
     /**
@@ -45,8 +61,8 @@ public final class RenderUtils {
      * You likely want to use {@link #createScissor(Minecraft, GuiGraphics, int, int, int, int)} instead.
      */
     public static ClosingScissorBox createScissorBox(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
-        Bound bound = getScissorBounds(minecraft, stack, x, y, width, height);
-        return new ClosingScissorBox(bound.x(), bound.y(), bound.width(), bound.height());
+        Rect2i bound = getScissorRect(minecraft, stack, x, y, width, height);
+        return new ClosingScissorBox(bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight());
     }
 
     /**
@@ -55,15 +71,15 @@ public final class RenderUtils {
      * You likely want to use {@link #createScissor(Minecraft, GuiGraphics, int, int, int, int)} instead.
      */
     public static CloseableScissorStack createScissorBoxStack(ScissorBoxStack scissorStack, Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
-        Bound bound = getScissorBounds(minecraft, stack, x, y, width, height);
-        return new CloseableScissorStack(scissorStack, bound.x(), bound.y(), bound.width(), bound.height());
+        Rect2i bound = getScissorRect(minecraft, stack, x, y, width, height);
+        return new CloseableScissorStack(scissorStack, bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight());
     }
 
     /**
      * Returns a scissor box stack using the stack's translation and the given bounds.
      */
     public static CloseableScissorStack createScissor(Minecraft minecraft, GuiGraphics graphics, int x, int y, int width, int height) {
-        Bound bound = getScissorBounds(minecraft, graphics.pose(), x, y, width, height);
-        return new CloseableScissorStack(new ScissorBoxStack(), bound.x(), bound.y(), bound.width(), bound.height());
+        Rect2i bound = getScissorRect(minecraft, graphics.pose(), x, y, width, height);
+        return new CloseableScissorStack(new ScissorBoxStack(), bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight());
     }
 }
