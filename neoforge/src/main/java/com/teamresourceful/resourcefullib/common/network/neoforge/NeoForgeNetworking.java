@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketT
 import com.teamresourceful.resourcefullib.common.network.base.Networking;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
-import com.teamresourceful.resourcefullib.neoforge.ResourcefulLibNeoForge;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -13,9 +12,13 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class NeoForgeNetworking implements Networking {
+
+    private static final List<Consumer<RegisterPayloadHandlerEvent>> LISTENERS = Collections.synchronizedList(new ArrayList<>());
 
     private final List<ClientboundPacketType<?>> clientPackets = new ArrayList<>();
     private final List<ServerboundPacketType<?>> serverPackets = new ArrayList<>();
@@ -24,10 +27,10 @@ public class NeoForgeNetworking implements Networking {
     private final boolean optional;
 
     public NeoForgeNetworking(ResourceLocation channel, int protocolVersion, boolean optional) {
-        this.channel = new ResourceLocation(channel.getNamespace(), channel.getPath() + "/v" + protocolVersion);
+        this.channel = channel.withSuffix("/v" + protocolVersion);
         this.optional = optional;
 
-        ResourcefulLibNeoForge.listen(bus -> bus.addListener(RegisterPayloadHandlerEvent.class, this::onNetworkSetup));
+        LISTENERS.add(this::onNetworkSetup);
     }
 
     @Override
@@ -87,6 +90,10 @@ public class NeoForgeNetworking implements Networking {
     }
 
     private static ResourceLocation createChannelLocation(ResourceLocation channel, ResourceLocation id) {
-        return new ResourceLocation(channel.getNamespace(), channel.getPath() + "/" + id.getNamespace() + "/" + id.getPath());
+        return channel.withSuffix("/" + id.getNamespace() + "/" + id.getPath());
+    }
+
+    public static void setupNetwork(RegisterPayloadHandlerEvent event) {
+        LISTENERS.forEach(listener -> listener.accept(event));
     }
 }

@@ -1,19 +1,14 @@
 package com.teamresourceful.resourcefullib.neoforge;
 
 import com.teamresourceful.resourcefullib.ResourcefulLib;
+import com.teamresourceful.resourcefullib.common.network.neoforge.NeoForgeNetworking;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 
 @Mod(ResourcefulLib.MOD_ID)
 public class ResourcefulLibNeoForge {
-
-    private static final List<Consumer<IEventBus>> LISTENERS = new ArrayList<>();
-    private static IEventBus bus;
 
     public ResourcefulLibNeoForge(IEventBus bus) {
         ResourcefulLib.init();
@@ -21,22 +16,10 @@ public class ResourcefulLibNeoForge {
             ResourcefulLibNeoForgeClient.init(bus);
         }
 
-        ResourcefulLibNeoForge.setBus(bus);
+        bus.addListener(ResourcefulLibNeoForge::onNetworkSetup);
     }
 
-    private static void setBus(IEventBus bus) {
-        ResourcefulLibNeoForge.bus = bus;
-        if (bus != null) {
-            LISTENERS.forEach(listener -> listener.accept(bus));
-            LISTENERS.clear();
-        }
-    }
-
-    public static void listen(Consumer<IEventBus> listener) {
-        if (bus != null) {
-            listener.accept(bus);
-        } else {
-            LISTENERS.add(listener);
-        }
+    public static void onNetworkSetup(RegisterPayloadHandlerEvent event) {
+        NeoForgeNetworking.setupNetwork(event);
     }
 }

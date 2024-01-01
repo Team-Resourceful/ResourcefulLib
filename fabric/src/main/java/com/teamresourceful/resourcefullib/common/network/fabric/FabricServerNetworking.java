@@ -46,6 +46,6 @@ public record FabricServerNetworking(ResourceLocation channel) implements Networ
     }
 
     private static ResourceLocation createChannelLocation(ResourceLocation channel, ResourceLocation id) {
-        return new ResourceLocation(channel.getNamespace(), channel.getPath() + "/" + id.getNamespace() + "/" + id.getPath());
+        return channel.withSuffix("/" + id.getNamespace() + "/" + id.getPath());
     }
 }

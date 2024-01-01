@@ -5,6 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class NetworkImpl {
     public static Networking getNetwork(ResourceLocation channel, int protocolVersion, boolean optional) {
-        return new FabricNetworking(channel.getNamespace(), protocolVersion, channel.getPath());
+        return new FabricNetworking(channel, protocolVersion);
     }
 }

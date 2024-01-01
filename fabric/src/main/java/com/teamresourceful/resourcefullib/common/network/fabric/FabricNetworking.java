@@ -12,13 +12,13 @@ public class FabricNetworking implements Networking {
     private final Networking client;
     private final Networking server;
 
-    public FabricNetworking(String modid, int protocolVersion, String channel) {
+    public FabricNetworking(ResourceLocation channel, int protocolVersion) {
         if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
-            this.client = FabricClientNetworking.of(new ResourceLocation(modid, channel + "/v" + protocolVersion));
+            this.client = FabricClientNetworking.of(channel.withSuffix("/v" + protocolVersion));
         } else {
             this.client = DummyNetworking.INSTANCE;
         }
-        this.server = new FabricServerNetworking(new ResourceLocation(modid, channel + "/v" + protocolVersion));
+        this.server = new FabricServerNetworking(channel.withSuffix("/v" + protocolVersion));
     }
 
     @Override
