@@ -1,3 +1,7 @@
+# -----{ 2.4.1 }-----
+
+Fix possible crash on neoforge and improve code on fabric
+
 # -----{ 2.4.0 }-----
 
 Deprecated old networking and added a new version.
