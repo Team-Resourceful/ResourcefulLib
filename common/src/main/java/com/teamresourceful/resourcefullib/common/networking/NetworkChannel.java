@@ -10,10 +10,16 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.function.BooleanSupplier;
 
+/**
+ * @deprecated Use {@link com.teamresourceful.resourcefullib.common.network.Network} instead.
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = "1.21")
 public class NetworkChannel {
 
     private final ResourceLocation channel;
@@ -99,6 +105,12 @@ public class NetworkChannel {
         }
     }
 
+    /**
+     * @implNote This will not return true ever if on neoforge, this is purely here for a bit while we transition to the new networking system.
+     */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
+    @ApiStatus.Experimental
     public final boolean canSendPlayerPackets(Player player) {
         return PacketChannelHelper.canSendPlayerPackets(this.channel, player);
     }

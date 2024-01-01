@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefullib.common.item.tabs.neoforge;
 
 import com.teamresourceful.resourcefullib.common.item.tabs.ResourcefulCreativeTab;
+import com.teamresourceful.resourcefullib.neoforge.ResourcefulLibNeoForge;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -24,7 +24,7 @@ public class ResourcefulCreativeTabImpl {
     private static DeferredHolder<CreativeModeTab, CreativeModeTab> register(ResourceLocation id, Supplier<CreativeModeTab> tab) {
         var register = CREATIVE_TABS.computeIfAbsent(id.getNamespace(), namespace -> {
             var registry = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, namespace);
-            registry.register(FMLJavaModLoadingContext.get().getModEventBus());
+            ResourcefulLibNeoForge.listen(registry::register);
             return registry;
         });
         return register.register(id.getPath(), tab);

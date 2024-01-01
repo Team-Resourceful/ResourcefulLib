@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefullib.common.registry.neoforge;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
+import com.teamresourceful.resourcefullib.neoforge.ResourcefulLibNeoForge;
 import net.minecraft.core.Registry;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Collection;
@@ -31,6 +31,6 @@ public class NeoForgeResourcefulRegistry<T> implements ResourcefulRegistry<T> {
 
     @Override
     public void init() {
-        register.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ResourcefulLibNeoForge.listen(register::register);
     }
 }
