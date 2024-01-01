@@ -77,7 +77,7 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
         tryAppendingNeoForge(builder);
         builder.append("FPS", Minecraft.getInstance().getFps());
         builder.append("TPS", Optionull.mapOrDefault(mc.getSingleplayerServer(),
-                server -> DECIMAL_FORMAT.format(Math.min(1000.0 / (mean(server.tickTimes) * 1.0E-6D), 20)),
+                server -> DECIMAL_FORMAT.format(Math.min(1000.0 / (mean(server.getTickTimesNanos()) * 1.0E-6D), 20)),
                 "N/A"
         ));
         builder.append("Ping", Optionull.mapOrDefault(mc.getConnection(),
