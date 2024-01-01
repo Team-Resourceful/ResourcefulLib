@@ -1,3 +1,13 @@
+# -----{ 2.4.0 }-----
+
+Deprecated old networking and added a new version.
+Removed FinishedCodecRecipe and add CodecRecipeBuilder
+Deprecated bound and update render utils to respect that
+Added width and height to parent widget
+Added number range codecs
+Update to 1.20.4
+Added nbt validators
+
 # -----{ 2.2.4 }-----
 
 Fixed scroll list scrolling on different axis
