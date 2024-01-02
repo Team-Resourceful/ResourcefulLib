@@ -1,3 +1,7 @@
+# -----{ 2.4.2 }-----
+
+Add check if network is optional if it should send the packet to the player
+
 # -----{ 2.4.1 }-----
 
 Fix possible crash on neoforge and improve code on fabric
