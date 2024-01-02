@@ -21,6 +21,7 @@ import java.util.Collection;
 public class Network implements Networking {
 
     private final Networking networking;
+    private final boolean optional;
 
     public Network(ResourceLocation channel, int protocolVersion) {
         this(channel, protocolVersion, false);
@@ -28,6 +29,7 @@ public class Network implements Networking {
 
     public Network(ResourceLocation channel, int protocolVersion, boolean optional) {
         this.networking = getNetwork(channel, protocolVersion, optional);
+        this.optional = optional;
     }
 
     @Deprecated
@@ -38,6 +40,7 @@ public class Network implements Networking {
     @Deprecated
     public Network(String modid, int protocolVersion, String channel, boolean optional) {
         this.networking = getNetwork(new ResourceLocation(modid, channel), protocolVersion, optional);
+        this.optional = optional;
     }
 
     @Override
@@ -57,6 +60,7 @@ public class Network implements Networking {
 
     @Override
     public final <T extends Packet<T>> void sendToPlayer(T message, ServerPlayer player) {
+        if (optional && !canSendToPlayer(player, message.type())) return;
         this.networking.sendToPlayer(message, player);
     }
 
