@@ -10,10 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import org.jetbrains.annotations.NotNull;
 
-public record NeoForgeCustomPayload<T extends Packet<T>>(T packet) implements CustomPacketPayload {
+public record NeoForgeCustomPayload<T extends Packet<T>>(T packet, ResourceLocation id) implements CustomPacketPayload {
 
-    public static <T extends Packet<T>> FriendlyByteBuf.Reader<NeoForgeCustomPayload<T>> read(PacketType<T> type) {
-        return buf -> new NeoForgeCustomPayload<>(type.decode(buf));
+    public static <T extends Packet<T>> FriendlyByteBuf.Reader<NeoForgeCustomPayload<T>> read(PacketType<T> type, ResourceLocation id) {
+        return buf -> new NeoForgeCustomPayload<>(type.decode(buf), id);
     }
 
     public static <T extends Packet<T>> IPayloadHandler<NeoForgeCustomPayload<T>> handleClient(ClientboundPacketType<T> type) {
@@ -33,10 +33,5 @@ public record NeoForgeCustomPayload<T extends Packet<T>>(T packet) implements Cu
     @Override
     public void write(@NotNull FriendlyByteBuf arg) {
         packet().type().encode(packet(), arg);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return packet().type().id();
     }
 }

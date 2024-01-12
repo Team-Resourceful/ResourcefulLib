@@ -45,12 +45,14 @@ public class NeoForgeNetworking implements Networking {
 
     @Override
     public <T extends Packet<T>> void sendToServer(T message) {
-        PacketDistributor.SERVER.noArg().send(new NeoForgeCustomPayload<>(message));
+        ResourceLocation id = createChannelLocation(this.channel, message.type().id());
+        PacketDistributor.SERVER.noArg().send(new NeoForgeCustomPayload<>(message, id));
     }
 
     @Override
     public <T extends Packet<T>> void sendToPlayer(T message, ServerPlayer player) {
-        PacketDistributor.PLAYER.with(player).send(new NeoForgeCustomPayload<>(message));
+        ResourceLocation id = createChannelLocation(this.channel, message.type().id());
+        PacketDistributor.PLAYER.with(player).send(new NeoForgeCustomPayload<>(message, id));
     }
 
     @Override
@@ -74,17 +76,19 @@ public class NeoForgeNetworking implements Networking {
     }
 
     private <T extends Packet<T>> void registerClientbound(IPayloadRegistrar registrar, ClientboundPacketType<T> type) {
+        ResourceLocation id = createChannelLocation(this.channel, type.id());
         registrar.common(
-            createChannelLocation(this.channel, type.id()),
-            NeoForgeCustomPayload.read(type),
+            id,
+            NeoForgeCustomPayload.read(type, id),
             NeoForgeCustomPayload.handleClient(type)
         );
     }
 
     private <T extends Packet<T>> void registerServerbound(IPayloadRegistrar registrar, ServerboundPacketType<T> type) {
+        ResourceLocation id = createChannelLocation(this.channel, type.id());
         registrar.common(
-            createChannelLocation(this.channel, type.id()),
-            NeoForgeCustomPayload.read(type),
+            id,
+            NeoForgeCustomPayload.read(type, id),
             NeoForgeCustomPayload.handleServer(type)
         );
     }
