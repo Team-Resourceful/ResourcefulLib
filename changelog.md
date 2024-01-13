@@ -1,3 +1,7 @@
+# -----{ 2.4.4 }-----
+
+Use correct generic for recipe serializer
+
 # -----{ 2.4.3 }-----
 
 Add check if network is optional if it should send the packet to the player
