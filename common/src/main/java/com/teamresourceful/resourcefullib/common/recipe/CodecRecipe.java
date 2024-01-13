@@ -37,6 +37,6 @@ public interface CodecRecipe<C extends Container> extends Recipe<C> {
         return serializer();
     }
 
-    <T extends CodecRecipe<C>> CodecRecipeSerializer<T> serializer();
+    CodecRecipeSerializer<? extends CodecRecipe<C>> serializer();
 }
 
