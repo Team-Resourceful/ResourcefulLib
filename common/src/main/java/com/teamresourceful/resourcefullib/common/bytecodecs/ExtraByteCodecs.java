@@ -3,15 +3,18 @@ package com.teamresourceful.resourcefullib.common.bytecodecs;
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import org.joml.Vector3f;
@@ -53,6 +56,10 @@ public final class ExtraByteCodecs {
 
     public static final ByteCodec<Item> ITEM = registry(BuiltInRegistries.ITEM);
     public static final ByteCodec<ItemStack> ITEM_STACK = ItemStackByteCodec.CODEC;
+    public static final ByteCodec<Ingredient> INGREDIENT = ByteCodec.passthrough(
+            (buf, ingredient) -> ingredient.toNetwork(toFriendly(buf)),
+            buf -> Ingredient.fromNetwork(toFriendly(buf))
+    );
 
 
     public static <T, R extends Registry<T>> ByteCodec<ResourceKey<T>> resourceKey(ResourceKey<R> registry) {
@@ -61,5 +68,9 @@ public final class ExtraByteCodecs {
 
     public static <T> ByteCodec<T> registry(IdMap<T> map) {
         return new IdMapByteCodec<>(map);
+    }
+
+    public static FriendlyByteBuf toFriendly(ByteBuf buffer) {
+        return buffer instanceof FriendlyByteBuf friendlyByteBuf ? friendlyByteBuf : new FriendlyByteBuf(buffer);
     }
 }

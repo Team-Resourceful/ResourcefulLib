@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefullib.client.utils;
 
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
@@ -64,5 +65,9 @@ public final class ScreenUtils {
         if (Minecraft.getInstance().gameMode != null) {
             Minecraft.getInstance().gameMode.handleInventoryButtonClick(containerId, buttonId);
         }
+    }
+
+    public static boolean inBounds(ScreenRectangle rectangle, int x, int y) {
+        return x >= rectangle.left() && x <= rectangle.right() && y >= rectangle.top() && y <= rectangle.bottom();
     }
 }
