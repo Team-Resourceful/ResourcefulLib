@@ -3,12 +3,6 @@ description: File a bug report
 title: "[Bug]: "
 labels: [bug]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        If this is about a specific bee, please report to the pack dev. We do not create bees, we just give tools to pack developers.
-        If you do report a "bug", that is about a specific bee or set of bees, it will be instantly closed due to it most likely being
-        an issue with the bees that pack developers added themselves and not our code.
 
   - type: textarea
     id: bug
@@ -57,30 +51,23 @@ body:
     validations:
       required: true
 
-  #Add back when fabric version is here.
-  #  - type: dropdown
-  #    id: loader
-  #    attributes:
-  #      label: Mod Loader
-  #      description: What mod loader are you using? (Not required as of right now)
-  #      multiple: true
-  #      options:
-  #        - N/A
-  #        - Forge
-  #    validations:
-  #      required: false
+  - type: dropdown
+    id: loader
+    attributes:
+      label: Mod Loader
+      description: What mod loader are you using?
+      multiple: true
+      options:
+        - N/A
+        - NeoForge
+        - Fabric
+        - Quilt
+        - Forge
+    validations:
+      required: true
 
   - type: textarea
     id: logs-extra-context
     attributes:
       label: Logs or additional context
       description: Please copy and paste any relevant log output into a paste website such as [Pastebin](https://pastebin.com) and then link them here. You may also give any additional information here too.
-
-  - type: checkboxes
-    id: acknowledgement
-    attributes:
-      label: Acknowledgement
-      description: By submitting this issue, you agree that you read the terms at the top of the page.
-      options:
-        - label: I agree that I read the terms at the top of the page.
-          required: true

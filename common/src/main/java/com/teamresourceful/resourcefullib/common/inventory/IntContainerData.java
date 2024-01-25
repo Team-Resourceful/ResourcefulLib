@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefullib.common.inventory;
 
 import net.minecraft.world.inventory.ContainerData;
 
+//TODO Move to menu package
+
 /**
  * An implementation of vanillas ContainerData that splits integers into two separate shorts.
  * <p>
