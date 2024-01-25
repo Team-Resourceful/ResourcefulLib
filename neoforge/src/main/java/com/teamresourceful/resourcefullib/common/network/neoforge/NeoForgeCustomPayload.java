@@ -17,15 +17,15 @@ public record NeoForgeCustomPayload<T extends Packet<T>>(T packet, ResourceLocat
     }
 
     public static <T extends Packet<T>> IPayloadHandler<NeoForgeCustomPayload<T>> handleClient(ClientboundPacketType<T> type) {
-        return (packet, context) -> type.handle(packet.packet()).run();
+        return (packet, context) -> context.workHandler().submitAsync(() -> type.handle(packet.packet()).run());
     }
 
     public static <T extends Packet<T>> IPayloadHandler<NeoForgeCustomPayload<T>> handleServer(ServerboundPacketType<T> type) {
         return (packet, context) -> context.player()
                 .ifPresentOrElse(
-                    player -> type.handle(packet.packet()).accept(player),
+                    player -> context.workHandler().submitAsync(() -> type.handle(packet.packet()).accept(player)),
                     () -> {
-                        throw new IllegalStateException("Server packets should not be sent from the client!");
+                        throw new IllegalStateException("Received a serverbound packet without a player context.");
                     }
                 );
     }
