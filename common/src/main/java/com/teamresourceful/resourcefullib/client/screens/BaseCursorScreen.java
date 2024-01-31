@@ -16,21 +16,26 @@ public abstract class BaseCursorScreen extends Screen implements CursorScreen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
-        setCursor(Cursor.DEFAULT);
-        actuallyRender(graphics, mouseX, mouseY, f);
-        setCursor(children(), mouseX, mouseY);
+        boolean wihinBounds = mouseX >= 0 && mouseY >= 0 && mouseX < this.width && mouseY < this.height;
+        if (!wihinBounds) {
+            actuallyRender(graphics, mouseX, mouseY, f);
+        } else {
+            setCursor(Cursor.DEFAULT);
+            actuallyRender(graphics, mouseX, mouseY, f);
+            setCursor(children(), mouseX, mouseY);
 
-        switch (cursor) {
-            case DEFAULT -> CursorUtils.setDefault();
-            case POINTER -> CursorUtils.setPointing();
-            case DISABLED -> CursorUtils.setDisabled();
-            case TEXT -> CursorUtils.setText();
-            case CROSSHAIR -> CursorUtils.setCrosshair();
-            case RESIZE_EW -> CursorUtils.setResizeEastWest();
-            case RESIZE_NS -> CursorUtils.setResizeNorthSouth();
-            case RESIZE_NESW -> CursorUtils.setResizeNorthEastSouthWest();
-            case RESIZE_NWSE -> CursorUtils.setResizeNorthWestSouthEast();
-            case RESIZE_ALL -> CursorUtils.setResizeAll();
+            switch (cursor) {
+                case DEFAULT -> CursorUtils.setDefault();
+                case POINTER -> CursorUtils.setPointing();
+                case DISABLED -> CursorUtils.setDisabled();
+                case TEXT -> CursorUtils.setText();
+                case CROSSHAIR -> CursorUtils.setCrosshair();
+                case RESIZE_EW -> CursorUtils.setResizeEastWest();
+                case RESIZE_NS -> CursorUtils.setResizeNorthSouth();
+                case RESIZE_NESW -> CursorUtils.setResizeNorthEastSouthWest();
+                case RESIZE_NWSE -> CursorUtils.setResizeNorthWestSouthEast();
+                case RESIZE_ALL -> CursorUtils.setResizeAll();
+            }
         }
     }
 
