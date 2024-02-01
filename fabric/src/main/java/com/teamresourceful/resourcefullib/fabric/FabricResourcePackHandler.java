@@ -7,8 +7,10 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.Optionull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 public final class FabricResourcePackHandler {
 
@@ -21,8 +23,7 @@ public final class FabricResourcePackHandler {
                 try {
                     initMod(mod, metadata);
                 }catch (Exception e) {
-                    Constants.LOGGER.error("Resourceful Lib failed to load resource pack for mod: " + metadata.getName());
-                    e.printStackTrace();
+                    Constants.LOGGER.error("Resourceful Lib failed to load resource pack for mod: " + metadata.getName(), e);
                 }
             }
         }
@@ -39,16 +40,25 @@ public final class FabricResourcePackHandler {
         try {
             String name = value.getAsString();
             ResourceManagerHelper.registerBuiltinResourcePack(
-                new ResourceLocation(name),
-                container,
-                Component.translatable("resourcefullib.resourcepack." + name),
-                ResourcePackActivationType.NORMAL
+                    new ResourceLocation(container.getMetadata().getId(), name),
+                    container,
+                    createDescription(null, name),
+                    ResourcePackActivationType.NORMAL
             );
         } catch (Exception ignored) {
             var object = value.getAsObject();
-            ResourceLocation id = new ResourceLocation(object.get("name").getAsString());
-            String description = object.get("description").getAsString();
-            ResourceManagerHelper.registerBuiltinResourcePack(id, container, Component.translatable(description), ResourcePackActivationType.NORMAL);
+            String name = object.get("name").getAsString();
+            ResourceLocation id = new ResourceLocation(container.getMetadata().getId(), name);
+            Component description = createDescription(Optionull.map(object.get("description"), CustomValue::getAsString), name);
+            ResourcePackActivationType type = Optionull.mapOrDefault(object.get("required"), CustomValue::getAsBoolean, false) ? ResourcePackActivationType.ALWAYS_ENABLED : ResourcePackActivationType.NORMAL;
+            ResourceManagerHelper.registerBuiltinResourcePack(id, container, description, type);
         }
+    }
+
+    private static Component createDescription(@Nullable String description, String name) {
+        if (description != null) {
+            return Component.literal(description);
+        }
+        return Component.translatableWithFallback("resourcefullib.resourcepack." + name, name);
     }
 }
