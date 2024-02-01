@@ -1,3 +1,7 @@
+# -----{ 2.4.7 }-----
+
+Added required option to packs and allow loading datapacks
+
 # -----{ 2.4.6 }-----
 
 Check if the mouse is in bounds to try cursor checks.
