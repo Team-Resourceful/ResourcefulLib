@@ -36,7 +36,7 @@ public class MenuContentHelperImpl {
 
         @Override
         public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-            C content = provider.createContent();
+            C content = provider.createContent(player);
             if (content != null) {
                 content.serializer().to(buf, content);
             }
