@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.neoforge;
+package com.teamresourceful.resourcefullib.common.modules.neoforge;
 
 import com.teamresourceful.resourcefullib.common.modules.Module;
 import com.teamresourceful.resourcefullib.common.modules.ModuleType;
@@ -30,7 +30,7 @@ public class ModuleRegistry implements ResourcefulRegistry<ModuleType<?>> {
         }), supplier));
     }
 
-    private static <T extends Module<T>> AttachmentType<T> builder(ModuleType<T> type) {
+    private static <T extends Module> AttachmentType<T> builder(ModuleType<T> type) {
         AttachmentType.Builder<T> builder = AttachmentType
                 .builder(type::create)
                 .serialize(new ModuleSerializer<>(type));

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.forge;
+package com.teamresourceful.resourcefullib.common.modules.forge;
 
 import com.teamresourceful.resourcefullib.common.modules.Module;
 import com.teamresourceful.resourcefullib.common.modules.ModuleType;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ModuleCapabilityProvider<M extends Module<M>> implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class ModuleCapabilityProvider<M extends Module> implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
     private final M module;
     private final Capability<M> capability;

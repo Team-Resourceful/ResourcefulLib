@@ -1,20 +1,17 @@
 package com.teamresourceful.resourcefullib.common.modules;
 
-import net.minecraft.resources.ResourceLocation;
-
 import java.util.EnumSet;
 import java.util.function.Supplier;
 
-public record SimpleModuleType<T extends Module<T>>(
-        ResourceLocation id,
+public record SimpleModuleType<T extends Module>(
         Class<T> type,
         Supplier<T> factory,
         boolean copy,
         EnumSet<ModuleTarget> targets
 ) implements ModuleType<T> {
 
-    public static <T extends Module<T>> Builder<T> builder(ResourceLocation id, Class<T> type, Supplier<T> factory) {
-        return new Builder<>(id, type, factory);
+    public static <T extends Module> Builder<T> builder(Class<T> type, Supplier<T> factory) {
+        return new Builder<>(type, factory);
     }
 
     @Override
@@ -22,24 +19,26 @@ public record SimpleModuleType<T extends Module<T>>(
         return factory.get();
     }
 
-    public static class Builder<T extends Module<T>> {
+    public static class Builder<T extends Module> {
 
-        private final ResourceLocation id;
         private final Class<T> type;
         private final Supplier<T> factory;
 
         private boolean copy = false;
         private EnumSet<ModuleTarget> targets = EnumSet.noneOf(ModuleTarget.class);
 
-        protected Builder(ResourceLocation id, Class<T> type, Supplier<T> factory) {
-            this.id = id;
+        protected Builder(Class<T> type, Supplier<T> factory) {
             this.type = type;
             this.factory = factory;
         }
 
-        public Builder<T> copy() {
-            this.copy = true;
+        public Builder<T> copy(boolean copy) {
+            this.copy = copy;
             return this;
+        }
+
+        public Builder<T> copy() {
+            return copy(true);
         }
 
         public Builder<T> targets(ModuleTarget... targets) {
@@ -48,7 +47,7 @@ public record SimpleModuleType<T extends Module<T>>(
         }
 
         public SimpleModuleType<T> build() {
-            return new SimpleModuleType<>(id, type, factory, copy, targets);
+            return new SimpleModuleType<>(type, factory, copy, targets);
         }
     }
 }

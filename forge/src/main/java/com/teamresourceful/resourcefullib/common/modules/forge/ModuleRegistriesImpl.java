@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.forge;
+package com.teamresourceful.resourcefullib.common.modules.forge;
 
 import com.teamresourceful.resourcefullib.common.modules.ModuleType;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;

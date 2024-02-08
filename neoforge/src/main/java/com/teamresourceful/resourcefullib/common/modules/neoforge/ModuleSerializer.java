@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.neoforge;
+package com.teamresourceful.resourcefullib.common.modules.neoforge;
 
 import com.teamresourceful.resourcefullib.common.modules.Module;
 import com.teamresourceful.resourcefullib.common.modules.ModuleType;
@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
-public record ModuleSerializer<T extends Module<T>>(ModuleType<T> type) implements IAttachmentSerializer<CompoundTag, T> {
+public record ModuleSerializer<T extends Module>(ModuleType<T> type) implements IAttachmentSerializer<CompoundTag, T> {
 
     @Override
     public T read(IAttachmentHolder holder, CompoundTag tag) {

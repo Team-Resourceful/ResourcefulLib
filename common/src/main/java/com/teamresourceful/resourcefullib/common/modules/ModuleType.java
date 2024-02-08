@@ -1,12 +1,13 @@
 package com.teamresourceful.resourcefullib.common.modules;
 
-import net.minecraft.resources.ResourceLocation;
+import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.EnumSet;
 
-public interface ModuleType<T extends Module<T>> {
-
-    ResourceLocation id();
+public interface ModuleType<T extends Module> {
 
     Class<T> type();
 

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.neoforge;
+package com.teamresourceful.resourcefullib.common.modules.neoforge;
 
 import com.teamresourceful.resourcefullib.common.modules.ModuleType;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;

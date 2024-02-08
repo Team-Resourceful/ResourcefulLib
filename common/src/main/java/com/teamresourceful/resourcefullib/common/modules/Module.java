@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefullib.common.modules;
 
 import net.minecraft.nbt.CompoundTag;
 
-public interface Module<T extends Module<T>> {
+public interface Module {
 
     void read(CompoundTag tag);
 

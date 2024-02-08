@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.forge;
+package com.teamresourceful.resourcefullib.common.modules.forge;
 
 import com.teamresourceful.resourcefullib.common.modules.Module;
 import com.teamresourceful.resourcefullib.common.modules.ModuleType;
@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.function.Supplier;
 
-public class ModuleRegistryEntry<M extends Module<M>, T extends ModuleType<?>> implements RegistryEntry<T> {
+public class ModuleRegistryEntry<M extends Module, T extends ModuleType<?>> implements RegistryEntry<T> {
 
     private final ResourceLocation id;
     private final T type;

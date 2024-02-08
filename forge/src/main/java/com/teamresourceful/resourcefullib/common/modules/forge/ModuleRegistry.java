@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.common.module.forge;
+package com.teamresourceful.resourcefullib.common.modules.forge;
 
 import com.teamresourceful.resourcefullib.common.modules.Module;
 import com.teamresourceful.resourcefullib.common.modules.ModuleTarget;
@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -78,17 +77,23 @@ public class ModuleRegistry implements ResourcefulRegistry<ModuleType<?>> {
         }
     }
 
-    private static <T extends Module<T>> void copyData(Capability<T> cap, ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean loseless) {
+    private static <T extends Module> void copyData(Capability<T> cap, ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean loseless) {
         if (!loseless) return;
-        oldPlayer.getCapability(cap).ifPresent(oldCap -> newPlayer.getCapability(cap).ifPresent(newCap -> {
-            CompoundTag data = new CompoundTag();
-            oldCap.save(data);
-            newCap.read(data);
-        }));
+        oldPlayer.getCapability(cap)
+                .ifPresent(oldCap ->
+                    newPlayer.getCapability(cap)
+                        .ifPresent(newCap -> copy(oldCap, newCap))
+                );
+    }
+
+    public static <T extends Module> void copy(Module module1, Module module2) {
+        CompoundTag data = new CompoundTag();
+        module1.save(data);
+        module2.read(data);
     }
 
     @SuppressWarnings("unchecked")
-    private static  <M extends Module<M>, T extends ModuleType<M>> void forEach(RegistryEntries<ModuleType<?>> entries, Consumer<ModuleRegistryEntry<M, T>> consumer) {
+    private static  <M extends Module, T extends ModuleType<M>> void forEach(RegistryEntries<ModuleType<?>> entries, Consumer<ModuleRegistryEntry<M, T>> consumer) {
         for (RegistryEntry<ModuleType<?>> entry : entries.getEntries()) {
             if (!(entry instanceof ModuleRegistryEntry<?, ?> moduleEntry)) continue;
             consumer.accept((ModuleRegistryEntry<M, T>) moduleEntry);
