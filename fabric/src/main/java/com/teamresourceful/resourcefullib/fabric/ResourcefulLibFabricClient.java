@@ -10,5 +10,6 @@ public class ResourcefulLibFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new FabricHighlightHandler());
         FabricResourcePackHandler.load();
+        FabricCompatibilityHandler.load();
     }
 }

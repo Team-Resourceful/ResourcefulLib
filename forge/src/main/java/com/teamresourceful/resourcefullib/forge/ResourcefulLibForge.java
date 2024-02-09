@@ -10,6 +10,7 @@ public class ResourcefulLibForge {
 
     public ResourcefulLibForge() {
         ResourcefulLib.init();
+        ForgeCompatibilityHandler.load();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ResourcefulLibForgeClient::init);
     }
 }
