@@ -1,3 +1,7 @@
+# -----{ 2.4.8 }-----
+
+Updated highlight internals to use less memory
+
 # -----{ 2.4.7 }-----
 
 Added required option to packs and allow loading datapacks
