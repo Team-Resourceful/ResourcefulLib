@@ -23,7 +23,7 @@ public class MenuContentHelperImpl {
 
     public static <C extends MenuContent<C>> void open(ServerPlayer player, ContentMenuProvider<C> provider) {
         player.openMenu(provider, buf -> {
-            C content = provider.createContent();
+            C content = provider.createContent(player);
             if (content != null) {
                 content.serializer().to(buf, content);
             }
