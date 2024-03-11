@@ -1,3 +1,8 @@
+# -----{ 2.4.9 }-----
+
+Add menu content player context from 1.20.1 to 1.20.4
+Updated highlight internals to use less memory
+
 # -----{ 2.4.8 }-----
 
 Updated highlight internals to use less memory
