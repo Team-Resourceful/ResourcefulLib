@@ -1,3 +1,8 @@
+# -----{ 2.4.10 }-----
+
+Added option to stop resetting mouse on container open.
+Add menu content player context from 1.20.1 to 1.20.4
+
 # -----{ 2.4.9 }-----
 
 Add menu content player context from 1.20.1 to 1.20.4
