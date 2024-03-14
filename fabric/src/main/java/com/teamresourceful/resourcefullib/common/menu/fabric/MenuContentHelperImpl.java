@@ -52,6 +52,11 @@ public class MenuContentHelperImpl {
         public AbstractContainerMenu createMenu(int i, @NotNull Inventory inventory, @NotNull Player player) {
             return provider.createMenu(i, inventory, player);
         }
+
+        @Override
+        public boolean shouldCloseCurrentScreen() {
+            return provider.resetMouseOnOpen();
+        }
     }
 
 }
