@@ -1,3 +1,7 @@
+# -----{ 2.1.24 }-----
+
+Added option to stop resetting mouse on container open.
+
 # -----{ 2.1.23 }-----
 
 
