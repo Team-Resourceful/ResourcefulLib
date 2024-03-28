@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import org.joml.Vector3f;
 
 import java.util.Optional;
@@ -60,8 +61,8 @@ public final class ExtraByteCodecs {
             (buf, ingredient) -> ingredient.toNetwork(toFriendly(buf)),
             buf -> Ingredient.fromNetwork(toFriendly(buf))
     );
-
-
+    public static final ByteCodec<Fluid> FLUID = registry(BuiltInRegistries.FLUID);
+    
     public static <T, R extends Registry<T>> ByteCodec<ResourceKey<T>> resourceKey(ResourceKey<R> registry) {
         return RESOURCE_LOCATION.map(id -> ResourceKey.create(registry, id), ResourceKey::location);
     }
