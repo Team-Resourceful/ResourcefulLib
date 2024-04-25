@@ -1,3 +1,8 @@
+# -----{ 2.5.3 }-----
+
+Fixed fabric network packets being flipped
+Added helper for creating data components & added pair bytecodec
+
 # -----{ 2.5.2 }-----
 
 Added helper for creating data components & added pair bytecodec
