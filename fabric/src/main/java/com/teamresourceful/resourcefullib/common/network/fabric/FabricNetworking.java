@@ -26,7 +26,7 @@ public class FabricNetworking implements Networking {
     @Override
     public <T extends Packet<T>> void register(ClientboundPacketType<T> type) {
         final var payloadType = type.type(this.channel);
-        PayloadTypeRegistry.playC2S().register(payloadType, type.codec(payloadType));
+        PayloadTypeRegistry.playS2C().register(payloadType, type.codec(payloadType));
         if (!IS_CLIENT) return;
         FabricClientNetworkHandler.register(payloadType, type);
     }
@@ -34,7 +34,7 @@ public class FabricNetworking implements Networking {
     @Override
     public <T extends Packet<T>> void register(ServerboundPacketType<T> type) {
         final var payloadType = type.type(this.channel);
-        PayloadTypeRegistry.playS2C().register(payloadType, type.codec(payloadType));
+        PayloadTypeRegistry.playC2S().register(payloadType, type.codec(payloadType));
         ServerPlayNetworking.registerGlobalReceiver(
                 payloadType,
                 (payload, context) -> type.handle(payload.packet()).accept(context.player())
