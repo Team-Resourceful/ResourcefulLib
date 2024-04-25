@@ -1,3 +1,7 @@
+# -----{ 2.5.2 }-----
+
+Added helper for creating data components & added pair bytecodec
+
 # -----{ 2.5.1 }-----
 
 
