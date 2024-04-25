@@ -10,7 +10,9 @@ public record ExactObjectValidator(Map<String, Validator<?>> validators) impleme
 
     public static final String ID = "object:exact";
     public static final Codec<ExactObjectValidator> CODEC = Codec.unboundedMap(Codec.STRING, Validator.CODEC)
-            .xmap(ExactObjectValidator::new, ExactObjectValidator::validators);
+            .xmap(ExactObjectValidator::new, ExactObjectValidator::validators)
+            .fieldOf("object")
+            .codec();
 
     @Override
     public String id() {

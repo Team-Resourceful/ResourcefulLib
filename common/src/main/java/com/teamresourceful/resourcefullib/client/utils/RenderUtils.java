@@ -26,7 +26,7 @@ public final class RenderUtils {
      * @deprecated Use {@link #getScissorRect(Minecraft, PoseStack, int, int, int, int)} instead.
      */
     @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
+    @ApiStatus.ScheduledForRemoval(inVersion = "21.0")
     public static Bound getScissorBounds(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
         float guiScale = (float) minecraft.getWindow().getGuiScale();
         Vector2ic translation = getTranslation(stack);

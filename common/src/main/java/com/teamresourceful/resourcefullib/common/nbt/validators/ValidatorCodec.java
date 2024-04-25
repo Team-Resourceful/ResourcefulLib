@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,9 +20,9 @@ public final class ValidatorCodec<I extends Tag> implements Codec<Validator<I>> 
 
     @SuppressWarnings("unchecked")
     public ValidatorCodec(Codec<? extends Validator<I>> defaultCodec, Consumer<AddCallback<I>> consumer) {
-        ImmutableMap.Builder<String, Codec<Validator<I>>> builder = ImmutableMap.builder();
-        consumer.accept((key, codec) -> builder.put(key, (Codec<Validator<I>>) codec));
-        Map<String, Codec<Validator<I>>> validators = builder.build();
+        ImmutableMap.Builder<String, MapCodec<Validator<I>>> builder = ImmutableMap.builder();
+        consumer.accept((key, codec) -> builder.put(key, (MapCodec<Validator<I>>) MapCodec.assumeMapUnsafe(codec)));
+        Map<String, MapCodec<Validator<I>>> validators = builder.build();
         this.codec = CodecExtras.eitherRight(Codec.either(
             (Codec<Validator<I>>) defaultCodec,
             Codec.STRING.dispatch(Validator::id, validators::get)

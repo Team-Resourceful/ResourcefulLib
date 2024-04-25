@@ -115,23 +115,20 @@ public final class CodecExtras {
     }
 
     private static Codec<Integer> intRangeWithMessage(int i, int j, Function<Integer, String> function) {
-        return ExtraCodecs.validate(
-                Codec.INT,
-                integer -> integer.compareTo(i) >= 0 && integer.compareTo(j) <= 0 ? DataResult.success(integer) : DataResult.error(() -> function.apply(integer))
+        return Codec.INT.validate(
+            integer -> integer.compareTo(i) >= 0 && integer.compareTo(j) <= 0 ? DataResult.success(integer) : DataResult.error(() -> function.apply(integer))
         );
     }
 
     private static Codec<Double> doubleRangeWithMessage(double i, double j, Function<Double, String> function) {
-        return ExtraCodecs.validate(
-                Codec.DOUBLE,
-                aDouble -> aDouble.compareTo(i) >= 0 && aDouble.compareTo(j) <= 0 ? DataResult.success(aDouble) : DataResult.error(() -> function.apply(aDouble))
+        return Codec.DOUBLE.validate(
+            aDouble -> aDouble.compareTo(i) >= 0 && aDouble.compareTo(j) <= 0 ? DataResult.success(aDouble) : DataResult.error(() -> function.apply(aDouble))
         );
     }
 
     private static Codec<Float> floatRangeWithMessage(float i, float j, Function<Float, String> function) {
-        return ExtraCodecs.validate(
-                Codec.FLOAT,
-                aFloat -> aFloat.compareTo(i) >= 0 && aFloat.compareTo(j) <= 0 ? DataResult.success(aFloat) : DataResult.error(() -> function.apply(aFloat))
+        return Codec.FLOAT.validate(
+            aFloat -> aFloat.compareTo(i) >= 0 && aFloat.compareTo(j) <= 0 ? DataResult.success(aFloat) : DataResult.error(() -> function.apply(aFloat))
         );
     }
 }

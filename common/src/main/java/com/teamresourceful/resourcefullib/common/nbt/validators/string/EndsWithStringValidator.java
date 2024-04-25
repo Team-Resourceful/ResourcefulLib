@@ -7,7 +7,9 @@ public record EndsWithStringValidator(String value) implements StringValidator {
 
     public static final String ID = "string:ends_with";
     public static final Codec<EndsWithStringValidator> CODEC = Codec.STRING
-            .xmap(EndsWithStringValidator::new, EndsWithStringValidator::value);
+            .xmap(EndsWithStringValidator::new, EndsWithStringValidator::value)
+            .fieldOf("string")
+            .codec();
 
     @Override
     public String id() {

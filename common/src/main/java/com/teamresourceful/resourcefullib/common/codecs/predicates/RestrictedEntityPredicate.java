@@ -2,11 +2,13 @@ package com.teamresourceful.resourcefullib.common.codecs.predicates;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.EntityFlagsPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MobEffectsPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -24,11 +26,11 @@ public record RestrictedEntityPredicate(
 
     public static final Codec<RestrictedEntityPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(RestrictedEntityPredicate::entityType),
-        ExtraCodecs.strictOptionalField(LocationPredicate.CODEC, "location").forGetter(RestrictedEntityPredicate::location),
-        ExtraCodecs.strictOptionalField(MobEffectsPredicate.CODEC, "effects").forGetter(RestrictedEntityPredicate::effects),
-        ExtraCodecs.strictOptionalField(NbtPredicate.CODEC, "nbt").forGetter(RestrictedEntityPredicate::nbt),
-        ExtraCodecs.strictOptionalField(EntityFlagsPredicate.CODEC, "flags").forGetter(RestrictedEntityPredicate::flags),
-        ExtraCodecs.strictOptionalField(EntityPredicate.CODEC, "target").forGetter(RestrictedEntityPredicate::targetedEntity)
+        LocationPredicate.CODEC.optionalFieldOf("location").forGetter(RestrictedEntityPredicate::location),
+        MobEffectsPredicate.CODEC.optionalFieldOf("effects").forGetter(RestrictedEntityPredicate::effects),
+        NbtPredicate.CODEC.optionalFieldOf("nbt").forGetter(RestrictedEntityPredicate::nbt),
+        EntityFlagsPredicate.CODEC.optionalFieldOf("flags").forGetter(RestrictedEntityPredicate::flags),
+        EntityPredicate.CODEC.optionalFieldOf("target").forGetter(RestrictedEntityPredicate::targetedEntity)
     ).apply(instance, RestrictedEntityPredicate::new));
 
     public Optional<CompoundTag> getTag() {

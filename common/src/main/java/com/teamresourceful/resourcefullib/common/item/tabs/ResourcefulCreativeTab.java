@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * @deprecated Use {@link ResourcefulCreativeModeTab} instead.
  */
 @Deprecated
-@ApiStatus.ScheduledForRemoval(inVersion = "1.21")
+@ApiStatus.ScheduledForRemoval(inVersion = "21.0")
 public class ResourcefulCreativeTab {
 
     public final ResourceLocation id;
@@ -26,11 +26,7 @@ public class ResourcefulCreativeTab {
     public boolean hideScrollBar;
     public boolean hideTitle;
 
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     public final List<ResourcefulRegistry<ItemLike>> registries = new ArrayList<>();
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     public final List<Supplier<ItemStack>> stacks = new ArrayList<>();
 
     public final List<Supplier<Stream<ItemStack>>> contents = new ArrayList<>();

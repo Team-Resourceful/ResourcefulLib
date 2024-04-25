@@ -54,8 +54,8 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
             float normalX, float normalY, float normalZ
         ) {
             PoseStack.Pose last = stack.last();
-            consumer.vertex(last.pose(), x + x1, y + y1, z + z1).color(r, g, b, a).normal(last.normal(), normalX, normalY, normalZ).endVertex();
-            consumer.vertex(last.pose(), x + x2, y + y2, z + z2).color(r, g, b, a).normal(last.normal(), normalX, normalY, normalZ).endVertex();
+            consumer.vertex(last.pose(), x + x1, y + y1, z + z1).color(r, g, b, a).normal(last, normalX, normalY, normalZ).endVertex();
+            consumer.vertex(last.pose(), x + x2, y + y2, z + z2).color(r, g, b, a).normal(last, normalX, normalY, normalZ).endVertex();
         }
 
         private static Vector3f normal(Vector3f start, Vector3f end) {

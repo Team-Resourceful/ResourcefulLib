@@ -6,6 +6,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
@@ -22,6 +24,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public final class NeoForgeResourcePackHandler {
 
@@ -73,19 +76,19 @@ public final class NeoForgeResourcePackHandler {
                 if (!Files.isDirectory(path.resolve(event.getPackType().getDirectory()))) continue;
 
                 final String id = new ResourceLocation(resourcePack.mod().getModId(), resourcePack.name()).toString();
-                final Pack.ResourcesSupplier supplier = new PathPackResources.PathResourcesSupplier(path, false);
-                final Pack.Info info = getInfo(id, supplier, event.getPackType(), resourcePack.required());
-
-                final Pack pack = Pack.create(
-                        "builtin/" + id,
-                        createDescription(resourcePack.description(), resourcePack.name()),
-                        resourcePack.required(),
-                        new PathPackResources.PathResourcesSupplier(path, false),
-                        info,
-                        Pack.Position.TOP,
-                        resourcePack.required(),
-                        PackSource.create(PackSource.NO_DECORATION, resourcePack.required())
+                final Pack.ResourcesSupplier supplier = new PathPackResources.PathResourcesSupplier(path);
+                final PackLocationInfo locationInfo = new PackLocationInfo(
+                    id,
+                    createDescription(resourcePack.description(), resourcePack.name()),
+                        PackSource.create(PackSource.NO_DECORATION, resourcePack.required()),
+                    Optional.empty()
                 );
+
+
+                final Pack.Metadata info = getInfo(locationInfo, supplier, event.getPackType(), resourcePack.required());
+                final PackSelectionConfig config = new PackSelectionConfig(resourcePack.required(), Pack.Position.TOP, false);
+
+                final Pack pack = new Pack(locationInfo, supplier, info, config);
 
                 event.addRepositorySource((source) -> source.accept(pack));
             } catch (Exception ignored) {
@@ -94,14 +97,14 @@ public final class NeoForgeResourcePackHandler {
         }
     }
 
-    private static Pack.Info getInfo(String id, Pack.ResourcesSupplier supplier, PackType type, boolean hidden) {
+    private static Pack.Metadata getInfo(PackLocationInfo locationInfo, Pack.ResourcesSupplier supplier, PackType type, boolean hidden) {
         if (!hidden) {
-            Pack.Info info = Pack.readPackInfo(id, supplier, SharedConstants.getCurrentVersion().getPackVersion(type));
+            Pack.Metadata info = Pack.readPackMetadata(locationInfo, supplier, SharedConstants.getCurrentVersion().getPackVersion(type));
             if (info != null) {
                 return info;
             }
         }
-        return new Pack.Info(CommonComponents.EMPTY, PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), hidden);
+        return new Pack.Metadata(CommonComponents.EMPTY, PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), hidden);
     }
 
     private static Component createDescription(@Nullable String description, String name) {

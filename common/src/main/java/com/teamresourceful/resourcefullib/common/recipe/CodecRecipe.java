@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefullib.common.recipe;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -15,14 +15,12 @@ public interface CodecRecipe<C extends Container> extends Recipe<C> {
     }
 
     @Override
-    @NotNull
-    default ItemStack assemble(@NotNull C container, @NotNull RegistryAccess access) {
+    default @NotNull ItemStack assemble(C container, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    @NotNull
-    default ItemStack getResultItem(@NotNull RegistryAccess access) {
+    default @NotNull ItemStack getResultItem(HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 

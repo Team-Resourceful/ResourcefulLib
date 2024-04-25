@@ -10,7 +10,9 @@ public record PartialObjectValidator(Map<String, Validator<?>> validators) imple
 
     public static final String ID = "object:partial";
     public static final Codec<PartialObjectValidator> CODEC = Codec.unboundedMap(Codec.STRING, Validator.CODEC)
-            .xmap(PartialObjectValidator::new, PartialObjectValidator::validators);
+            .xmap(PartialObjectValidator::new, PartialObjectValidator::validators)
+            .fieldOf("object")
+            .codec();
 
     @Override
     public String id() {

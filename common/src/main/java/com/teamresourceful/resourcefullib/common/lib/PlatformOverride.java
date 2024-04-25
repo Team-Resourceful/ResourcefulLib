@@ -14,6 +14,9 @@ import java.lang.annotation.Target;
 @ApiStatus.Internal
 public @interface PlatformOverride {
 
+    String FABRIC = "fabric";
+    String NEOFORGE = "neoforge";
+
     /**
      * @return The platform this method is overridden for.
      */

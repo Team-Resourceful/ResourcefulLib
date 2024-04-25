@@ -7,7 +7,9 @@ public record StartsWithStringValidator(String value) implements StringValidator
 
     public static final String ID = "string:starts_with";
     public static final Codec<StartsWithStringValidator> CODEC = Codec.STRING
-            .xmap(StartsWithStringValidator::new, StartsWithStringValidator::value);
+            .xmap(StartsWithStringValidator::new, StartsWithStringValidator::value)
+            .fieldOf("string")
+            .codec();
 
     @Override
     public String id() {

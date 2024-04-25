@@ -6,7 +6,6 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -18,7 +17,7 @@ public record RestrictedItemPredicate(
 
     public static final Codec<RestrictedItemPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.ITEM.byNameCodec().fieldOf("id").forGetter(RestrictedItemPredicate::item),
-            ExtraCodecs.strictOptionalField(NbtPredicate.CODEC,"nbt").forGetter(RestrictedItemPredicate::nbt),
+            NbtPredicate.CODEC.optionalFieldOf("nbt").forGetter(RestrictedItemPredicate::nbt),
             MinMaxBounds.Ints.CODEC.fieldOf("durability").orElse(MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::durability),
             MinMaxBounds.Ints.CODEC.fieldOf("count").orElse(MinMaxBounds.Ints.ANY).forGetter(RestrictedItemPredicate::count)
     ).apply(instance, RestrictedItemPredicate::new));

@@ -13,14 +13,6 @@ public interface CodecIngredient<T extends CodecIngredient<T>> extends Predicate
 
     List<ItemStack> getStacks();
 
-    default ItemStack[] getStacksAsArray() {
-        return getStacks().toArray(new ItemStack[0]);
-    }
-
-    default boolean isEmpty() {
-        return getStacks().isEmpty();
-    }
-
     /**
      * Determines if this ingredient is complex.
      * i.e. it can change based on the context.

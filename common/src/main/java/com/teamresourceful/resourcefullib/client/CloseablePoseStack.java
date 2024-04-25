@@ -44,6 +44,11 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
         stack.mulPose(quaternion);
     }
 
+    @Override
+    public void rotateAround(Quaternionf quaternionf, float f, float g, float h) {
+        stack.rotateAround(quaternionf, f, g, h);
+    }
+
     @NotNull
     @Override
     public PoseStack.Pose last() {
@@ -61,8 +66,8 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
     }
 
     @Override
-    public void mulPoseMatrix(@NotNull Matrix4f matrix4f) {
-        stack.mulPoseMatrix(matrix4f);
+    public void mulPose(Matrix4f matrix4f) {
+        stack.mulPose(matrix4f);
     }
 
     @Override

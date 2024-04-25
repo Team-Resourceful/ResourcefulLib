@@ -1,20 +1,23 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient.fabric;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements CustomIngredientSerializer<FabricIngredient<T>> {
 
     private final CodecIngredientSerializer<T> serializer;
-    private final Codec<FabricIngredient<T>> codec;
+    private final MapCodec<FabricIngredient<T>> codec;
+    private final StreamCodec<RegistryFriendlyByteBuf, FabricIngredient<T>> packetCodec;
 
     public FabricIngredientSerializer(CodecIngredientSerializer<T> serializer) {
         this.serializer = serializer;
         this.codec = serializer.codec().xmap(FabricIngredient::new, FabricIngredient::ingredient);
+        this.packetCodec = serializer.network().map(FabricIngredient::new, FabricIngredient::ingredient);
     }
 
     @Override
@@ -23,19 +26,13 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
     }
 
     @Override
-    public Codec<FabricIngredient<T>> getCodec(boolean allowEmpty) {
+    public MapCodec<FabricIngredient<T>> getCodec(boolean allowEmpty) {
         return this.codec;
     }
 
     @Override
-    public FabricIngredient<T> read(FriendlyByteBuf buf) {
-        return new FabricIngredient<>(this.serializer.network().decode(buf));
+    public StreamCodec<RegistryFriendlyByteBuf, FabricIngredient<T>> getPacketCodec() {
+        return this.packetCodec;
     }
-
-    @Override
-    public void write(FriendlyByteBuf buf, FabricIngredient<T> ingredient) {
-        this.serializer.network().encode(ingredient.ingredient(), buf);
-    }
-
 
 }

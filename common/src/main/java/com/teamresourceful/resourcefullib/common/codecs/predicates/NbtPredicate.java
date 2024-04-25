@@ -1,10 +1,12 @@
 package com.teamresourceful.resourcefullib.common.codecs.predicates;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -14,9 +16,10 @@ public record NbtPredicate(CompoundTag tag) {
     public static final NbtPredicate ANY = new NbtPredicate(null);
     public static final Codec<NbtPredicate> CODEC = CompoundTag.CODEC.xmap(NbtPredicate::new, NbtPredicate::tag);
 
-    public boolean matches(ItemStack pStack) {
+    public boolean matches(ItemStack stack) {
         if (this == ANY || isEmpty(this.tag)) return true;
-        return this.matches(pStack.getTag());
+        //noinspection deprecation
+        return this.matches(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).getUnsafe());
     }
 
     public boolean matches(Entity pEntity) {
@@ -38,8 +41,10 @@ public record NbtPredicate(CompoundTag tag) {
     public static boolean compareNbt(@Nullable Tag tag, @Nullable Tag tag2) {
         if (tag == tag2) {
             return true;
-        } else if (tag == null || tag2 == null) {
+        } else if (tag == null) {
             return true;
+        } else if (tag2 == null)  {
+            return false;
         } else if (tag instanceof NumericTag num1 && tag2 instanceof NumericTag num2) {
             BigDecimal bigDecimal = new BigDecimal(num1.getAsNumber().toString());
             BigDecimal bigDecimal2 = new BigDecimal(num2.getAsNumber().toString());
@@ -89,7 +94,7 @@ public record NbtPredicate(CompoundTag tag) {
         if (entity instanceof Player player) {
             ItemStack itemstack = player.getInventory().getSelected();
             if (!itemstack.isEmpty()) {
-                compoundtag.put("SelectedItem", itemstack.save(new CompoundTag()));
+                compoundtag.put("SelectedItem", itemstack.save(entity.level().registryAccess()));
             }
         }
 

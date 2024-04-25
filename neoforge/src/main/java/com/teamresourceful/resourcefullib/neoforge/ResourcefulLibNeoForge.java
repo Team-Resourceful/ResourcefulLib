@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefullib.common.network.neoforge.NeoForgeNetwor
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(ResourcefulLib.MOD_ID)
 public class ResourcefulLibNeoForge {
@@ -19,7 +19,7 @@ public class ResourcefulLibNeoForge {
         bus.addListener(ResourcefulLibNeoForge::onNetworkSetup);
     }
 
-    public static void onNetworkSetup(RegisterPayloadHandlerEvent event) {
+    public static void onNetworkSetup(RegisterPayloadHandlersEvent event) {
         NeoForgeNetworking.setupNetwork(event);
     }
 }

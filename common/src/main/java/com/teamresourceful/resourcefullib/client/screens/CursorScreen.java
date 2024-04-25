@@ -25,7 +25,7 @@ public interface CursorScreen {
     }
 
     @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
+    @ApiStatus.ScheduledForRemoval(inVersion = "21.0")
     default void setCursor(List<? extends GuiEventListener> listeners) {
         for (GuiEventListener child : listeners) {
             if (child instanceof CursorWidget) continue;

@@ -1,8 +1,10 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient.neoforge;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -25,11 +27,12 @@ public class IngredientHelperImpl {
     }
 
     public static <T extends CodecIngredient<T>> Ingredient getIngredient(T ingredient) {
-        return new NeoForgeIngredient<>(ingredient);
+        return new NeoForgeIngredient<>(ingredient).toVanilla();
     }
 
     public static <C extends CodecIngredient<C>, T extends CodecIngredientSerializer<C>> void registerIngredient(T serializer) {
-        Codec<NeoForgeIngredient<C>> codec = serializer.codec().xmap(NeoForgeIngredient::new, NeoForgeIngredient::getIngredient);
-        getOrCreate(serializer.id().getNamespace()).register(serializer.id().getPath(), () -> new IngredientType<>(codec));
+        MapCodec<NeoForgeIngredient<C>> codec = serializer.codec().xmap(NeoForgeIngredient::new, NeoForgeIngredient::ingredient);
+        StreamCodec<RegistryFriendlyByteBuf, NeoForgeIngredient<C>> network = serializer.network().map(NeoForgeIngredient::new, NeoForgeIngredient::ingredient);
+        getOrCreate(serializer.id().getNamespace()).register(serializer.id().getPath(), () -> new IngredientType<>(codec, network));
     }
 }

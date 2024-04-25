@@ -9,7 +9,9 @@ public record MatchesListValidator(Validator<?> validator) implements ListValida
 
     public static final String ID = "list:matches";
     public static final Codec<MatchesListValidator> CODEC = Validator.CODEC
-            .xmap(MatchesListValidator::new, MatchesListValidator::validator);
+            .xmap(MatchesListValidator::new, MatchesListValidator::validator)
+            .fieldOf("validators")
+            .codec();
 
     @Override
     public String id() {

@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -9,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Use mixins and extensible enums to create new enum values at runtime.
+ */
+@ApiStatus.Obsolete
 @SuppressWarnings({"unchecked", "unused"})
 public class EnumBuilder<T extends Enum<T>> {
 

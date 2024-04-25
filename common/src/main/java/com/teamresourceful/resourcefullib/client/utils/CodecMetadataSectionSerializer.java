@@ -6,8 +6,15 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link MetadataSectionType#fromCodec(String, Codec)}
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = "21.0")
 public record CodecMetadataSectionSerializer<T>(Codec<T> codec, ResourceLocation id) implements MetadataSectionSerializer<T> {
 
     @Override

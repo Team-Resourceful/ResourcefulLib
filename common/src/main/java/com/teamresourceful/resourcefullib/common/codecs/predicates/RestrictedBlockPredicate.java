@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,8 +20,8 @@ public record RestrictedBlockPredicate(@NotNull Block block, Optional<NbtPredica
 
     public static final Codec<RestrictedBlockPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.BLOCK.byNameCodec().fieldOf("id").forGetter(RestrictedBlockPredicate::block),
-            ExtraCodecs.strictOptionalField(NbtPredicate.CODEC, "nbt").forGetter(RestrictedBlockPredicate::nbt),
-            ExtraCodecs.strictOptionalField(LocationPredicate.CODEC, "location").forGetter(RestrictedBlockPredicate::location),
+            NbtPredicate.CODEC.optionalFieldOf("nbt").forGetter(RestrictedBlockPredicate::nbt),
+            LocationPredicate.CODEC.optionalFieldOf("location").forGetter(RestrictedBlockPredicate::location),
             BlockStatePredicate.CODEC.fieldOf("properties").orElse(BlockStatePredicate.ANY).forGetter(RestrictedBlockPredicate::properties)
     ).apply(instance, RestrictedBlockPredicate::new));
 
@@ -40,7 +39,7 @@ public record RestrictedBlockPredicate(@NotNull Block block, Optional<NbtPredica
             return false;
         } else  if (this.nbt.isPresent()) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
-            return blockEntity != null && this.nbt.get().matches(blockEntity.saveWithFullMetadata());
+            return blockEntity != null && this.nbt.get().matches(blockEntity.saveWithFullMetadata(level.registryAccess()));
         }
         return true;
     }

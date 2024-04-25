@@ -6,6 +6,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
@@ -31,9 +32,12 @@ public final class ScreenUtils {
     }
 
     public static void setTooltip(ItemStack stack, boolean replace) {
+        Minecraft mc = Minecraft.getInstance();
+        Item.TooltipContext context = Item.TooltipContext.of(mc.level);
         setTooltip(stack.getTooltipLines(
-                Minecraft.getInstance().player,
-                Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL
+                context,
+                mc.player,
+                mc.options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL
         ), replace);
     }
 

@@ -5,7 +5,6 @@ import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefullib.common.nbt.validators.TagValidationType;
 import com.teamresourceful.resourcefullib.common.nbt.validators.Validator;
 import net.minecraft.nbt.CollectionTag;
-import net.minecraft.util.ExtraCodecs;
 
 import java.util.List;
 
@@ -13,8 +12,7 @@ public record ExactListValidator(List<Validator<?>> validators) implements ListV
 
     public static final String ID = "list:exact";
 
-    public static final Codec<ExactListValidator> CODEC = ExtraCodecs.validate(
-            Validator.CODEC.listOf(),
+    public static final Codec<ExactListValidator> CODEC = Validator.CODEC.listOf().validate(
             validators -> {
                 TagValidationType type = null;
                 for (Validator<?> validator : validators) {
@@ -26,7 +24,10 @@ public record ExactListValidator(List<Validator<?>> validators) implements ListV
                 }
                 return DataResult.success(validators);
             }
-    ).xmap(ExactListValidator::new, ExactListValidator::validators);
+    )
+    .xmap(ExactListValidator::new, ExactListValidator::validators)
+    .fieldOf("validators")
+    .codec();
 
     @Override
     public String id() {

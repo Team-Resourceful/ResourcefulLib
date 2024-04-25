@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefullib.common.utils.modinfo;
 import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 public final class ModInfoUtils {
@@ -11,8 +12,16 @@ public final class ModInfoUtils {
         throw new UtilityClassException();
     }
 
+    @ExpectPlatform
+    @Contract(pure = true)
     public static boolean isModLoaded(String id) {
-        return getModInfo(id) != null;
+        throw new NotImplementedException();
+    }
+
+    @ExpectPlatform
+    @Contract(pure = true)
+    public static boolean isMixinModLoaded(String id) {
+        throw new NotImplementedException();
     }
 
     @Nullable

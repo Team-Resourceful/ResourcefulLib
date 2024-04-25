@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 public interface ContentMenuProvider<C extends MenuContent<C>> extends MenuProvider {
 
     @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
+    @ApiStatus.ScheduledForRemoval(inVersion = "21.0")
     default C createContent() {
         throw new UnsupportedOperationException("createContent");
     }

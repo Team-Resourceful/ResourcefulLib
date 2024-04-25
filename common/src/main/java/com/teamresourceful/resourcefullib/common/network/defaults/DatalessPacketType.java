@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefullib.common.network.defaults;
 
 import com.teamresourceful.resourcefullib.common.network.Packet;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Supplier;
@@ -16,12 +16,12 @@ public abstract class DatalessPacketType<T extends Packet<T>> extends AbstractPa
     }
 
     @Override
-    public void encode(T message, FriendlyByteBuf buffer) {
+    public void encode(T message, RegistryFriendlyByteBuf buffer) {
 
     }
 
     @Override
-    public T decode(FriendlyByteBuf buffer) {
+    public T decode(RegistryFriendlyByteBuf buffer) {
         return factory.get();
     }
 }

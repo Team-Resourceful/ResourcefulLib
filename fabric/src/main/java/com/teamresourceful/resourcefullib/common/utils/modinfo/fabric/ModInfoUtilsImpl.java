@@ -21,6 +21,14 @@ public class ModInfoUtilsImpl {
         return FabricLoader.getInstance().getAllMods().size();
     }
 
+    public static boolean isModLoaded(String id) {
+        return FabricLoader.getInstance().isModLoaded(id);
+    }
+
+    public static boolean isMixinModLoaded(String id) {
+        return FabricLoader.getInstance().isModLoaded(id);
+    }
+
     private record Info(ModContainer container) implements ModInfo {
 
         @Override

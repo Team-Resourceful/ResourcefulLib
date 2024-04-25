@@ -9,7 +9,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -52,17 +54,14 @@ public final class ExtraByteCodecs {
             .map(Optional::orElseThrow, Optional::of);
     public static final ByteCodec<Optional<CompoundTag>> COMPOUND_TAG = CompoundTagByteCodec.INSTANCE;
 
-    public static final ByteCodec<Component> COMPONENT = ByteCodec.STRING_COMPONENT
-            .map(Component.Serializer::fromJson, Component.Serializer::toJson);
+    public static final ByteCodec<Component> COMPONENT = StreamCodecByteCodec.ofRegistry(ComponentSerialization.STREAM_CODEC);
 
     public static final ByteCodec<Item> ITEM = registry(BuiltInRegistries.ITEM);
-    public static final ByteCodec<ItemStack> ITEM_STACK = ItemStackByteCodec.CODEC;
-    public static final ByteCodec<Ingredient> INGREDIENT = ByteCodec.passthrough(
-            (buf, ingredient) -> ingredient.toNetwork(toFriendly(buf)),
-            buf -> Ingredient.fromNetwork(toFriendly(buf))
-    );
     public static final ByteCodec<Fluid> FLUID = registry(BuiltInRegistries.FLUID);
-    
+
+    public static final ByteCodec<ItemStack> ITEM_STACK = StreamCodecByteCodec.ofRegistry(ItemStack.STREAM_CODEC);
+    public static final ByteCodec<Ingredient> INGREDIENT = StreamCodecByteCodec.ofRegistry(Ingredient.CONTENTS_STREAM_CODEC);
+
     public static <T, R extends Registry<T>> ByteCodec<ResourceKey<T>> resourceKey(ResourceKey<R> registry) {
         return RESOURCE_LOCATION.map(id -> ResourceKey.create(registry, id), ResourceKey::location);
     }
@@ -73,5 +72,10 @@ public final class ExtraByteCodecs {
 
     public static FriendlyByteBuf toFriendly(ByteBuf buffer) {
         return buffer instanceof FriendlyByteBuf friendlyByteBuf ? friendlyByteBuf : new FriendlyByteBuf(buffer);
+    }
+
+    public static RegistryFriendlyByteBuf toRegistry(ByteBuf buffer) {
+        if (buffer instanceof RegistryFriendlyByteBuf registryFriendlyByteBuf) return registryFriendlyByteBuf;
+        throw new IllegalArgumentException("ByteBuf is not a RegistryFriendlyByteBuf");
     }
 }

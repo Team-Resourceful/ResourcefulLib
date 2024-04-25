@@ -10,7 +10,9 @@ public record RegexStringValidator(Pattern value) implements StringValidator {
 
     public static final String ID = "string:regex";
     public static final Codec<RegexStringValidator> CODEC = ExtraCodecs.PATTERN
-            .xmap(RegexStringValidator::new, RegexStringValidator::value);
+            .xmap(RegexStringValidator::new, RegexStringValidator::value)
+            .fieldOf("string")
+            .codec();
 
     @Override
     public String id() {

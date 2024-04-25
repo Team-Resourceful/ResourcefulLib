@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
 public abstract class SaveHandler extends SavedData {
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.Provider provider) {
         this.saveData(tag);
         return tag;
     }
@@ -49,7 +50,7 @@ public abstract class SaveHandler extends SavedData {
         }
 
         public static <T extends SaveHandler> HandlerType<T> create(T clientSide, Supplier<T> creator) {
-            return new HandlerType<>(clientSide, new Factory<>(creator, tag -> {
+            return new HandlerType<>(clientSide, new Factory<>(creator, (tag, provider) -> {
                 T handler = creator.get();
                 handler.loadData(tag);
                 return handler;
