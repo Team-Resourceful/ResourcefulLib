@@ -55,8 +55,8 @@
           "value": "${mc_version}"
         },
         {
-          "name": "Forge Version",
-          "value": "${forge_version}",
+          "name": "NeoForge Version",
+          "value": "${neoforge_version}",
           "inline": true
         },
         {

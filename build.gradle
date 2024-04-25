@@ -103,7 +103,7 @@ resourcefulGradle {
             injectedValues = [
                     "version"      : libs.versions.mod.version.get(),
                     "mc_version"   : mc_version,
-                    "forge_version": forge_version,
+                    "neoforge_version": neoforge_version,
                     "fabric_version": fabric_loader_version,
                     "fabric_link": fabricLink,
                     "forge_link": forgeLink
