@@ -1,3 +1,7 @@
+# -----{ 2.5.0 }-----
+
+Updated to 1.20.5
+
 # -----{ 2.4.10 }-----
 
 Added option to stop resetting mouse on container open.
