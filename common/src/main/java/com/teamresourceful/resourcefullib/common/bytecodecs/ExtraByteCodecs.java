@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.bytecodecs;
 
+import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -68,6 +69,14 @@ public final class ExtraByteCodecs {
 
     public static <T> ByteCodec<T> registry(IdMap<T> map) {
         return new IdMapByteCodec<>(map);
+    }
+
+    public static <A, B> ByteCodec<Pair<A, B>> pair(ByteCodec<A> first, ByteCodec<B> second) {
+        return ObjectByteCodec.create(
+                first.fieldOf(Pair::getFirst),
+                second.fieldOf(Pair::getSecond),
+                Pair::of
+        );
     }
 
     public static FriendlyByteBuf toFriendly(ByteBuf buffer) {
