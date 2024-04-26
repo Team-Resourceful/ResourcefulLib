@@ -1,3 +1,7 @@
+# -----{ 2.5.4 }-----
+
+Update bytecodecs to 1.1.0
+
 # -----{ 2.5.3 }-----
 
 Fixed fabric network packets being flipped
