@@ -1,3 +1,8 @@
+# -----{ 2.5.5 }-----
+
+Added helper for mojang either in bytecodecs.
+Update bytecodecs to 1.1.0
+
 # -----{ 2.5.4 }-----
 
 Update bytecodecs to 1.1.0
