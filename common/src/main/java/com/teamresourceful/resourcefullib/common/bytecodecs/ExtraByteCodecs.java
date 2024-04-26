@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.bytecodecs;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
@@ -76,6 +77,15 @@ public final class ExtraByteCodecs {
                 first.fieldOf(Pair::getFirst),
                 second.fieldOf(Pair::getSecond),
                 Pair::of
+        );
+    }
+
+    public static <A, B> ByteCodec<Either<A, B>> either(ByteCodec<A> first, ByteCodec<B> second) {
+        final ByteCodec<Either<A, B>> left = first.map(Either::left, either -> either.left().orElseThrow());
+        final ByteCodec<Either<A, B>> right = second.map(Either::right, either -> either.right().orElseThrow());
+        return ByteCodec.BOOLEAN.dispatch(
+            value -> value ? left : right,
+            either -> either.map(l -> true, r -> false)
         );
     }
 
