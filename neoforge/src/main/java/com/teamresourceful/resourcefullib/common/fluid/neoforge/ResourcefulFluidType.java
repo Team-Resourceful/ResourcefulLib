@@ -16,9 +16,9 @@ public class ResourcefulFluidType extends FluidType {
 
     private final FluidProperties properties;
 
-    public ResourcefulFluidType(FluidProperties props) {
+    public ResourcefulFluidType(ResourceLocation id, FluidProperties props) {
         super(Util.make(Properties.create(), properties -> {
-            properties.descriptionId(Util.makeDescriptionId("fluid_type", props.id()));
+            properties.descriptionId(Util.makeDescriptionId("fluid_type", id));
             properties.adjacentPathType(props.adjacentPathType());
             properties.canConvertToSource(props.canConvertToSource());
             properties.canDrown(props.canDrown());

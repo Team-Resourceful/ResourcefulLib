@@ -7,8 +7,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 
 public interface FluidProperties {
 
-    ResourceLocation id();
-
     double motionScale();
 
     boolean canPushEntity();
@@ -236,8 +234,8 @@ public interface FluidProperties {
             return this;
         }
 
-        public FluidProperties build(ResourceLocation id) {
-            return new ImmutableFluidProperties(id, motionScale, canPushEntity, canSwim, canDrown, fallDistanceModifier, canExtinguish, canConvertToSource, supportsBloating, pathType, adjacentPathType, canHydrate, lightLevel, density, temperature, viscosity, rarity, sounds, still, flowing, overlay, screenOverlay, tintColor, tickRate, slopeFindDistance, dropOff, explosionResistance, canPlace);
+        public FluidProperties build() {
+            return new ImmutableFluidProperties(motionScale, canPushEntity, canSwim, canDrown, fallDistanceModifier, canExtinguish, canConvertToSource, supportsBloating, pathType, adjacentPathType, canHydrate, lightLevel, density, temperature, viscosity, rarity, sounds, still, flowing, overlay, screenOverlay, tintColor, tickRate, slopeFindDistance, dropOff, explosionResistance, canPlace);
         }
     }
 }

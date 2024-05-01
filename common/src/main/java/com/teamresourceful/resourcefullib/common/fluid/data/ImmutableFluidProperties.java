@@ -7,7 +7,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public record ImmutableFluidProperties(
-        ResourceLocation id,
         double motionScale,
         boolean canPushEntity,
         boolean canSwim,

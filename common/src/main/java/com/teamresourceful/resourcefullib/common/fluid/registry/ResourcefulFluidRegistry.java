@@ -21,7 +21,11 @@ public interface ResourcefulFluidRegistry extends ResourcefulRegistry<FluidData>
         throw new UnsupportedOperationException("Use register(String, FluidProperties.Builder) instead.");
     }
 
-    RegistryEntry<FluidData> register(String id, FluidProperties.Builder builder);
+    RegistryEntry<FluidData> register(String id, FluidProperties properties);
+
+    default RegistryEntry<FluidData> register(String id, FluidProperties.Builder builder) {
+        return register(id, builder.build());
+    }
 
     /**
      * @hidden For internal use only.
