@@ -10,6 +10,9 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResoucefulLib/issues/new/ch
     authors = "ThatGravyBoat, Epic_Oreo"
     description = "Team Resourceful Library"
 
+[[mixins]]
+    config = "resourcefullib.mixins.json"
+
 [[dependencies.resourcefullib]]
     modId = "neoforge"
     type = "required"

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefullib.mixin.fabric;
+package com.teamresourceful.resourcefullib.mixins.fabric;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
