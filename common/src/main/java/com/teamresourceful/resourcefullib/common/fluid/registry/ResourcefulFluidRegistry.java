@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefullib.common.fluid.registry;
 
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidProperties;
+import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,16 @@ public interface ResourcefulFluidRegistry extends ResourcefulRegistry<FluidData>
     @Deprecated
     @Override
     default <I extends FluidData> RegistryEntry<I> register(String id, Supplier<I> supplier) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Use register(String, FluidProperties.Builder) instead.");
+    }
+
+    /**
+     * @hidden use {@link #register(String, FluidProperties.Builder)} instead
+     */
+    @ApiStatus.Internal
+    @Deprecated
+    @Override
+    default HolderRegistryEntry<FluidData> registerHolder(String id, Supplier<FluidData> supplier) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Use register(String, FluidProperties.Builder) instead.");
     }
 

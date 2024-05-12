@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.registry.neoforge;
 
+import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -22,6 +23,11 @@ public class NeoForgeResourcefulRegistry<T> implements ResourcefulRegistry<T> {
     @Override
     public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
         return this.entries.add(new NeoForgeRegistryEntry<>(register.register(id, supplier)));
+    }
+
+    @Override
+    public HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier) {
+        return this.entries.add(new NeoForgeHolderRegistryEntry<>(register.register(id, supplier)));
     }
 
     @Override
