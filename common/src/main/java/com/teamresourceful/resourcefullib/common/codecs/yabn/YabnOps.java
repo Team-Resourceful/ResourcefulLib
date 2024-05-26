@@ -170,7 +170,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
             Stream<Pair<YabnElement, YabnElement>> output = object.elements()
                     .entrySet()
                     .stream()
-                    .map(entry -> Pair.of(createString(entry.getKey()), entry.getValue().getOrNull()));
+                    .map(entry -> Pair.of(createString(entry.getKey()), entry.getValue()));
             return DataResult.success(output);
         }
         return DataResult.error(() -> "Not a YABN Object: " + input);
@@ -179,7 +179,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
     @Override
     public DataResult<Consumer<BiConsumer<YabnElement, YabnElement>>> getMapEntries(YabnElement input) {
         if (input instanceof YabnObject object) {
-            return DataResult.success(c -> object.elements().forEach((key, value) -> c.accept(createString(key), value.getOrNull())));
+            return DataResult.success(c -> object.elements().forEach((key, value) -> c.accept(createString(key), value)));
         }
         return DataResult.error(() -> "Not a YABN Object: " + input);
     }
@@ -200,7 +200,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
     @Override
     public DataResult<Stream<YabnElement>> getStream(YabnElement input) {
         if (input instanceof YabnArray array) {
-            return DataResult.success(array.elements().stream().map(YabnElement::getOrNull));
+            return DataResult.success(array.elements().stream());
         }
         return DataResult.error(() -> "Not a YABN Array: " + input);
     }
@@ -208,7 +208,7 @@ public class YabnOps implements DynamicOps<YabnElement> {
     @Override
     public DataResult<Consumer<Consumer<YabnElement>>> getList(YabnElement input) {
         if (input instanceof YabnArray array) {
-            return DataResult.success(c -> array.elements().forEach(e -> c.accept(e.getOrNull())));
+            return DataResult.success(c -> array.elements().forEach(c));
         }
         return DataResult.error(() -> "Not a YABN Array: " + input);
     }
