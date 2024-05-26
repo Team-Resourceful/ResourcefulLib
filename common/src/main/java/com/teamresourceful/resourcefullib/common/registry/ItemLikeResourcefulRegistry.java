@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.common.registry;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 public class ItemLikeResourcefulRegistry<T extends ItemLike> implements ResourcefulRegistry<T>  {
 
     private final ResourcefulRegistry<T> parent;
-    private final List<Entry<T>> entries = new ArrayList<>();
+    private final List<ItemLikeEntry<T>> entries = new ArrayList<>();
 
     public ItemLikeResourcefulRegistry(Registry<T> registry, String id) {
         this.parent = ResourcefulRegistries.create(registry, id);
@@ -30,11 +31,18 @@ public class ItemLikeResourcefulRegistry<T extends ItemLike> implements Resource
     }
 
     @Override
+    public HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier) {
+        HolderEntry<T> entry = new HolderEntry<>(parent.registerHolder(id, supplier));
+        this.entries.add(entry);
+        return entry;
+    }
+
+    @Override
     public Collection<RegistryEntry<T>> getEntries() {
         return ImmutableList.copyOf(this.entries);
     }
 
-    public Collection<Entry<T>> getItemLikeEntries() {
+    public Collection<ItemLikeEntry<T>> getItemLikeEntries() {
         return ImmutableList.copyOf(this.entries);
     }
 
@@ -43,11 +51,31 @@ public class ItemLikeResourcefulRegistry<T extends ItemLike> implements Resource
         this.parent.init();
     }
 
-    public record Entry<T extends ItemLike>(RegistryEntry<T> entry) implements RegistryEntry<T>, ItemLike {
+    public interface ItemLikeEntry<T extends ItemLike> extends RegistryEntry<T>, ItemLike {}
+
+    public record Entry<T extends ItemLike>(RegistryEntry<T> entry) implements ItemLikeEntry<T> {
 
         @Override
         public T get() {
             return entry.get();
+        }
+
+        @Override
+        public ResourceLocation getId() {
+            return entry.getId();
+        }
+
+        @Override
+        public @NotNull Item asItem() {
+            return entry.get().asItem();
+        }
+    }
+
+    public record HolderEntry<T extends ItemLike>(HolderRegistryEntry<T> entry) implements HolderRegistryEntry<T>, ItemLikeEntry<T> {
+
+        @Override
+        public Holder<T> holder() {
+            return entry.holder();
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.registry.fabric;
 
+import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -23,6 +24,11 @@ public class FabricResourcefulRegistry<T> implements ResourcefulRegistry<T> {
     @Override
     public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
         return entries.add(FabricRegistryEntry.of(this.registry, new ResourceLocation(this.id, id), supplier));
+    }
+
+    @Override
+    public HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier) {
+        return entries.add(FabricHolderRegistryEntry.of(this.registry, new ResourceLocation(this.id, id), supplier));
     }
 
     @Override

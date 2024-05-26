@@ -8,6 +8,8 @@ public interface ResourcefulRegistry<T> {
 
     <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier);
 
+    HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier);
+
     Collection<RegistryEntry<T>> getEntries();
 
     default Stream<RegistryEntry<T>> stream() {
