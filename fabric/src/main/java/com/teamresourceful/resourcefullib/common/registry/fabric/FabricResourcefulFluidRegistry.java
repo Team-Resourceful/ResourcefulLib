@@ -36,6 +36,6 @@ public class FabricResourcefulFluidRegistry implements ResourcefulFluidRegistry 
     @Override
     public void init() {
         if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) return;
-        this.boundStream().forEach(ResourcefulFluidRenderHandler::register);
+        this.stream().forEach((entry) -> ResourcefulFluidRenderHandler.register(entry.getId(), entry.get()));
     }
 }

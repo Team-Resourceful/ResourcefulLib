@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.PathType;
+import org.jetbrains.annotations.ApiStatus;
 
 public interface FluidProperties {
 
@@ -21,7 +22,7 @@ public interface FluidProperties {
 
     boolean canConvertToSource();
 
-    boolean supportsBloating();
+    boolean supportsBoating();
 
     PathType pathType();
 
@@ -74,7 +75,7 @@ public interface FluidProperties {
         private float fallDistanceModifier = 0.5f;
         private boolean canExtinguish = false;
         private boolean canConvertToSource = true;
-        private boolean supportsBloating = false;
+        private boolean supportsBoating = false;
         private PathType pathType = PathType.WATER;
         private PathType adjacentPathType = PathType.WATER_BORDER;
         private boolean canHydrate = true;
@@ -134,8 +135,8 @@ public interface FluidProperties {
             return this;
         }
 
-        public Builder supportsBloating(boolean supportsBloating) {
-            this.supportsBloating = supportsBloating;
+        public Builder supportsBoating(boolean supportsBoating) {
+            this.supportsBoating = supportsBoating;
             return this;
         }
 
@@ -235,7 +236,14 @@ public interface FluidProperties {
         }
 
         public FluidProperties build() {
-            return new ImmutableFluidProperties(motionScale, canPushEntity, canSwim, canDrown, fallDistanceModifier, canExtinguish, canConvertToSource, supportsBloating, pathType, adjacentPathType, canHydrate, lightLevel, density, temperature, viscosity, rarity, sounds, still, flowing, overlay, screenOverlay, tintColor, tickRate, slopeFindDistance, dropOff, explosionResistance, canPlace);
+            return new ImmutableFluidProperties(
+                    motionScale, canPushEntity, canSwim, canDrown, fallDistanceModifier,
+                    canExtinguish, canConvertToSource, supportsBoating,
+                    pathType, adjacentPathType, canHydrate, lightLevel, density,
+                    temperature, viscosity, rarity, sounds, still, flowing,
+                    overlay, screenOverlay, tintColor, tickRate, slopeFindDistance,
+                    dropOff, explosionResistance, canPlace
+            );
         }
     }
 }

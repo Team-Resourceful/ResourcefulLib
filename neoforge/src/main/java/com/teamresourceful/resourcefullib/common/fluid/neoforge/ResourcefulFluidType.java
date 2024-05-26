@@ -1,11 +1,19 @@
 package com.teamresourceful.resourcefullib.common.fluid.neoforge;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
+import com.teamresourceful.resourcefullib.client.fluid.registry.ResourcefulClientFluidRegistry;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidProperties;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundAction;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +22,7 @@ import java.util.function.Consumer;
 
 public class ResourcefulFluidType extends FluidType {
 
-    private final FluidProperties properties;
+    private final ResourceLocation id;
 
     public ResourcefulFluidType(ResourceLocation id, FluidProperties props) {
         super(Util.make(Properties.create(), properties -> {
@@ -36,36 +44,59 @@ public class ResourcefulFluidType extends FluidType {
             properties.viscosity(props.viscosity());
             props.sounds().sounds().forEach((name, sound) -> properties.sound(SoundAction.get(name), sound));
         }));
-        this.properties = props;
+        this.id = id;
     }
 
     @Override
     public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
         var type = this;
         consumer.accept(new IClientFluidTypeExtensions() {
-            @Override
-            public @NotNull ResourceLocation getStillTexture() {
-                return type.properties.still();
+
+            private ClientFluidProperties properties = null;
+
+            private ClientFluidProperties properties() {
+                if (properties == null) {
+                    properties = ResourcefulClientFluidRegistry.get(type.id);
+                }
+                return properties;
             }
 
             @Override
-            public @NotNull ResourceLocation getFlowingTexture() {
-                return type.properties.flowing();
+            public @NotNull ResourceLocation getStillTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+                return properties().still(getter, pos, state);
             }
 
             @Override
-            public @Nullable ResourceLocation getOverlayTexture() {
-                return type.properties.overlay();
+            public @NotNull ResourceLocation getFlowingTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+                return properties().flowing(getter, pos, state);
+            }
+
+            @Override
+            public @NotNull ResourceLocation getOverlayTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+                return properties().overlay(getter, pos, state);
             }
 
             @Override
             public @Nullable ResourceLocation getRenderOverlayTexture(@NotNull Minecraft mc) {
-                return type.properties.screenOverlay();
+                return properties().screenOverlay();
             }
 
             @Override
-            public int getTintColor() {
-                return type.properties.tintColor();
+            public int getTintColor(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+                return properties().tintColor(getter, pos, state);
+            }
+
+            @Override
+            public int getTintColor(@NotNull FluidStack stack) {
+                return properties().tintColor(null, null, stack.getFluid().defaultFluidState());
+            }
+
+            @Override
+            public boolean renderFluid(@NotNull FluidState fluidState, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos, @NotNull VertexConsumer vertexConsumer, @NotNull BlockState blockState) {
+                if (properties().renderFluid(pos, getter, vertexConsumer, blockState, fluidState)) {
+                    return true;
+                }
+                return IClientFluidTypeExtensions.super.renderFluid(fluidState, getter, pos, vertexConsumer, blockState);
             }
         });
     }
