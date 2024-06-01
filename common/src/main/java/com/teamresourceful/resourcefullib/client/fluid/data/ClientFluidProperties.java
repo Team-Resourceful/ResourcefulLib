@@ -4,13 +4,14 @@ import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Function3;
-import com.mojang.datafixers.util.Function5;
+import com.mojang.datafixers.util.Function6;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+
+import java.util.function.Function;
 
 public interface ClientFluidProperties {
 
@@ -60,7 +63,12 @@ public interface ClientFluidProperties {
 
     int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state);
 
-    default boolean renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
+    default boolean renderFluid(
+            BlockPos pos,
+            BlockAndTintGetter world, VertexConsumer vertexConsumer,
+            BlockState blockState, FluidState fluidState,
+            Function<ResourceLocation, TextureAtlasSprite> sprites
+    ) {
         return false;
     }
 
@@ -83,7 +91,7 @@ public interface ClientFluidProperties {
         private Function3<BlockAndTintGetter, BlockPos, FluidState, ResourceLocation> overlay = (a, b, c) -> null;
         private ResourceLocation screenOverlay = null;
         private Function3<BlockAndTintGetter, BlockPos, FluidState, Integer> tintColor = (a, b, c) -> -1;
-        private Function5<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Boolean> renderFluid = (a, b, c, d, e) -> false;
+        private Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<ResourceLocation, TextureAtlasSprite>, Boolean> renderFluid = (a, b, c, d, e, f) -> false;
 
         public Builder still(ResourceLocation still) {
             this.still = (a, b, c) -> still;
@@ -115,7 +123,7 @@ public interface ClientFluidProperties {
             return this;
         }
 
-        public Builder renderFluid(Function5<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Boolean> renderFluid) {
+        public Builder renderFluid(Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<ResourceLocation, TextureAtlasSprite>, Boolean> renderFluid) {
             this.renderFluid = renderFluid;
             return this;
         }
@@ -149,8 +157,8 @@ public interface ClientFluidProperties {
                 }
 
                 @Override
-                public boolean renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
-                    return renderFluid.apply(pos, world, vertexConsumer, blockState, fluidState);
+                public boolean renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState, Function<ResourceLocation, TextureAtlasSprite> sprites) {
+                    return renderFluid.apply(pos, world, vertexConsumer, blockState, fluidState, sprites);
                 }
             };
         }

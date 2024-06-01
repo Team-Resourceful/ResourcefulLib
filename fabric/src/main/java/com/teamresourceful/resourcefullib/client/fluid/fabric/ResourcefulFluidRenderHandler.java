@@ -16,11 +16,16 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
+
 
     protected final ResourceLocation id;
     protected ClientFluidProperties properties;
-    protected TextureAtlas textureAtlas;
+    private Function<ResourceLocation, TextureAtlasSprite> spriteCache = id -> {
+        throw new IllegalStateException("TextureAtlas not loaded");
+    };
     protected TextureAtlasSprite[] sprites;
 
     private ResourcefulFluidRenderHandler(ResourceLocation id) {
@@ -49,9 +54,9 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
         if (sprites == null) {
             var overlay = properties().overlay(view, pos, state);
             sprites = new TextureAtlasSprite[overlay == null ? 2 : 3];
-            sprites[0] = textureAtlas.getSprite(properties().still(view, pos, state));
-            sprites[1] = textureAtlas.getSprite(properties().flowing(view, pos, state));
-            if (overlay != null) sprites[2] = textureAtlas.getSprite(overlay);
+            sprites[0] = spriteCache.apply(properties().still(view, pos, state));
+            sprites[1] = spriteCache.apply(properties().flowing(view, pos, state));
+            if (overlay != null) sprites[2] = spriteCache.apply(overlay);
         }
         return sprites;
     }
@@ -59,6 +64,7 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
     @Override
     public void reloadTextures(TextureAtlas textureAtlas) {
         this.sprites = null;
+        this.spriteCache = textureAtlas::getSprite;
     }
 
     @Override
@@ -68,7 +74,7 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
 
     @Override
     public void renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
-        if (!properties().renderFluid(pos, world, vertexConsumer, blockState, fluidState)) {
+        if (!properties().renderFluid(pos, world, vertexConsumer, blockState, fluidState, this.spriteCache)) {
             FluidRenderHandler.super.renderFluid(pos, world, vertexConsumer, blockState, fluidState);
         }
     }

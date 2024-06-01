@@ -17,6 +17,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.textures.FluidSpriteCache;
 import net.neoforged.neoforge.common.SoundAction;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -98,7 +99,7 @@ public class ResourcefulFluidType extends FluidType {
 
             @Override
             public boolean renderFluid(@NotNull FluidState fluidState, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos, @NotNull VertexConsumer vertexConsumer, @NotNull BlockState blockState) {
-                if (properties().renderFluid(pos, getter, vertexConsumer, blockState, fluidState)) {
+                if (properties().renderFluid(pos, getter, vertexConsumer, blockState, fluidState, FluidSpriteCache::getSprite)) {
                     return true;
                 }
                 return IClientFluidTypeExtensions.super.renderFluid(fluidState, getter, pos, vertexConsumer, blockState);
