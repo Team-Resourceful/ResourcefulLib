@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import com.teamresourceful.resourcefullib.client.fluid.fabric.EntityFluidEyesHook;
 import com.teamresourceful.resourcefullib.client.fluid.registry.ResourcefulClientFluidRegistry;
+import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -19,8 +20,8 @@ public class ScreenEffectRendererMixin {
     @Inject(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z", shift = At.Shift.BEFORE))
     private static void rlib_renderScreenEffect(Minecraft minecraft, PoseStack poseStack, CallbackInfo ci) {
         Player player = minecraft.player;
-        if (player instanceof EntityFluidEyesHook hook && hook.rlib$getEyesFluid() != null) {
-            ResourceLocation id = hook.rlib$getEyesFluid().getData().id();
+        if (player instanceof EntityFluidEyesHook hook && hook.rlib$getEyesFluid() != null && hook.rlib$getEyesFluid().getType() instanceof ResourcefulFlowingFluid fluid) {
+            ResourceLocation id = fluid.getData().id();
             ClientFluidProperties properties = ResourcefulClientFluidRegistry.get(id);
             if (properties != null) {
                 properties.renderOverlay(minecraft, poseStack);

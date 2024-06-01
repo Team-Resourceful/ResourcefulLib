@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefullib.mixins.fabric;
 
 import com.teamresourceful.resourcefullib.client.fluid.fabric.EntityFluidEyesHook;
-import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -25,21 +24,21 @@ public abstract class EntityMixin implements EntityFluidEyesHook {
     @Shadow public abstract Level level();
 
     @Unique
-    private ResourcefulFlowingFluid rlibEyesFluid;
+    private FluidState rlibEyesFluid;
 
-    @Inject(method = "updateFluidOnEyes", at = @At("TAIL"))
-    private void rlib_updateEyes(CallbackInfo ci) {
+    @Inject(method = "updateFluidOnEyes", at = @At("HEAD"))
+    private void rlib_resetEyesFluid(CallbackInfo ci) {
         rlibEyesFluid = null;
         BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
         FluidState fluidState = this.level().getFluidState(blockPos);
         double e = (float)blockPos.getY() + fluidState.getHeight(this.level(), blockPos);
-        if (e > this.getEyeY() && fluidState.getType() instanceof ResourcefulFlowingFluid fluid) {
-            rlibEyesFluid = fluid;
+        if (e > this.getEyeY()) {
+            rlibEyesFluid = fluidState;
         }
     }
 
     @Override
-    public ResourcefulFlowingFluid rlib$getEyesFluid() {
+    public FluidState rlib$getEyesFluid() {
         return rlibEyesFluid;
     }
 }
