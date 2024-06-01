@@ -25,7 +25,7 @@ public class FabricResourcefulFluidRegistry implements ResourcefulFluidRegistry 
     @Override
     public RegistryEntry<FluidData> register(String name, FluidProperties properties) {
         ResourceLocation id = new ResourceLocation(this.id, name);
-        return this.entries.add(new Entry(id, new InternalFluidData(properties)));
+        return this.entries.add(new Entry(id, new InternalFluidData(id, properties)));
     }
 
     @Override

@@ -1,11 +1,16 @@
 package com.teamresourceful.resourcefullib.common.fluid.neoforge;
 
+import com.mojang.blaze3d.shaders.FogShape;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import com.teamresourceful.resourcefullib.client.fluid.registry.ResourcefulClientFluidRegistry;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidProperties;
 import net.minecraft.Util;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -16,7 +21,7 @@ import net.neoforged.neoforge.common.SoundAction;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.function.Consumer;
 
@@ -77,8 +82,8 @@ public class ResourcefulFluidType extends FluidType {
             }
 
             @Override
-            public @Nullable ResourceLocation getRenderOverlayTexture(@NotNull Minecraft mc) {
-                return properties().screenOverlay();
+            public void renderOverlay(@NotNull Minecraft mc, @NotNull PoseStack poseStack) {
+                properties().renderOverlay(mc, poseStack);
             }
 
             @Override
@@ -97,6 +102,16 @@ public class ResourcefulFluidType extends FluidType {
                     return true;
                 }
                 return IClientFluidTypeExtensions.super.renderFluid(fluidState, getter, pos, vertexConsumer, blockState);
+            }
+
+            @Override
+            public @NotNull Vector3f modifyFogColor(@NotNull Camera camera, float partialTick, @NotNull ClientLevel level, int renderDistance, float darkenWorldAmount, @NotNull Vector3f fluidFogColor) {
+                return properties().modifyFogColor(camera, partialTick, level, renderDistance, darkenWorldAmount, fluidFogColor);
+            }
+
+            @Override
+            public void modifyFogRender(@NotNull Camera camera, FogRenderer.@NotNull FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, @NotNull FogShape shape) {
+                properties().modifyFogRender(camera, mode, renderDistance, partialTick, nearDistance, farDistance, shape);
             }
         });
     }

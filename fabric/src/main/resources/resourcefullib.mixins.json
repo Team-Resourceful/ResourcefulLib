@@ -1,12 +1,10 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "com.teamresourceful.resourcefullib.mixins.fabric",
-  "compatibilityLevel": "JAVA_17",
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "client": [
-    "MixinLevelRenderer"
-  ]
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.teamresourceful.resourcefullib.mixins.fabric",
+    "compatibilityLevel": "JAVA_17",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "client": [ "FogRendererMixin", "MixinLevelRenderer" ]
 }
