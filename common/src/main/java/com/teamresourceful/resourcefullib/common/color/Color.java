@@ -6,6 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.resourcefullib.common.utils.Scheduling;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -26,6 +27,15 @@ public class Color {
     public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.value)));
     public static final Color DEFAULT = defaultColor();
     public static final Color RAINBOW = createRainbowColor();
+    public static final ByteCodec<Color> BYTE_CODEC = ByteCodec.BYTE.dispatch(aByte -> switch (aByte) {
+        case 0 -> ByteCodec.unit(DEFAULT);
+        case 1 -> ByteCodec.unit(RAINBOW);
+        default -> ByteCodec.INT.map(Color::new, Color::getValue);
+    }, color -> {
+        if (color.isDefault()) return (byte) 0;
+        if (color.isRainbow()) return (byte) 1;
+        return (byte) 2;
+    });
 
     static {
         ConstantColors.init();
