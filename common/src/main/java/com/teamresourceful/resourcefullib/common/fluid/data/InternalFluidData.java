@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.fluid.data;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -18,16 +19,23 @@ public class InternalFluidData implements FluidData {
     private Supplier<? extends Item> bucket;
     private Supplier<? extends LiquidBlock> block;
 
+    private final ResourceLocation id;
     private final FluidProperties properties;
     private final Supplier<?> data;
 
-    public InternalFluidData(FluidProperties properties, Supplier<?> data) {
+    public InternalFluidData(ResourceLocation id, FluidProperties properties, Supplier<?> data) {
+        this.id = id;
         this.properties = properties;
         this.data = data;
     }
 
-    public InternalFluidData(FluidProperties properties) {
-        this(properties, () -> null);
+    public InternalFluidData(ResourceLocation id, FluidProperties properties) {
+        this(id, properties, () -> null);
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return this.id;
     }
 
     @SuppressWarnings("unchecked")

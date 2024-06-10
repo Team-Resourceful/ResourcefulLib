@@ -14,7 +14,7 @@ public record ImmutableFluidProperties(
         float fallDistanceModifier,
         boolean canExtinguish,
         boolean canConvertToSource,
-        boolean supportsBloating,
+        boolean supportsBoating,
         PathType pathType,
         PathType adjacentPathType,
         boolean canHydrate,

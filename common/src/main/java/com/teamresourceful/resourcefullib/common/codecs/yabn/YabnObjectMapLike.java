@@ -27,8 +27,7 @@ public class YabnObjectMapLike implements MapLike<YabnElement> {
     @Nullable
     @Override
     public YabnElement get(String key) {
-        YabnElement element = object.elements().get(key);
-        return element == null ? null : element.getOrNull();
+        return object.elements().get(key);
     }
 
     @Override

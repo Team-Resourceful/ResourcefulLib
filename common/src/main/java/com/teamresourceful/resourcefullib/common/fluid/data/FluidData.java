@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.common.fluid.data;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -8,6 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.function.Supplier;
 
 public interface FluidData {
+
+    ResourceLocation id();
 
     FluidProperties properties();
 
