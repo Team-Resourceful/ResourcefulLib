@@ -106,7 +106,7 @@ resourcefulGradle {
                     "neoforge_version": neoforge_version,
                     "fabric_version": fabric_loader_version,
                     "fabric_link": fabricLink,
-                    "forge_link": forgeLink
+                    "neoforge_link": forgeLink
             ]
 
             def template = nightly.toBoolean() ? "nightly_embed.json.template" : "release_embed.json.template"

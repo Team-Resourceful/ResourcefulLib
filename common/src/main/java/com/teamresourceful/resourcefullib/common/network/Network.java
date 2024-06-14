@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Collection;
 
@@ -33,13 +34,15 @@ public class Network implements Networking {
     }
 
     @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
     public Network(String modid, int protocolVersion, String channel) {
         this(modid, protocolVersion, channel, false);
     }
 
     @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
     public Network(String modid, int protocolVersion, String channel, boolean optional) {
-        this.networking = getNetwork(new ResourceLocation(modid, channel), protocolVersion, optional);
+        this.networking = getNetwork(ResourceLocation.fromNamespaceAndPath(modid, channel), protocolVersion, optional);
         this.optional = optional;
     }
 
@@ -116,6 +119,7 @@ public class Network implements Networking {
 
     @ExpectPlatform
     @ApiStatus.Internal
+    @Contract(pure = true)
     public static Networking getNetwork(ResourceLocation channel, int protocolVersion, boolean optional) {
         throw new NotImplementedException();
     }

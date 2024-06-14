@@ -23,12 +23,12 @@ public class FabricResourcefulRegistry<T> implements ResourcefulRegistry<T> {
 
     @Override
     public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-        return entries.add(FabricRegistryEntry.of(this.registry, new ResourceLocation(this.id, id), supplier));
+        return entries.add(FabricRegistryEntry.of(this.registry, ResourceLocation.fromNamespaceAndPath(this.id, id), supplier));
     }
 
     @Override
     public HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier) {
-        return entries.add(FabricHolderRegistryEntry.of(this.registry, new ResourceLocation(this.id, id), supplier));
+        return entries.add(FabricHolderRegistryEntry.of(this.registry, ResourceLocation.fromNamespaceAndPath(this.id, id), supplier));
     }
 
     @Override

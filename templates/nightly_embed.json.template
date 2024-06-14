@@ -44,7 +44,7 @@
         },
         {
           "name": "Download",
-          "value": "[Forge](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefullib/resourcefullib-forge-${mc_version}/${version}/resourcefullib-forge-${mc_version}-${version}.jar)\\n[Fabric](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefullib/resourcefullib-fabric-${mc_version}/${version}/resourcefullib-fabric-${mc_version}-${version}.jar)"
+          "value": "[Forge](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefullib/resourcefullib-neoforge-${mc_version}/${version}/resourcefullib-forge-${mc_version}-${version}.jar)\\n[Fabric](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefullib/resourcefullib-fabric-${mc_version}/${version}/resourcefullib-fabric-${mc_version}-${version}.jar)"
         }
       ]
     }

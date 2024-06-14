@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefullib.common.recipe;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.NotNull;
 
-public interface CodecRecipe<C extends Container> extends Recipe<C> {
+public interface CodecRecipe<C extends RecipeInput> extends Recipe<C> {
 
     @Override
     default boolean isSpecial() {

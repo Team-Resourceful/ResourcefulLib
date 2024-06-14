@@ -9,6 +9,6 @@ public class FabricHighlightHandler extends HighlightHandler implements Identifi
 
     @Override
     public ResourceLocation getFabricId() {
-        return new ResourceLocation(ResourcefulLib.MOD_ID, "highlights");
+        return ResourceLocation.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights");
     }
 }

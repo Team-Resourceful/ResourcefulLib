@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredie
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -21,7 +21,7 @@ public class IngredientHelperImpl {
     private static DeferredRegister<IngredientType<?>> getOrCreate(String namespace) {
         return REGISTRIES.computeIfAbsent(namespace, s -> {
             var registry = DeferredRegister.create(NeoForgeRegistries.INGREDIENT_TYPES, s);
-            registry.register(FMLJavaModLoadingContext.get().getModEventBus());
+            registry.register(ModLoadingContext.get().getActiveContainer().getEventBus());
             return registry;
         });
     }

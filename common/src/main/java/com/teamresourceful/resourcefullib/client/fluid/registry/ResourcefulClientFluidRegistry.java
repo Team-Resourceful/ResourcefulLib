@@ -30,8 +30,8 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
 
     @Override
     public <I extends ClientFluidProperties> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-        REGISTRY.put(new ResourceLocation(this.modid, id), supplier.get());
-        return entries.add(new Entry<>(new ResourceLocation(this.modid, id), supplier.get()));
+        REGISTRY.put(ResourceLocation.fromNamespaceAndPath(this.modid, id), supplier.get());
+        return entries.add(new Entry<>(ResourceLocation.fromNamespaceAndPath(this.modid, id), supplier.get()));
     }
 
     /**

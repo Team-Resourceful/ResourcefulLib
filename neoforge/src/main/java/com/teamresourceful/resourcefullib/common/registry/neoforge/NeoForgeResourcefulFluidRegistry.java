@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefullib.common.fluid.registry.ResourcefulFluid
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -28,7 +28,7 @@ public class NeoForgeResourcefulFluidRegistry implements ResourcefulFluidRegistr
 
     @Override
     public RegistryEntry<FluidData> register(String name, FluidProperties properties) {
-        ResourceLocation rid = new ResourceLocation(this.id, name);
+        ResourceLocation rid = ResourceLocation.fromNamespaceAndPath(this.id, name);
         return this.entries.add(new Entry(
                 rid,
                 new InternalFluidData(
@@ -46,6 +46,6 @@ public class NeoForgeResourcefulFluidRegistry implements ResourcefulFluidRegistr
 
     @Override
     public void init() {
-        this.registry.register(FMLJavaModLoadingContext.get().getModEventBus());
+        this.registry.register(ModLoadingContext.get().getActiveContainer().getEventBus());
     }
 }

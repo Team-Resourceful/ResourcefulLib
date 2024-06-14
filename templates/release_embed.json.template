@@ -14,9 +14,9 @@
               },
               {
                   "type": 2,
-                  "label": "Forge",
+                  "label": "NeoForge",
                   "style": 5,
-                  "url": "https://modrinth.com/mod/resourceful-lib/version/${forge_link}"
+                  "url": "https://modrinth.com/mod/resourceful-lib/version/${neoforge_link}"
               }
           ]
 

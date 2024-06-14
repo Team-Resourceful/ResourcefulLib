@@ -32,7 +32,7 @@ public final class ExtraByteCodecs {
         throw new UtilityClassException();
     }
 
-    public static final ByteCodec<ResourceLocation> RESOURCE_LOCATION = ByteCodec.STRING.map(ResourceLocation::new, ResourceLocation::toString);
+    public static final ByteCodec<ResourceLocation> RESOURCE_LOCATION = ByteCodec.STRING.map(ResourceLocation::parse, ResourceLocation::toString);
     public static final ByteCodec<ResourceKey<Level>> DIMENSION = resourceKey(Registries.DIMENSION);
 
     public static final ByteCodec<BlockPos> BLOCK_POS = ByteCodec.LONG.map(BlockPos::of, BlockPos::asLong);

@@ -40,7 +40,7 @@ public final class FabricResourcePackHandler {
         try {
             String name = value.getAsString();
             ResourceManagerHelper.registerBuiltinResourcePack(
-                    new ResourceLocation(container.getMetadata().getId(), name),
+                    ResourceLocation.fromNamespaceAndPath(container.getMetadata().getId(), name),
                     container,
                     createDescription(null, name),
                     ResourcePackActivationType.NORMAL
@@ -48,7 +48,7 @@ public final class FabricResourcePackHandler {
         } catch (Exception ignored) {
             var object = value.getAsObject();
             String name = object.get("name").getAsString();
-            ResourceLocation id = new ResourceLocation(container.getMetadata().getId(), name);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(container.getMetadata().getId(), name);
             Component description = createDescription(Optionull.map(object.get("description"), CustomValue::getAsString), name);
             ResourcePackActivationType type = Optionull.mapOrDefault(object.get("required"), CustomValue::getAsBoolean, false) ? ResourcePackActivationType.ALWAYS_ENABLED : ResourcePackActivationType.NORMAL;
             ResourceManagerHelper.registerBuiltinResourcePack(id, container, description, type);

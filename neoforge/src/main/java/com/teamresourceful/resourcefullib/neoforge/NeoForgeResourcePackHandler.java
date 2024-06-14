@@ -75,7 +75,7 @@ public final class NeoForgeResourcePackHandler {
 
                 if (!Files.isDirectory(path.resolve(event.getPackType().getDirectory()))) continue;
 
-                final String id = new ResourceLocation(resourcePack.mod().getModId(), resourcePack.name()).toString();
+                final String id = ResourceLocation.fromNamespaceAndPath(resourcePack.mod().getModId(), resourcePack.name()).toString();
                 final Pack.ResourcesSupplier supplier = new PathPackResources.PathResourcesSupplier(path);
                 final PackLocationInfo locationInfo = new PackLocationInfo(
                     id,

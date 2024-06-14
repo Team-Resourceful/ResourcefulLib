@@ -5,11 +5,9 @@ import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
 import com.teamresourceful.resourcefullib.client.scissor.ClosingScissorBox;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import com.teamresourceful.resourcefullib.common.utils.types.Bound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -19,20 +17,6 @@ public final class RenderUtils {
 
     private RenderUtils() throws UtilityClassException {
         throw new UtilityClassException();
-    }
-
-    /**
-     * Get the current bounds for a GL scissor.
-     * @deprecated Use {@link #getScissorRect(Minecraft, PoseStack, int, int, int, int)} instead.
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "21.0")
-    public static Bound getScissorBounds(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
-        float guiScale = (float) minecraft.getWindow().getGuiScale();
-        Vector2ic translation = getTranslation(stack);
-        float translationX = translation.x() * guiScale;
-        float translationY = translation.y() * guiScale;
-        return new Bound((int) (translationX + x * guiScale), (int) (Minecraft.getInstance().getWindow().getHeight() - y * guiScale - translationY - height * guiScale), (int) (width * guiScale), (int) (height * guiScale));
     }
 
     /**

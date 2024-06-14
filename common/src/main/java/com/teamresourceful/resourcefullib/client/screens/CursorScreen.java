@@ -5,7 +5,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -15,21 +14,12 @@ public interface CursorScreen {
 
 
     default void setCursor(List<? extends GuiEventListener> listeners, double mouseX, double mouseY) {
-        setCursor(listeners);
         for (GuiEventListener child : listeners) {
+            boolean hovered = child.isMouseOver(mouseX, mouseY);
             if (child instanceof CursorWidget widget && child.isMouseOver(mouseX, mouseY) && widget.getCursor() != Cursor.DEFAULT) {
                 setCursor(widget.getCursor());
                 break;
-            }
-        }
-    }
-
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "21.0")
-    default void setCursor(List<? extends GuiEventListener> listeners) {
-        for (GuiEventListener child : listeners) {
-            if (child instanceof CursorWidget) continue;
-            if (child instanceof AbstractWidget widget && widget.isHovered() && widget.visible) {
+            } else if (child instanceof AbstractWidget widget && hovered && widget.visible) {
                 if (widget.active) {
                     setCursor(widget instanceof EditBox || widget instanceof MultiLineEditBox ? Cursor.TEXT : Cursor.POINTER);
                 } else {

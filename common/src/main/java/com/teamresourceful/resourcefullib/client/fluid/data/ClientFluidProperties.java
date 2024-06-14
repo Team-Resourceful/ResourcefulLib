@@ -44,18 +44,20 @@ public interface ClientFluidProperties {
             BlockPos blockpos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             float brightness = LightTexture.getBrightness(player.level().dimensionType(), player.level().getMaxLocalRawBrightness(blockpos));
 
-            BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+            BufferBuilder bufferbuilder = Tesselator.getInstance().begin(
+                    VertexFormat.Mode.QUADS,
+                    DefaultVertexFormat.POSITION_TEX
+            );
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(brightness, brightness, brightness, 0.1F);
             float f7 = -player.getYRot() / 64.0F;
             float f8 = player.getXRot() / 64.0F;
             Matrix4f matrix4f = stack.last().pose();
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-            bufferbuilder.vertex(matrix4f, -1.0F, -1.0F, -0.5F).uv(4.0F + f7, 4.0F + f8).endVertex();
-            bufferbuilder.vertex(matrix4f, 1.0F, -1.0F, -0.5F).uv(0.0F + f7, 4.0F + f8).endVertex();
-            bufferbuilder.vertex(matrix4f, 1.0F, 1.0F, -0.5F).uv(0.0F + f7, 0.0F + f8).endVertex();
-            bufferbuilder.vertex(matrix4f, -1.0F, 1.0F, -0.5F).uv(4.0F + f7, 0.0F + f8).endVertex();
-            BufferUploader.drawWithShader(bufferbuilder.end());
+            bufferbuilder.addVertex(matrix4f, -1.0F, -1.0F, -0.5F).setUv(4.0F + f7, 4.0F + f8);
+            bufferbuilder.addVertex(matrix4f, 1.0F, -1.0F, -0.5F).setUv(0.0F + f7, 4.0F + f8);
+            bufferbuilder.addVertex(matrix4f, 1.0F, 1.0F, -0.5F).setUv(0.0F + f7, 0.0F + f8);
+            bufferbuilder.addVertex(matrix4f, -1.0F, 1.0F, -0.5F).setUv(4.0F + f7, 0.0F + f8);
+            BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.disableBlend();
         }
