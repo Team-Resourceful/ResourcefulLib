@@ -22,6 +22,7 @@ import net.neoforged.neoforge.common.SoundAction;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.function.Consumer;
@@ -68,13 +69,43 @@ public class ResourcefulFluidType extends FluidType {
             }
 
             @Override
+            public @NotNull ResourceLocation getStillTexture() {
+                return properties().still(null, null, null);
+            }
+
+            @Override
+            public @NotNull ResourceLocation getStillTexture(@NotNull FluidStack stack) {
+                return properties().still(null, null, stack.getFluid().defaultFluidState());
+            }
+
+            @Override
             public @NotNull ResourceLocation getStillTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
                 return properties().still(getter, pos, state);
             }
 
             @Override
+            public @NotNull ResourceLocation getFlowingTexture() {
+                return properties().flowing(null, null, null);
+            }
+
+            @Override
+            public @NotNull ResourceLocation getFlowingTexture(@NotNull FluidStack stack) {
+                return properties().flowing(null, null, stack.getFluid().defaultFluidState());
+            }
+
+            @Override
             public @NotNull ResourceLocation getFlowingTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
                 return properties().flowing(getter, pos, state);
+            }
+
+            @Override
+            public @Nullable ResourceLocation getOverlayTexture() {
+                return properties().overlay(null, null, null);
+            }
+
+            @Override
+            public @NotNull ResourceLocation getOverlayTexture(@NotNull FluidStack stack) {
+                return properties().overlay(null, null, stack.getFluid().defaultFluidState());
             }
 
             @Override
@@ -88,13 +119,18 @@ public class ResourcefulFluidType extends FluidType {
             }
 
             @Override
-            public int getTintColor(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
-                return properties().tintColor(getter, pos, state);
+            public int getTintColor() {
+                return properties().tintColor(null, null, null);
             }
 
             @Override
             public int getTintColor(@NotNull FluidStack stack) {
                 return properties().tintColor(null, null, stack.getFluid().defaultFluidState());
+            }
+
+            @Override
+            public int getTintColor(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+                return properties().tintColor(getter, pos, state);
             }
 
             @Override

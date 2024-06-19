@@ -26,11 +26,11 @@ import java.util.function.Function;
 
 public interface ClientFluidProperties {
 
-    ResourceLocation still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state);
+    ResourceLocation still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
-    ResourceLocation flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state);
+    ResourceLocation flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
-    ResourceLocation overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state);
+    ResourceLocation overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
     ResourceLocation screenOverlay();
 
@@ -63,7 +63,7 @@ public interface ClientFluidProperties {
         }
     }
 
-    int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state);
+    int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
     default boolean renderFluid(
             BlockPos pos,
@@ -134,17 +134,17 @@ public interface ClientFluidProperties {
             return new ClientFluidProperties() {
 
                 @Override
-                public ResourceLocation still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
+                public ResourceLocation still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return still.apply(view, pos, state);
                 }
 
                 @Override
-                public ResourceLocation flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
+                public ResourceLocation flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return flowing.apply(view, pos, state);
                 }
 
                 @Override
-                public ResourceLocation overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
+                public ResourceLocation overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return overlay.apply(view, pos, state);
                 }
 
@@ -154,7 +154,7 @@ public interface ClientFluidProperties {
                 }
 
                 @Override
-                public int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
+                public int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return tintColor.apply(view, pos, state);
                 }
 
