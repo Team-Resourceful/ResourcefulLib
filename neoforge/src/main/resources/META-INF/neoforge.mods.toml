@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[1,)"
 license = "MIT"
-issueTrackerURL="https://github.com/Team-Resourceful/ResoucefulLib/issues/new/choose"
+issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulLib/issues/new/choose"
 
 [[mods]]
     modId = "resourcefullib"
