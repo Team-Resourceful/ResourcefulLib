@@ -1,3 +1,7 @@
+# -----{ 3.0.2 }-----
+
+fixed crash if someone used stack sensitive texture on neo
+
 # -----{ 3.0.1 }-----
 
 fixed crash if someone used stack sensitive texture on neo
