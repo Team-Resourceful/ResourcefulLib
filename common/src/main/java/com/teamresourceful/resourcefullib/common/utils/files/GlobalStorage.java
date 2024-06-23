@@ -7,7 +7,6 @@ import org.lwjgl.system.Platform;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Creates and manages the cache and data directories for mods.
@@ -31,12 +30,12 @@ public class GlobalStorage {
     static {
         switch (Platform.get()) {
             case WINDOWS -> {
-                cache = Paths.get(System.getenv("LOCALAPPDATA"), "." + ID, "cache");
-                data = Paths.get(System.getenv("LOCALAPPDATA"), "." + ID, "data");
+                cache = Path.of(System.getenv("LOCALAPPDATA"), "." + ID, "cache");
+                data = Path.of(System.getenv("LOCALAPPDATA"), "." + ID, "data");
             }
             case MACOSX -> {
-                cache = Paths.get(System.getProperty("user.home"), "Library", "Caches", ID);
-                data = Paths.get(System.getProperty("user.home"), "Library", "Application Support", ID);
+                cache = Path.of(System.getProperty("user.home"), "Library", "Caches", ID);
+                data = Path.of(System.getProperty("user.home"), "Library", "Application Support", ID);
             }
             default -> {
                 cache = Optionull.mapOrElse(
