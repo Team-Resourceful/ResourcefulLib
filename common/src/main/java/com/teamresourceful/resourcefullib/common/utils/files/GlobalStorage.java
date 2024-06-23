@@ -24,6 +24,8 @@ public class GlobalStorage {
             This directory is used to store data/caches for mods.
             """;
 
+    private static boolean initialized = false;
+
     private static final Path cache;
     private static final Path data;
 
@@ -54,9 +56,11 @@ public class GlobalStorage {
 
     @ApiStatus.Internal
     public static void init() {
+        if (initialized) return;
+        initialized = true;
         try {
-            cache.toFile().mkdirs();
-            data.toFile().mkdirs();
+            Files.createDirectories(cache);
+            Files.createDirectories(data);
 
             Path readme = cache.resolve("README.txt");
             if (!Files.exists(readme)) {
@@ -78,6 +82,7 @@ public class GlobalStorage {
      * @return The cache directory for the mod.
      */
     public static Path getCacheDirectory(String modid) {
+        init();
         return cache.resolve(modid);
     }
 
@@ -87,6 +92,7 @@ public class GlobalStorage {
      * @return The data directory for the mod.
      */
     public static Path getDataDirectory(String modid) {
+        init();
         return data.resolve(modid);
     }
 }

@@ -16,6 +16,9 @@
   "entrypoints": {
     "client": [
       "com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabricClient"
+    ],
+    "main": [
+      "com.teamresourceful.resourcefullib.ResourcefulLib::init"
     ]
   },
   "mixins": [
