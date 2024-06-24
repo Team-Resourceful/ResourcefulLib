@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefullib.common.utils.files;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.Optionull;
 import org.jetbrains.annotations.ApiStatus;
-import org.lwjgl.system.Platform;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,27 +29,24 @@ public class GlobalStorage {
     private static final Path data;
 
     static {
-        switch (Platform.get()) {
-            case WINDOWS -> {
-                cache = Path.of(System.getenv("LOCALAPPDATA"), "." + ID, "cache");
-                data = Path.of(System.getenv("LOCALAPPDATA"), "." + ID, "data");
-            }
-            case MACOSX -> {
-                cache = Path.of(System.getProperty("user.home"), "Library", "Caches", ID);
-                data = Path.of(System.getProperty("user.home"), "Library", "Application Support", ID);
-            }
-            default -> {
-                cache = Optionull.mapOrElse(
-                        System.getenv("XDG_CACHE_HOME"),
-                        home -> Path.of(home, ID),
-                        () -> Path.of(System.getProperty("user.home"), ".cache", ID)
-                );
-                data = Optionull.mapOrElse(
-                        System.getenv("XDG_DATA_HOME"),
-                        home -> Path.of(home, ID),
-                        () -> Path.of(System.getProperty("user.home"), ".local", "share", ID)
-                );
-            }
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Windows")) {
+            cache = Path.of(System.getenv("LOCALAPPDATA"), "." + ID, "cache");
+            data = Path.of(System.getenv("LOCALAPPDATA"), "." + ID, "data");
+        } else if (osName.startsWith("Mac OS X") || osName.startsWith("Darwin")) {
+            cache = Path.of(System.getProperty("user.home"), "Library", "Caches", ID);
+            data = Path.of(System.getProperty("user.home"), "Library", "Application Support", ID);
+        } else {
+            cache = Optionull.mapOrElse(
+                    System.getenv("XDG_CACHE_HOME"),
+                    home -> Path.of(home, ID),
+                    () -> Path.of(System.getProperty("user.home"), ".cache", ID)
+            );
+            data = Optionull.mapOrElse(
+                    System.getenv("XDG_DATA_HOME"),
+                    home -> Path.of(home, ID),
+                    () -> Path.of(System.getProperty("user.home"), ".local", "share", ID)
+            );
         }
     }
 
