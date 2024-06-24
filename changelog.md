@@ -1,3 +1,7 @@
+# -----{ 3.0.3 }-----
+
+Fixed crash on dedicated server
+
 # -----{ 3.0.2 }-----
 
 fixed crash if someone used stack sensitive texture on neo
