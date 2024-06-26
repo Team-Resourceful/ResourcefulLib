@@ -34,13 +34,13 @@ public class Network implements Networking {
     }
 
     @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
+    @ApiStatus.ScheduledForRemoval(inVersion = "22.0")
     public Network(String modid, int protocolVersion, String channel) {
         this(modid, protocolVersion, channel, false);
     }
 
     @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
+    @ApiStatus.ScheduledForRemoval(inVersion = "22.0")
     public Network(String modid, int protocolVersion, String channel, boolean optional) {
         this.networking = getNetwork(ResourceLocation.fromNamespaceAndPath(modid, channel), protocolVersion, optional);
         this.optional = optional;

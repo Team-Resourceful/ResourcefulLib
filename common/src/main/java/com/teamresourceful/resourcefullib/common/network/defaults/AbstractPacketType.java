@@ -9,14 +9,13 @@ public abstract class AbstractPacketType<T extends Packet<T>> implements PacketT
     protected final Class<T> clazz;
     protected final ResourceLocation id;
 
+    public AbstractPacketType(ResourceLocation id) {
+        this(null, id);
+    }
+
     public AbstractPacketType(Class<T> clazz, ResourceLocation id) {
         this.clazz = clazz;
         this.id = id;
-    }
-
-    @Override
-    public Class<T> type() {
-        return clazz;
     }
 
     @Override
