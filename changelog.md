@@ -1,3 +1,7 @@
+# -----{ 3.0.4 }-----
+
+Fixed crash on dedicated server
+
 # -----{ 3.0.3 }-----
 
 Fixed crash on dedicated server
