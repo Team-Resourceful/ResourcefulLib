@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.neoforge;
 
 import com.teamresourceful.resourcefullib.ResourcefulLib;
+import com.teamresourceful.resourcefullib.common.ApiProxy;
 import com.teamresourceful.resourcefullib.common.network.neoforge.NeoForgeNetworking;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -14,6 +15,9 @@ public class ResourcefulLibNeoForge {
         ResourcefulLib.init();
         if (FMLLoader.getDist().isClient()) {
             ResourcefulLibNeoForgeClient.init(bus);
+            ApiProxy.setInstance(NeoForgeClientApiProxy.INSTANCE);
+        } else {
+            ApiProxy.setInstance(NeoForgeServerApiProxy.INSTANCE);
         }
 
         bus.addListener(ResourcefulLibNeoForge::onNetworkSetup);

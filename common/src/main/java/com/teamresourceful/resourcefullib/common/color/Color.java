@@ -198,6 +198,19 @@ public class Color {
         return String.format("#%x", this.value);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(defaultValue, isRainbow, value);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Color color &&
+                color.value == this.value &&
+                color.isRainbow == this.isRainbow &&
+                color.defaultValue == this.defaultValue;
+    }
+
     public float[] getRGBComponents(float[] compArray) {
         float[] f = compArray == null ? new float[4] : compArray;
         f[0] = rgbaValue[0];

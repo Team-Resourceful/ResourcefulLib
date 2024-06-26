@@ -19,6 +19,9 @@
     ],
     "main": [
       "com.teamresourceful.resourcefullib.ResourcefulLib::init"
+    ],
+    "server": [
+      "com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabricServer"
     ]
   },
   "mixins": [

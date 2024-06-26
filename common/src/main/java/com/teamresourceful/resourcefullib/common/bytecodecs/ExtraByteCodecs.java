@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
+import com.teamresourceful.resourcefullib.common.ApiProxy;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.*;
@@ -95,6 +96,7 @@ public final class ExtraByteCodecs {
 
     public static RegistryFriendlyByteBuf toRegistry(ByteBuf buffer) {
         if (buffer instanceof RegistryFriendlyByteBuf registryFriendlyByteBuf) return registryFriendlyByteBuf;
-        throw new IllegalArgumentException("ByteBuf is not a RegistryFriendlyByteBuf");
+        if (!ApiProxy.hasProxy()) throw new IllegalStateException("No proxy found.");
+        return new RegistryFriendlyByteBuf(buffer, ApiProxy.getRegistry());
     }
 }

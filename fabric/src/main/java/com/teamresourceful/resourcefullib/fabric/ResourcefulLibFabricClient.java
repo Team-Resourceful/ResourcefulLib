@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.fabric;
 
 import com.teamresourceful.resourcefullib.client.sysinfo.SystemInfo;
+import com.teamresourceful.resourcefullib.common.ApiProxy;
 import com.teamresourceful.resourcefullib.common.utils.files.GlobalStorage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -18,6 +19,7 @@ public class ResourcefulLibFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ApiProxy.setInstance(FabricClientProxy.INSTANCE);
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new FabricHighlightHandler());
         FabricResourcePackHandler.load();
 
