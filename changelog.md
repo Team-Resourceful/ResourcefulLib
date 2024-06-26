@@ -1,3 +1,7 @@
+# -----{ 3.0.5 }-----
+
+Deprecated PacketType.type, added helpers for CodecPacketType
+
 # -----{ 3.0.4 }-----
 
 Fixed crash on dedicated server
