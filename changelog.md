@@ -1,3 +1,8 @@
+# -----{ 3.0.8 }-----
+
+Fix extra parameter in CodecSavedData
+Added CodecSavedData
+
 # -----{ 3.0.7 }-----
 
 Added CodecSavedData
