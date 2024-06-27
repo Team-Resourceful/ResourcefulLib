@@ -70,8 +70,8 @@ public final class CodecSavedData<T> extends SavedData implements Supplier<T> {
         this.setDirty();
     }
 
-    public static <T> Factory<T> create(Codec<T> codec, Supplier<T> supplier, String path) {
-        return new Factory<>(codec, supplier, path);
+    public static <T> Factory<T> create(Codec<T> codec, String path) {
+        return new Factory<>(codec, path);
     }
 
     public static class Factory<T> {
@@ -86,7 +86,7 @@ public final class CodecSavedData<T> extends SavedData implements Supplier<T> {
 
         private SavedData.Factory<CodecSavedData<T>> factory;
 
-        private Factory(Codec<T> codec, Supplier<T> supplier, String path) {
+        private Factory(Codec<T> codec, String path) {
             this.codec = codec;
             this.path = path;
         }
