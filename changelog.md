@@ -1,3 +1,8 @@
+# -----{ 3.0.7 }-----
+
+Added CodecSavedData
+Added NetworkHandle and bumped ByteCodecs
+
 # -----{ 3.0.6 }-----
 
 Added NetworkHandle and bumped ByteCodecs
