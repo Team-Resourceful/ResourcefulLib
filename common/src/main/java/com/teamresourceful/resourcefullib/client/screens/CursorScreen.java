@@ -16,7 +16,7 @@ public interface CursorScreen {
     default void setCursor(List<? extends GuiEventListener> listeners, double mouseX, double mouseY) {
         for (GuiEventListener child : listeners) {
             boolean hovered = child.isMouseOver(mouseX, mouseY);
-            if (child instanceof CursorWidget widget && child.isMouseOver(mouseX, mouseY) && widget.getCursor() != Cursor.DEFAULT) {
+            if (child instanceof CursorWidget widget && hovered) {
                 setCursor(widget.getCursor());
                 break;
             } else if (child instanceof AbstractWidget widget && hovered && widget.visible) {
