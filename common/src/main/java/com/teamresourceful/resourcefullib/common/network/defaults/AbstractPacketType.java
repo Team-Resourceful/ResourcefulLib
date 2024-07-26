@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefullib.common.network.defaults;
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
+import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import net.minecraft.resources.ResourceLocation;
 
 public abstract class AbstractPacketType<T extends Packet<T>> implements PacketType<T> {
@@ -27,7 +28,7 @@ public abstract class AbstractPacketType<T extends Packet<T>> implements PacketT
         }
     }
 
-    public static abstract class Server<T extends Packet<T>> extends AbstractPacketType<T> implements ClientboundPacketType<T> {
+    public static abstract class Server<T extends Packet<T>> extends AbstractPacketType<T> implements ServerboundPacketType<T> {
 
         public Server(Class<T> clazz, ResourceLocation id) {
             super(clazz, id);
