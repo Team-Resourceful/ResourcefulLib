@@ -21,6 +21,11 @@ public abstract class AbstractPacketType<T extends Packet<T>> implements PacketT
         return id;
     }
 
+    @Override
+    public Class<T> type() {
+        return clazz;
+    }
+
     public static abstract class Client<T extends Packet<T>> extends AbstractPacketType<T> implements ClientboundPacketType<T> {
 
         public Client(Class<T> clazz, ResourceLocation id) {
