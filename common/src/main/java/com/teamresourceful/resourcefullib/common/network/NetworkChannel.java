@@ -18,10 +18,6 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Collection;
 import java.util.function.BooleanSupplier;
 
-/**
- * @apiNote This class is experimental and may change at any time.
- */
-@ApiStatus.Experimental
 public class NetworkChannel implements Networking {
 
     private final Networking networking;
