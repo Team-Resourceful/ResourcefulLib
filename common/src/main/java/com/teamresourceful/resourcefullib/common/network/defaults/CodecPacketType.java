@@ -21,7 +21,7 @@ public interface CodecPacketType<T extends Packet<T>> extends PacketType<T> {
         return codec().decode(buffer);
     }
 
-    abstract class Client<T extends Packet<T>> extends AbstractPacketType<T> implements ClientboundPacketType<T>, CodecPacketType<T> {
+    abstract class Client<T extends Packet<T>> extends AbstractPacketType.Client<T> implements CodecPacketType<T> {
 
         private final ByteCodec<T> codec;
 
@@ -36,7 +36,7 @@ public interface CodecPacketType<T extends Packet<T>> extends PacketType<T> {
         }
     }
 
-    abstract class Server<T extends Packet<T>> extends AbstractPacketType<T> implements ClientboundPacketType<T>, CodecPacketType<T> {
+    abstract class Server<T extends Packet<T>> extends AbstractPacketType.Server<T> implements CodecPacketType<T> {
 
         private final ByteCodec<T> codec;
 
