@@ -42,15 +42,40 @@ public interface FluidProperties {
 
     FluidSounds sounds();
 
-    ResourceLocation still();
+    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    default ResourceLocation still() {
+        return null;
+    }
 
-    ResourceLocation flowing();
+    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    default ResourceLocation flowing() {
+        return null;
+    }
 
-    ResourceLocation overlay();
+    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    default ResourceLocation overlay() {
+        return null;
+    }
 
-    ResourceLocation screenOverlay();
+    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    default ResourceLocation screenOverlay() {
+        return null;
+    }
 
-    int tintColor();
+    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    default int tintColor() {
+        return -1;
+    }
 
     int tickDelay();
 
@@ -85,11 +110,6 @@ public interface FluidProperties {
         private int viscosity = 1000;
         private Rarity rarity = Rarity.COMMON;
         private final FluidSounds sounds = new FluidSounds();
-        private ResourceLocation still;
-        private ResourceLocation flowing;
-        private ResourceLocation overlay;
-        private ResourceLocation screenOverlay;
-        private int tintColor = -1;
         private int tickRate = 5;
         private int slopeFindDistance = 4;
         private int dropOff = 1;
@@ -185,28 +205,38 @@ public interface FluidProperties {
             return this;
         }
 
+        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
         public Builder still(ResourceLocation still) {
-            this.still = still;
             return this;
         }
 
+        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
         public Builder flowing(ResourceLocation flowing) {
-            this.flowing = flowing;
             return this;
         }
 
+        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
         public Builder overlay(ResourceLocation overlay) {
-            this.overlay = overlay;
             return this;
         }
 
+        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
         public Builder screenOverlay(ResourceLocation screenOverlay) {
-            this.screenOverlay = screenOverlay;
             return this;
         }
 
+        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
         public Builder tintColor(int tintColor) {
-            this.tintColor = tintColor;
             return this;
         }
 
@@ -240,8 +270,7 @@ public interface FluidProperties {
                     motionScale, canPushEntity, canSwim, canDrown, fallDistanceModifier,
                     canExtinguish, canConvertToSource, supportsBoating,
                     pathType, adjacentPathType, canHydrate, lightLevel, density,
-                    temperature, viscosity, rarity, sounds, still, flowing,
-                    overlay, screenOverlay, tintColor, tickRate, slopeFindDistance,
+                    temperature, viscosity, rarity, sounds, tickRate, slopeFindDistance,
                     dropOff, explosionResistance, canPlace
             );
         }
