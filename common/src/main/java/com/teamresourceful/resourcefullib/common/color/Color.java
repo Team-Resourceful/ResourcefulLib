@@ -10,6 +10,7 @@ import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.resourcefullib.common.utils.Scheduling;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -196,6 +197,7 @@ public class Color {
      * @deprecated Use {@link #isSpecial()} instead.
      */
     @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
     public boolean isRainbow() {
         return "rainbow".equals(specialName);
     }
