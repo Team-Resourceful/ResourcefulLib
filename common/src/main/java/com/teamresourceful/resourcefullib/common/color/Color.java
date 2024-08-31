@@ -10,6 +10,7 @@ import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.resourcefullib.common.utils.Scheduling;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,16 +25,16 @@ public class Color {
 
     protected static final Map<String, Color> colorsWithNames = new HashMap<>();
 
-    public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.value)));
+    public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.toString())));
     public static final Color DEFAULT = defaultColor();
     public static final Color RAINBOW = createRainbowColor();
     public static final ByteCodec<Color> BYTE_CODEC = ByteCodec.BYTE.dispatch(aByte -> switch (aByte) {
         case 0 -> ByteCodec.unit(DEFAULT);
-        case 1 -> ByteCodec.unit(RAINBOW);
+        case 1 -> ByteCodec.STRING.map(Color::parse, Color::toString);
         default -> ByteCodec.INT.map(Color::new, Color::getValue);
     }, color -> {
         if (color.isDefault()) return (byte) 0;
-        if (color.isRainbow()) return (byte) 1;
+        if (color.isSpecial()) return (byte) 1;
         return (byte) 2;
     });
 
@@ -48,7 +49,9 @@ public class Color {
     private int value;
 
     private boolean defaultValue;
-    private boolean isRainbow;
+
+    @Nullable
+    private String specialName;
 
     private float[] rgbaValue;
 
@@ -86,14 +89,15 @@ public class Color {
 
     private static Color createRainbowColor() {
         Color color = new Color(0xff0000);
-        color.isRainbow = true;
+        color.specialName = "rainbow";
         colorsWithNames.put("rainbow", color);
         return color;
     }
 
     public static Color createNamedColor(String name, int value) {
         Color color = new Color(value);
-        colorsWithNames.putIfAbsent(name.toLowerCase(Locale.ENGLISH), color);
+        color.specialName = name.toLowerCase(Locale.ENGLISH);
+        colorsWithNames.putIfAbsent(color.specialName, color);
         return color;
     }
 
@@ -188,26 +192,34 @@ public class Color {
         return defaultValue;
     }
 
+    /**
+     * @deprecated Use {@link #isSpecial()} instead.
+     */
+    @Deprecated
     public boolean isRainbow() {
-        return isRainbow;
+        return specialName != null && specialName.equals("rainbow");
+    }
+
+    public boolean isSpecial() {
+        return specialName != null;
     }
 
     @Override
     public String toString() {
-        if (this.isRainbow) return "rainbow";
+        if (specialName != null) return specialName;
         return String.format("#%x", this.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(defaultValue, isRainbow, value);
+        return Objects.hash(defaultValue, specialName, value);
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Color color &&
                 color.value == this.value &&
-                color.isRainbow == this.isRainbow &&
+                color.specialName == this.specialName &&
                 color.defaultValue == this.defaultValue;
     }
 
