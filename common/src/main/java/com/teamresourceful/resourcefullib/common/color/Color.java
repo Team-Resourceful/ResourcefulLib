@@ -197,7 +197,7 @@ public class Color {
      */
     @Deprecated
     public boolean isRainbow() {
-        return specialName != null && specialName.equals("rainbow");
+        return "rainbow".equals(specialName);
     }
 
     public boolean isSpecial() {
