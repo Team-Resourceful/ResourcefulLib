@@ -106,6 +106,7 @@ public class Color {
 
     //region Parsers
 
+    @Nullable
     public static Color tryParse(String color) {
         if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
             return new Color(Long.decode(color).intValue());
