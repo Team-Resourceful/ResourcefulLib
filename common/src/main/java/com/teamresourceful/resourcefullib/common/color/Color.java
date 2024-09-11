@@ -106,15 +106,23 @@ public class Color {
 
     //region Parsers
 
-    public static Color parse(String color) {
-        if (colorsWithNames.containsKey(color.toLowerCase()))
+    @Nullable
+    public static Color tryParse(String color) {
+        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
+            return new Color(Long.decode(color).intValue());
+        else if (colorsWithNames.containsKey(color.toLowerCase()))
             return colorsWithNames.get(color.toLowerCase());
-        return new Color(parseColor(color));
+        return null;
+    }
+
+    public static Color parse(String color) {
+        Color parsedColor = tryParse(color);
+        return parsedColor == null ? DEFAULT : parsedColor;
     }
 
     public static int parseColor(String color) {
         Objects.requireNonNull(color);
-        if (color.startsWith("0x") || color.startsWith("#"))
+        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
             return Long.decode(color).intValue();
         else if (colorsWithNames.containsKey(color.toLowerCase()))
             return colorsWithNames.get(color.toLowerCase()).getValue();
