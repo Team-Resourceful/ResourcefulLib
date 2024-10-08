@@ -69,7 +69,7 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
 
     @Override
     public int getFluidColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
-        return properties.tintColor(view, pos, state);
+        return properties().tintColor(view, pos, state);
     }
 
     @Override
