@@ -1,3 +1,8 @@
+# -----{ 3.0.11 }-----
+
+Improved performance for certain UI render utilities.
+Fix crash with Tech Reborn on fabric
+
 # -----{ 3.0.10 }-----
 
 
