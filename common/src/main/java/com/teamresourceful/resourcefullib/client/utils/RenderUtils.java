@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.Rect2i;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
-import org.joml.Vector3f;
 
 public final class RenderUtils {
 
@@ -35,8 +34,7 @@ public final class RenderUtils {
      */
     public static Vector2ic getTranslation(PoseStack stack) {
         Matrix4f pose = stack.last().pose();
-        Vector3f vec = pose.getTranslation(new Vector3f());
-        return new Vector2i((int) vec.x, (int) vec.y);
+        return new Vector2i((int) pose.m30(), (int) pose.m31());
     }
 
     /**
