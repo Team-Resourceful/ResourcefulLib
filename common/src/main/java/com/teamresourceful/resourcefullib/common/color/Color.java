@@ -295,6 +295,10 @@ public class Color {
     }
     //endregion
 
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    public static void initRainbow() {}
+
     public class ColorEditor {
         private ColorEditor() {
         }
