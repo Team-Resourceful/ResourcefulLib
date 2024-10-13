@@ -18,11 +18,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public class Color {
-
-    private static boolean rainbowInitialized = false;
 
     protected static final Map<String, Color> colorsWithNames = new HashMap<>();
 
@@ -89,10 +88,20 @@ public class Color {
     }
 
     private static Color createRainbowColor() {
-        Color color = new Color(0xff0000);
-        color.specialName = "rainbow";
-        colorsWithNames.put("rainbow", color);
-        return color;
+        return createPulsingColor("rainbow", 0xff0000, editor -> {
+            if (editor.getColor().getIntRed() > 0 && editor.getColor().getIntBlue() == 0) {
+                editor.setRed(editor.getColor().getIntRed() - 1);
+                editor.setGreen(editor.getColor().getIntGreen() + 1);
+            }
+            if (editor.getColor().getIntGreen() > 0 && editor.getColor().getIntRed() == 0) {
+                editor.setGreen(editor.getColor().getIntGreen() - 1);
+                editor.setBlue(editor.getColor().getIntBlue() + 1);
+            }
+            if (editor.getColor().getIntBlue() > 0 && editor.getColor().getIntGreen() == 0) {
+                editor.setRed(editor.getColor().getIntRed() + 1);
+                editor.setBlue(editor.getColor().getIntBlue() - 1);
+            }
+        });
     }
 
     public static Color createNamedColor(String name, int value) {
@@ -102,16 +111,35 @@ public class Color {
         return color;
     }
 
+    public static Color createPulsingColor(String name, int startingValue, Consumer<Color.ColorEditor> editorConsumer) {
+        Color color = new Color(startingValue);
+        color.specialName = name.toLowerCase(Locale.ENGLISH);
+        if (colorsWithNames.containsKey(color.specialName)) return colorsWithNames.get(color.specialName);
+        colorsWithNames.put(color.specialName, color);
+        Scheduling.schedule(() -> {
+            Color.ColorEditor editor = color.new ColorEditor();
+            editorConsumer.accept(editor);
+            color.updateValue();
+            color.updateFloats();
+        }, 0, 40, TimeUnit.MILLISECONDS);
+        return color;
+    }
+
     //endregion
 
     //region Parsers
 
     @Nullable
     public static Color tryParse(String color) {
-        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
-            return new Color(Long.decode(color).intValue());
-        else if (colorsWithNames.containsKey(color.toLowerCase()))
+        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X")) {
+            try {
+                return new Color(Long.decode(color).intValue());
+            } catch (NumberFormatException ignored) {
+                return null;
+            }
+        } else if (colorsWithNames.containsKey(color.toLowerCase())) {
             return colorsWithNames.get(color.toLowerCase());
+        }
         return null;
     }
 
@@ -121,12 +149,7 @@ public class Color {
     }
 
     public static int parseColor(String color) {
-        Objects.requireNonNull(color);
-        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
-            return Long.decode(color).intValue();
-        else if (colorsWithNames.containsKey(color.toLowerCase()))
-            return colorsWithNames.get(color.toLowerCase()).getValue();
-        return 0;
+        return parse(color).getValue();
     }
 
     //endregion
@@ -143,6 +166,10 @@ public class Color {
 
     private void updateValue() {
         this.value = (this.a << 24) | (this.r << 16) | (this.g << 8) | this.b;
+    }
+
+    public Color withAlpha(int alpha) {
+        return new Color(r, g, b, alpha);
     }
 
     //endregion
@@ -229,7 +256,7 @@ public class Color {
     public boolean equals(Object obj) {
         return obj instanceof Color color &&
                 color.value == this.value &&
-                color.specialName == this.specialName &&
+                Objects.equals(color.specialName, this.specialName) &&
                 color.defaultValue == this.defaultValue;
     }
 
@@ -268,29 +295,24 @@ public class Color {
     }
     //endregion
 
-    //region Rainbow
+    public class ColorEditor {
+        private ColorEditor() {
+        }
 
-    public static void initRainbow() {
-        if (rainbowInitialized) return;
-        rainbowInitialized = true;
-        Scheduling.schedule(() -> {
-            if (RAINBOW.r > 0 && RAINBOW.b == 0) {
-                RAINBOW.r--;
-                RAINBOW.g++;
-            }
-            if (RAINBOW.g > 0 && RAINBOW.r == 0) {
-                RAINBOW.g--;
-                RAINBOW.b++;
-            }
-            if (RAINBOW.b > 0 && RAINBOW.g == 0) {
-                RAINBOW.r++;
-                RAINBOW.b--;
-            }
+        public void setRed(int r) {
+            Color.this.r = r;
+        }
 
-            RAINBOW.updateValue();
-            RAINBOW.updateFloats();
-        }, 0, 40, TimeUnit.MILLISECONDS);
+        public void setGreen(int g) {
+            Color.this.g = g;
+        }
+
+        public void setBlue(int b) {
+            Color.this.b = b;
+        }
+
+        public Color getColor() {
+            return Color.this;
+        }
     }
-
-    //endregion
 }
