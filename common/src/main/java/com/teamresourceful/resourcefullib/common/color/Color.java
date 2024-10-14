@@ -42,16 +42,16 @@ public class Color {
         ConstantColors.init();
     }
 
-    private int r;
-    private int g;
-    private int b;
-    private final int a;
-    private int value;
+    int r;
+    int g;
+    int b;
+    final int a;
+    int value;
 
     private boolean defaultValue;
 
     @Nullable
-    private String specialName;
+    protected String specialName;
 
     private float[] rgbaValue;
 
@@ -89,17 +89,17 @@ public class Color {
 
     private static Color createRainbowColor() {
         return createPulsingColor("rainbow", 0xff0000, editor -> {
-            if (editor.getColor().getIntRed() > 0 && editor.getColor().getIntBlue() == 0) {
-                editor.setRed(editor.getColor().getIntRed() - 1);
-                editor.setGreen(editor.getColor().getIntGreen() + 1);
+            if (editor.getIntRed() > 0 && editor.getIntBlue() == 0) {
+                editor.setRed(editor.getIntRed() - 1);
+                editor.setGreen(editor.getIntGreen() + 1);
             }
-            if (editor.getColor().getIntGreen() > 0 && editor.getColor().getIntRed() == 0) {
-                editor.setGreen(editor.getColor().getIntGreen() - 1);
-                editor.setBlue(editor.getColor().getIntBlue() + 1);
+            if (editor.getIntGreen() > 0 && editor.getIntRed() == 0) {
+                editor.setGreen(editor.getIntGreen() - 1);
+                editor.setBlue(editor.getIntBlue() + 1);
             }
-            if (editor.getColor().getIntBlue() > 0 && editor.getColor().getIntGreen() == 0) {
-                editor.setRed(editor.getColor().getIntRed() + 1);
-                editor.setBlue(editor.getColor().getIntBlue() - 1);
+            if (editor.getIntBlue() > 0 && editor.getIntGreen() == 0) {
+                editor.setRed(editor.getIntRed() + 1);
+                editor.setBlue(editor.getIntBlue() - 1);
             }
         });
     }
@@ -111,15 +111,13 @@ public class Color {
         return color;
     }
 
-    public static Color createPulsingColor(String name, int startingValue, Consumer<Color.ColorEditor> editorConsumer) {
+    public static Color createPulsingColor(String name, int startingValue, Consumer<MutableColor> editorConsumer) {
         name = name.toLowerCase(Locale.ENGLISH);
         if (colorsWithNames.containsKey(name)) return colorsWithNames.get(name);
-        Color color = new Color(startingValue);
-        color.specialName = name;
+        MutableColor color = new MutableColor(name, startingValue);
         colorsWithNames.put(name, color);
         Scheduling.schedule(() -> {
-            Color.ColorEditor editor = color.new ColorEditor();
-            editorConsumer.accept(editor);
+            editorConsumer.accept(color);
             color.updateValue();
             color.updateFloats();
         }, 0, 40, TimeUnit.MILLISECONDS);
@@ -158,7 +156,7 @@ public class Color {
 
     //region updaters
 
-    private void updateFloats() {
+    void updateFloats() {
         rgbaValue = new float[4];
         rgbaValue[0] = this.getFloatRed();
         rgbaValue[1] = this.getFloatGreen();
@@ -166,7 +164,7 @@ public class Color {
         rgbaValue[3] = this.getFloatAlpha();
     }
 
-    private void updateValue() {
+    void updateValue() {
         this.value = (this.a << 24) | (this.r << 16) | (this.g << 8) | this.b;
     }
 
@@ -300,25 +298,4 @@ public class Color {
     @Deprecated
     @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
     public static void initRainbow() {}
-
-    public class ColorEditor {
-        private ColorEditor() {
-        }
-
-        public void setRed(int r) {
-            Color.this.r = r;
-        }
-
-        public void setGreen(int g) {
-            Color.this.g = g;
-        }
-
-        public void setBlue(int b) {
-            Color.this.b = b;
-        }
-
-        public Color getColor() {
-            return Color.this;
-        }
-    }
 }
