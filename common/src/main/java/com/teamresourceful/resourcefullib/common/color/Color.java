@@ -112,10 +112,11 @@ public class Color {
     }
 
     public static Color createPulsingColor(String name, int startingValue, Consumer<Color.ColorEditor> editorConsumer) {
+        name = name.toLowerCase(Locale.ENGLISH);
+        if (colorsWithNames.containsKey(name)) return colorsWithNames.get(name);
         Color color = new Color(startingValue);
-        color.specialName = name.toLowerCase(Locale.ENGLISH);
-        if (colorsWithNames.containsKey(color.specialName)) return colorsWithNames.get(color.specialName);
-        colorsWithNames.put(color.specialName, color);
+        color.specialName = name;
+        colorsWithNames.put(name, color);
         Scheduling.schedule(() -> {
             Color.ColorEditor editor = color.new ColorEditor();
             editorConsumer.accept(editor);
@@ -131,7 +132,8 @@ public class Color {
 
     @Nullable
     public static Color tryParse(String color) {
-        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X")) {
+        color = color.toLowerCase(Locale.ROOT);
+        if (color.startsWith("0x") || color.startsWith("#")) {
             try {
                 return new Color(Long.decode(color).intValue());
             } catch (NumberFormatException ignored) {
