@@ -42,11 +42,11 @@ public class Color {
         ConstantColors.init();
     }
 
-    int r;
-    int g;
-    int b;
-    final int a;
-    int value;
+    protected int r;
+    protected int g;
+    protected int b;
+    protected final int a;
+    protected int value;
 
     private boolean defaultValue;
 
