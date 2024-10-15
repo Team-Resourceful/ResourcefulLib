@@ -18,11 +18,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public class Color {
-
-    private static boolean rainbowInitialized = false;
 
     protected static final Map<String, Color> colorsWithNames = new HashMap<>();
 
@@ -43,16 +42,16 @@ public class Color {
         ConstantColors.init();
     }
 
-    private int r;
-    private int g;
-    private int b;
-    private final int a;
-    private int value;
+    protected int r;
+    protected int g;
+    protected int b;
+    protected final int a;
+    protected int value;
 
     private boolean defaultValue;
 
     @Nullable
-    private String specialName;
+    protected String specialName;
 
     private float[] rgbaValue;
 
@@ -89,10 +88,20 @@ public class Color {
     }
 
     private static Color createRainbowColor() {
-        Color color = new Color(0xff0000);
-        color.specialName = "rainbow";
-        colorsWithNames.put("rainbow", color);
-        return color;
+        return createPulsingColor("rainbow", 0xff0000, editor -> {
+            if (editor.getIntRed() > 0 && editor.getIntBlue() == 0) {
+                editor.setRed(editor.getIntRed() - 1);
+                editor.setGreen(editor.getIntGreen() + 1);
+            }
+            if (editor.getIntGreen() > 0 && editor.getIntRed() == 0) {
+                editor.setGreen(editor.getIntGreen() - 1);
+                editor.setBlue(editor.getIntBlue() + 1);
+            }
+            if (editor.getIntBlue() > 0 && editor.getIntGreen() == 0) {
+                editor.setRed(editor.getIntRed() + 1);
+                editor.setBlue(editor.getIntBlue() - 1);
+            }
+        });
     }
 
     public static Color createNamedColor(String name, int value) {
@@ -102,16 +111,35 @@ public class Color {
         return color;
     }
 
+    public static Color createPulsingColor(String name, int startingValue, Consumer<MutableColor> editorConsumer) {
+        name = name.toLowerCase(Locale.ENGLISH);
+        if (colorsWithNames.containsKey(name)) return colorsWithNames.get(name);
+        MutableColor color = new MutableColor(name, startingValue);
+        colorsWithNames.put(name, color);
+        Scheduling.schedule(() -> {
+            editorConsumer.accept(color);
+            color.updateValue();
+            color.updateFloats();
+        }, 0, 40, TimeUnit.MILLISECONDS);
+        return color;
+    }
+
     //endregion
 
     //region Parsers
 
     @Nullable
     public static Color tryParse(String color) {
-        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
-            return new Color(Long.decode(color).intValue());
-        else if (colorsWithNames.containsKey(color.toLowerCase()))
+        color = color.toLowerCase(Locale.ROOT);
+        if (color.startsWith("0x") || color.startsWith("#")) {
+            try {
+                return new Color(Long.decode(color).intValue());
+            } catch (NumberFormatException ignored) {
+                return null;
+            }
+        } else if (colorsWithNames.containsKey(color.toLowerCase())) {
             return colorsWithNames.get(color.toLowerCase());
+        }
         return null;
     }
 
@@ -121,19 +149,14 @@ public class Color {
     }
 
     public static int parseColor(String color) {
-        Objects.requireNonNull(color);
-        if (color.startsWith("0x") || color.startsWith("#") || color.startsWith("0X"))
-            return Long.decode(color).intValue();
-        else if (colorsWithNames.containsKey(color.toLowerCase()))
-            return colorsWithNames.get(color.toLowerCase()).getValue();
-        return 0;
+        return parse(color).getValue();
     }
 
     //endregion
 
     //region updaters
 
-    private void updateFloats() {
+    void updateFloats() {
         rgbaValue = new float[4];
         rgbaValue[0] = this.getFloatRed();
         rgbaValue[1] = this.getFloatGreen();
@@ -141,8 +164,12 @@ public class Color {
         rgbaValue[3] = this.getFloatAlpha();
     }
 
-    private void updateValue() {
+    void updateValue() {
         this.value = (this.a << 24) | (this.r << 16) | (this.g << 8) | this.b;
+    }
+
+    public Color withAlpha(int alpha) {
+        return new Color(r, g, b, alpha);
     }
 
     //endregion
@@ -229,7 +256,7 @@ public class Color {
     public boolean equals(Object obj) {
         return obj instanceof Color color &&
                 color.value == this.value &&
-                color.specialName == this.specialName &&
+                Objects.equals(color.specialName, this.specialName) &&
                 color.defaultValue == this.defaultValue;
     }
 
@@ -268,29 +295,7 @@ public class Color {
     }
     //endregion
 
-    //region Rainbow
-
-    public static void initRainbow() {
-        if (rainbowInitialized) return;
-        rainbowInitialized = true;
-        Scheduling.schedule(() -> {
-            if (RAINBOW.r > 0 && RAINBOW.b == 0) {
-                RAINBOW.r--;
-                RAINBOW.g++;
-            }
-            if (RAINBOW.g > 0 && RAINBOW.r == 0) {
-                RAINBOW.g--;
-                RAINBOW.b++;
-            }
-            if (RAINBOW.b > 0 && RAINBOW.g == 0) {
-                RAINBOW.r++;
-                RAINBOW.b--;
-            }
-
-            RAINBOW.updateValue();
-            RAINBOW.updateFloats();
-        }, 0, 40, TimeUnit.MILLISECONDS);
-    }
-
-    //endregion
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
+    public static void initRainbow() {}
 }
