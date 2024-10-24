@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefullib.common.collections;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.Validate;
 
 import java.util.AbstractList;
 import java.util.List;
+import java.util.Objects;
 
 public class SelectableList<E> extends AbstractList<E> {
 
@@ -37,7 +37,7 @@ public class SelectableList<E> extends AbstractList<E> {
 
     @Override
     public void add(int index, E element) {
-        Validate.notNull(element);
+        Objects.requireNonNull(element);
         list.add(index, element);
     }
 
@@ -50,7 +50,7 @@ public class SelectableList<E> extends AbstractList<E> {
 
     @Override
     public E set(int pIndex, E pValue) {
-        Validate.notNull(pValue);
+        Objects.requireNonNull(pValue);
         return this.list.set(pIndex, pValue);
     }
 

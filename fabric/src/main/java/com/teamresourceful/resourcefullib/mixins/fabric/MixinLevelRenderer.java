@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinLevelRenderer {
 
     @Inject(method = "renderHitOutline", at = @At("HEAD"), cancellable = true)
-    public void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
-        if (HighlightHandler.onBlockHighlight(new Vec3(d, e, f), entity, poseStack, blockPos, blockState, vertexConsumer)) {
+    public void onRenderHitOutline(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState, int i, CallbackInfo ci) {
+        if (HighlightHandler.onBlockHighlight(new Vec3(d, e, f), entity, poseStack, blockPos, blockState, vertexConsumer, i)) {
             ci.cancel();
         }
     }

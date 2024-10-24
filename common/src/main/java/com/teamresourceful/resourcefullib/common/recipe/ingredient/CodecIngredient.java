@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +13,7 @@ public interface CodecIngredient<T extends CodecIngredient<T>> extends Predicate
     @Override
     boolean test(@Nullable ItemStack stack);
 
-    List<ItemStack> getStacks();
+    List<Holder<Item>> getItems();
 
     /**
      * Determines if this ingredient is complex.

@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefullib.client.fluid.data;
 
-import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Function3;
@@ -8,9 +7,7 @@ import com.mojang.datafixers.util.Function6;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.function.Function;
 
@@ -38,7 +35,7 @@ public interface ClientFluidProperties {
         ResourceLocation texture = screenOverlay();
         if (texture != null) {
             Player player = minecraft.player;
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShader(CoreShaders.POSITION_TEX);
             RenderSystem.setShaderTexture(0, texture);
 
             BlockPos blockpos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
@@ -74,12 +71,12 @@ public interface ClientFluidProperties {
         return false;
     }
 
-    default Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
+    default Vector4f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
         return fluidFogColor;
     }
 
-    default void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape) {
-
+    default FogParameters modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, FogParameters parameters) {
+        return parameters;
     }
 
     static ClientFluidProperties.Builder builder() {

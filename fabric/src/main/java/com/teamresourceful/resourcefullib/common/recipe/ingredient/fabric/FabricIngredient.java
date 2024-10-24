@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefullib.common.recipe.ingredient.fabric;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -15,8 +17,8 @@ public record FabricIngredient<T extends CodecIngredient<T>>(T ingredient) imple
     }
 
     @Override
-    public List<ItemStack> getMatchingStacks() {
-        return ingredient.getStacks();
+    public List<Holder<Item>> getMatchingItems() {
+        return this.ingredient.getItems();
     }
 
     @Override

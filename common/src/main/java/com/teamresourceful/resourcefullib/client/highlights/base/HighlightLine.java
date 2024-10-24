@@ -37,7 +37,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
     public void render(PoseStack poseStack, VertexConsumer consumer, float x, float y, float z) {
         render(
                 poseStack, consumer,
-                0f, 0f, 0f, 0.4f,
+                0x00000066,
                 x, y, z,
                 start.x(), start.y(), start.z(),
                 end.x(), end.y(), end.z(),
@@ -47,7 +47,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
 
     public static void render(
             PoseStack stack, VertexConsumer consumer,
-            float r, float g, float b, float a,
+            int color,
             float x, float y, float z,
             float x1, float y1, float z1,
             float x2, float y2, float z2,
@@ -55,10 +55,10 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
     ) {
         PoseStack.Pose last = stack.last();
         consumer.addVertex(last.pose(), x + x1, y + y1, z + z1)
-                .setColor(r, g, b, a)
+                .setColor(color)
                 .setNormal(last, normalX, normalY, normalZ);
         consumer.addVertex(last.pose(), x + x2, y + y2, z + z2)
-                .setColor(r, g, b, a)
+                .setColor(color)
                 .setNormal(last, normalX, normalY, normalZ);
     }
 

@@ -1,10 +1,8 @@
 package com.teamresourceful.resourcefullib.common.fluid.data;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.PathType;
-import org.jetbrains.annotations.ApiStatus;
 
 public interface FluidProperties {
 
@@ -41,41 +39,6 @@ public interface FluidProperties {
     Rarity rarity();
 
     FluidSounds sounds();
-
-    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    default ResourceLocation still() {
-        return null;
-    }
-
-    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    default ResourceLocation flowing() {
-        return null;
-    }
-
-    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    default ResourceLocation overlay() {
-        return null;
-    }
-
-    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    default ResourceLocation screenOverlay() {
-        return null;
-    }
-
-    /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    default int tintColor() {
-        return -1;
-    }
 
     int tickDelay();
 
@@ -202,41 +165,6 @@ public interface FluidProperties {
 
         public Builder sounds(String sound, SoundEvent soundEvent) {
             this.sounds.add(sound, soundEvent);
-            return this;
-        }
-
-        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-        @Deprecated
-        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-        public Builder still(ResourceLocation still) {
-            return this;
-        }
-
-        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-        @Deprecated
-        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-        public Builder flowing(ResourceLocation flowing) {
-            return this;
-        }
-
-        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-        @Deprecated
-        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-        public Builder overlay(ResourceLocation overlay) {
-            return this;
-        }
-
-        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-        @Deprecated
-        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-        public Builder screenOverlay(ResourceLocation screenOverlay) {
-            return this;
-        }
-
-        /** @deprecated See {@link com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties} */
-        @Deprecated
-        @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-        public Builder tintColor(int tintColor) {
             return this;
         }
 

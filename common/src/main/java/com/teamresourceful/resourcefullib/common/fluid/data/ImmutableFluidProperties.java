@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefullib.common.fluid.data;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.PathType;
 import org.jetbrains.annotations.ApiStatus;

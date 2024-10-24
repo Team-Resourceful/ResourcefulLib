@@ -11,12 +11,6 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.NonExtendable
 public interface PacketType<T extends Packet<T>> {
 
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "22.0")
-    default Class<T> type() {
-        return null;
-    }
-
     ResourceLocation id();
 
     void encode(T message, RegistryFriendlyByteBuf buffer);

@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefullib.client.highlights;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,7 +10,6 @@ import com.teamresourceful.resourcefullib.client.highlights.base.Highlight;
 import com.teamresourceful.resourcefullib.client.highlights.base.HighlightLine;
 import com.teamresourceful.resourcefullib.client.highlights.base.Highlightable;
 import com.teamresourceful.resourcefullib.client.highlights.state.HighlightStates;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -19,6 +17,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,19 +27,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HighlightHandler extends SimpleJsonResourceReloadListener {
+public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonElement> {
 
     private static final Reference2ReferenceMap<BlockState, float[]> STATE_CACHE = new Reference2ReferenceOpenHashMap<>();
     private static final Map<ResourceLocation, Highlight> BOX_CACHE = new HashMap<>();
 
     public static final Codec<Highlight> HIGHLIGHT_CODEC = ResourceLocation.CODEC.xmap(HighlightHandler::getOrThrow, Highlight::id);
-    private static float red = 0f;
-    private static float green = 0f;
-    private static float blue = 0f;
-    private static float alpha = 0.4f;
 
     public HighlightHandler() {
-        super(new Gson(), "resourcefullib/highlights");
+        super(ExtraCodecs.JSON, "resourcefullib/highlights");
     }
 
     @Override
@@ -84,16 +79,16 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
         BOX_CACHE.clear();
     }
 
-    public static boolean onBlockHighlight(Vec3 cameraPos, Entity cameraEntity, PoseStack stack, BlockPos blockPos, BlockState state, VertexConsumer consumer) {
+    public static boolean onBlockHighlight(Vec3 cameraPos, Entity cameraEntity, PoseStack stack, BlockPos blockPos, BlockState state, VertexConsumer consumer, int color) {
         if (state.getBlock() instanceof Highlightable highlightable) {
             var highlight = highlightable.getHighlight(cameraEntity.level(), blockPos, state);
             if (highlight != null) {
-                highlight.render(consumer, stack, cameraPos, state.getOffset(cameraEntity.level(), blockPos), blockPos);
+                highlight.render(consumer, stack, cameraPos, state.getOffset(blockPos), blockPos);
                 return true;
             }
         }
         if (STATE_CACHE.containsKey(state)) {
-            Vec3 offset = state.getOffset(cameraEntity.level(), blockPos);
+            Vec3 offset = state.getOffset(blockPos);
             try (var ignored = new CloseablePoseStack(stack)) {
                 float x = (float) (blockPos.getX() - cameraPos.x());
                 float y = (float) (blockPos.getY() - cameraPos.y());
@@ -108,7 +103,7 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
                 for (int i = 0; i < lines.length; i += 9) {
                     HighlightLine.render(
                             stack, consumer,
-                            red, green, blue, alpha,
+                            color,
                             x, y, z,
                             lines[i], lines[i + 1], lines[i + 2],
                             lines[i + 3], lines[i + 4], lines[i + 5],
@@ -126,13 +121,5 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener {
         var highlight = BOX_CACHE.get(id);
         if (highlight == null) throw new RuntimeException("No highlight with the id '" + id + "' was found!");
         return highlight;
-    }
-
-    public static void setColor(int value) {
-        Color color = new Color(value);
-        red = color.getFloatRed();
-        green = color.getFloatGreen();
-        blue = color.getFloatBlue();
-        alpha = color.getFloatAlpha();
     }
 }

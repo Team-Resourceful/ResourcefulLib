@@ -10,7 +10,6 @@ import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.resourcefullib.common.utils.Scheduling;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -228,15 +227,6 @@ public class Color {
         return defaultValue;
     }
 
-    /**
-     * @deprecated Use {@link #isSpecial()} instead.
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    public boolean isRainbow() {
-        return "rainbow".equals(specialName);
-    }
-
     public boolean isSpecial() {
         return specialName != null;
     }
@@ -294,8 +284,4 @@ public class Color {
                 .orElse(DataResult.error(() -> "Color input not valid!"));
     }
     //endregion
-
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.21.2")
-    public static void initRainbow() {}
 }

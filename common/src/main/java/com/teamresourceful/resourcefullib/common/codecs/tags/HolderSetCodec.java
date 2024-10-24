@@ -38,12 +38,12 @@ public class HolderSetCodec<E> implements Codec<HolderSet<E>> {
     @Override
     public <T> DataResult<Pair<HolderSet<E>, T>> decode(DynamicOps<T> ops, T input) {
         return this.holderCodec.decode(ops, input)
-                .map(pair -> pair.mapFirst(either -> either.map(registry::getOrCreateTag, HolderSet::direct)));
+                .map(pair -> pair.mapFirst(either -> either.map(registry::getOrThrow, HolderSet::direct)));
     }
 
     @Override
     public <T> DataResult<T> encode(HolderSet<E> set, DynamicOps<T> ops, T prefix) {
-        if (!set.canSerializeIn(registry.holderOwner())) {
+        if (!set.canSerializeIn(registry)) {
             return DataResult.error(() -> "HolderSet " + set + " is not valid in current registry set");
         }
 

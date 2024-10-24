@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefullib.client.components;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ public abstract class ImageButton extends AbstractButton {
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.blit(
+            RenderType::guiTextured,
             getTexture(mouseX, mouseY),
             getX(), getY(),
             getU(mouseX, mouseY), getV(mouseX, mouseY),

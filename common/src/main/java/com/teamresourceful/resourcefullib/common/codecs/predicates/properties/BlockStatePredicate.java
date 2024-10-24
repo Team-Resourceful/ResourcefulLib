@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 
 import java.util.Map;
-import java.util.Optional;
 
 public record BlockStatePredicate(Map<String, PropertyMatcher> properties) {
 
@@ -33,9 +32,7 @@ public record BlockStatePredicate(Map<String, PropertyMatcher> properties) {
 
     private static <T extends Comparable<T>> BlockState setProperty(BlockState state, Property<T> property, String string) {
         if (string == null) return state;
-        Optional<T> optional = property.getValue(string);
-        if (optional.isEmpty()) return state;
-        return state.setValue(property, optional.get());
+        return property.getValue(string).map(t -> state.setValue(property, t)).orElse(state);
     }
 
     public boolean matches(BlockState blockState) {

@@ -1,6 +1,8 @@
 package com.teamresourceful.resourcefullib.common.recipe.ingredient.neoforge;
 
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -18,8 +20,8 @@ public record NeoForgeIngredient<T extends CodecIngredient<T>>(T ingredient) imp
     }
 
     @Override
-    public @NotNull Stream<ItemStack> getItems() {
-        return this.ingredient.getStacks().stream();
+    public @NotNull Stream<Holder<Item>> items() {
+        return this.ingredient.getItems().stream();
     }
 
     @Override
@@ -29,6 +31,6 @@ public record NeoForgeIngredient<T extends CodecIngredient<T>>(T ingredient) imp
 
     @Override
     public @NotNull IngredientType<?> getType() {
-        return Objects.requireNonNull(NeoForgeRegistries.INGREDIENT_TYPES.get(this.ingredient.serializer().id()));
+        return Objects.requireNonNull(NeoForgeRegistries.INGREDIENT_TYPES.getValue(this.ingredient.serializer().id()));
     }
 }

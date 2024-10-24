@@ -26,7 +26,7 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
     }
 
     @Override
-    public MapCodec<FabricIngredient<T>> getCodec(boolean allowEmpty) {
+    public MapCodec<FabricIngredient<T>> getCodec() {
         return this.codec;
     }
 
