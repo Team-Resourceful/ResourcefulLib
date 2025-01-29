@@ -29,6 +29,11 @@ public class ItemLikeResourcefulRegistry<T extends ItemLike> implements Resource
     }
 
     @Override
+    public String namespace() {
+        return this.parent.namespace();
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <I extends T> Entry<I> register(String id, Supplier<I> supplier) {
         Entry<I> entry = new Entry<>(parent.register(id, supplier));

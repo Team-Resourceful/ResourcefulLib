@@ -4,6 +4,8 @@ import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulBlo
 import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulItemRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.Registry;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class ResourcefulRegistries {
@@ -16,8 +18,16 @@ public class ResourcefulRegistries {
         return new ResourcefulItemRegistry(id);
     }
 
+    public static ResourcefulItemRegistry createForItems(ResourcefulRegistry<Item> parent) {
+        return new ResourcefulItemRegistry(parent);
+    }
+
     public static ResourcefulBlockRegistry createForBlocks(String id) {
         return new ResourcefulBlockRegistry(id);
+    }
+
+    public static ResourcefulBlockRegistry createForBlocks(ResourcefulRegistry<Block> parent) {
+        return new ResourcefulBlockRegistry(parent);
     }
 
     @ExpectPlatform

@@ -21,6 +21,11 @@ public class NeoForgeResourcefulRegistry<T> implements ResourcefulRegistry<T> {
     }
 
     @Override
+    public String namespace() {
+        return this.register.getNamespace();
+    }
+
+    @Override
     public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
         return this.entries.add(new NeoForgeRegistryEntry<>(register.register(id, supplier)));
     }

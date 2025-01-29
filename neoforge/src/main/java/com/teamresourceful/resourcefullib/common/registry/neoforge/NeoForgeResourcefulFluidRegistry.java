@@ -27,6 +27,11 @@ public class NeoForgeResourcefulFluidRegistry implements ResourcefulFluidRegistr
     }
 
     @Override
+    public String namespace() {
+        return this.id;
+    }
+
+    @Override
     public RegistryEntry<FluidData> register(String name, FluidProperties properties) {
         ResourceLocation rid = ResourceLocation.fromNamespaceAndPath(this.id, name);
         return this.entries.add(new Entry(

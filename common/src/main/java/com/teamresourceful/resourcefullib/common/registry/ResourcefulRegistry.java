@@ -6,6 +6,10 @@ import java.util.stream.Stream;
 
 public interface ResourcefulRegistry<T> {
 
+    default String namespace() {
+        return null;
+    }
+
     <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier);
 
     HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier);

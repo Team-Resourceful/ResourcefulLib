@@ -13,6 +13,11 @@ public class ResourcefulRegistryChild<T> implements ResourcefulRegistry<T> {
     }
 
     @Override
+    public String namespace() {
+        return this.parent.namespace();
+    }
+
+    @Override
     public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
         return this.entries.add(parent.register(id, supplier));
     }

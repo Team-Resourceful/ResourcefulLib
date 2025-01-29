@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -21,13 +22,22 @@ public class ResourcefulBlockRegistry implements ResourcefulRegistry<Block> {
     private final ResourcefulRegistry<Block> registry;
 
     public ResourcefulBlockRegistry(String id) {
-        this.namespace = id;
-        this.registry = ResourcefulRegistries.create(BuiltInRegistries.BLOCK, this.namespace);
+        this(ResourcefulRegistries.create(BuiltInRegistries.BLOCK, id));
+    }
+
+    public ResourcefulBlockRegistry(ResourcefulRegistry<Block> parent) {
+        this.namespace = Objects.requireNonNull(parent.namespace(), "Parent registry must have a namespace.");
+        this.registry = parent;
     }
 
     public <I extends Block> ItemLikeEntry<I> register(String id, Function<Block.Properties, I> factory, Supplier<Block.Properties> getter) {
         ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.namespace, id));
         return this.register(id, () -> factory.apply(getter.get().setId(key)));
+    }
+
+    @Override
+    public String namespace() {
+        return this.namespace;
     }
 
     @Override
