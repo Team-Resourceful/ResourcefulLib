@@ -19,7 +19,7 @@ public class ResourcefulRegistries {
     }
 
     public static ResourcefulItemRegistry createForItems(ResourcefulRegistry<Item> parent) {
-        return new ResourcefulItemRegistry(parent);
+        return new ResourcefulItemRegistry(ResourcefulRegistries.create(parent));
     }
 
     public static ResourcefulBlockRegistry createForBlocks(String id) {
@@ -27,7 +27,7 @@ public class ResourcefulRegistries {
     }
 
     public static ResourcefulBlockRegistry createForBlocks(ResourcefulRegistry<Block> parent) {
-        return new ResourcefulBlockRegistry(parent);
+        return new ResourcefulBlockRegistry(ResourcefulRegistries.create(parent));
     }
 
     @ExpectPlatform
