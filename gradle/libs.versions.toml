@@ -10,7 +10,7 @@ yabn = "1.0.3"
 bytecodecs = "1.1.2"
 
 # Plugins
-resourceful-loom = "1.0.+"
+resourceful-loom = "1.0.3"
 
 [libraries]
 
