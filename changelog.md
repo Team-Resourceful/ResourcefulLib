@@ -1,3 +1,8 @@
+# -----{ 3.4.2 }-----
+
+Fix common shading issue
+Add parentable builtin registries
+
 # -----{ 3.4.1 }-----
 
 Add parentable builtin registries
