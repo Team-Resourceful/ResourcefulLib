@@ -1,3 +1,8 @@
+# -----{ 3.4.3 }-----
+
+Use fabric-api instead of fabric in FMJ
+Add auto enclosing of type specific parent registries
+
 # -----{ 3.4.2 }-----
 
 Fix common shading issue
