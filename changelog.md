@@ -1,3 +1,8 @@
+# -----{ 3.4.1 }-----
+
+Add parentable builtin registries
+Update to 1.21.4
+
 # -----{ 3.4.0 }-----
 
 Update to 1.21.4
