@@ -38,7 +38,7 @@ public class ResourcefulItemRegistry implements ResourcefulRegistry<Item> {
     }
 
     public ItemLikeEntry<BlockItem> register(String id, Supplier<? extends Block> supplier, Supplier<Item.Properties> getter) {
-        return register(id, properties -> new BlockItem(supplier.get(), properties), getter);
+        return register(id, properties -> new BlockItem(supplier.get(), properties.useBlockDescriptionPrefix()), getter);
     }
 
     @Override
