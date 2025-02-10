@@ -1,3 +1,7 @@
+# -----{ 3.4.5 }-----
+
+Fix crash on newer neoforge versions
+
 # -----{ 3.4.4 }-----
 
 Use block description prefix for registered bloc items
