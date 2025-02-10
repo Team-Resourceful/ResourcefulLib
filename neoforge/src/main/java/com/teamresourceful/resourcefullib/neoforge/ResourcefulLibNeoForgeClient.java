@@ -14,11 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class ResourcefulLibNeoForgeClient {
@@ -32,7 +32,7 @@ public class ResourcefulLibNeoForgeClient {
         modEventBus.addListener(NeoForgeResourcePackHandler::onRegisterPackFinders);
     }
 
-    public static void onClientReloadListeners(AddServerReloadListenersEvent event) {
+    public static void onClientReloadListeners(AddClientReloadListenersEvent event) {
         event.addListener(ResourceLocation.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"), new HighlightHandler());
     }
 
