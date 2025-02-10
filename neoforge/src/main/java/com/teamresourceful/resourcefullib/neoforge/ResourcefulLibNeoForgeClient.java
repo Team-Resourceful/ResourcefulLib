@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.neoforge;
 
+import com.teamresourceful.resourcefullib.ResourcefulLib;
 import com.teamresourceful.resourcefullib.client.fluid.neoforge.ResourcefulClientFluidType;
 import com.teamresourceful.resourcefullib.client.fluid.registry.ResourcefulClientFluidRegistry;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
@@ -9,14 +10,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class ResourcefulLibNeoForgeClient {
@@ -30,8 +32,8 @@ public class ResourcefulLibNeoForgeClient {
         modEventBus.addListener(NeoForgeResourcePackHandler::onRegisterPackFinders);
     }
 
-    public static void onClientReloadListeners(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener(new HighlightHandler());
+    public static void onClientReloadListeners(AddServerReloadListenersEvent event) {
+        event.addListener(ResourceLocation.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"), new HighlightHandler());
     }
 
     public static void onHighlight(RenderHighlightEvent.Block event) {
