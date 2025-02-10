@@ -1,3 +1,8 @@
+# -----{ 3.4.4 }-----
+
+Use block description prefix for registered bloc items
+Use fabric-api instead of fabric in FMJ
+
 # -----{ 3.4.3 }-----
 
 Use fabric-api instead of fabric in FMJ
