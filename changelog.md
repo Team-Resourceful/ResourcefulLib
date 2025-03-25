@@ -1,3 +1,7 @@
+# -----{ 3.5.0 }-----
+
+Update to 1.21.5
+
 # -----{ 3.4.5 }-----
 
 Fix crash on newer neoforge versions
