@@ -18,6 +18,6 @@ public record ExactStringValidator(String value) implements StringValidator {
 
     @Override
     public boolean test(StringTag tag) {
-        return tag.getAsString().equals(value);
+        return tag.value().equals(value);
     }
 }

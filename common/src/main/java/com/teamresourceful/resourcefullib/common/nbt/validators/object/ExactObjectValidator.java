@@ -2,9 +2,11 @@ package com.teamresourceful.resourcefullib.common.nbt.validators.object;
 
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefullib.common.nbt.validators.Validator;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Map;
+import java.util.UUID;
 
 public record ExactObjectValidator(Map<String, Validator<?>> validators) implements ObjectValidator {
 
@@ -21,7 +23,7 @@ public record ExactObjectValidator(Map<String, Validator<?>> validators) impleme
 
     @Override
     public boolean test(CompoundTag tag) {
-        for (String key : tag.getAllKeys()) {
+        for (String key : tag.keySet()) {
             if (!validators.containsKey(key) || !validators.get(key).testAndValidate(tag.get(key))) {
                 return false;
             }

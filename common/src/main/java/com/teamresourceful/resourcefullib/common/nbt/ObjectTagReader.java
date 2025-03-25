@@ -36,8 +36,9 @@ public class ObjectTagReader<I> implements NbtReader<I, CompoundTag> {
     @Override
     public void read(I instance, CompoundTag tag) {
         readers.forEach((key, reader) -> {
-            if (tag.contains(key, reader.type())) {
-                reader.castRead(instance, tag.get(key));
+            var value = tag.get(key);
+            if (value != null && value.getId() == reader.type()) {
+                reader.castRead(instance, value);
             } else {
                 reader.setDefault(instance);
             }

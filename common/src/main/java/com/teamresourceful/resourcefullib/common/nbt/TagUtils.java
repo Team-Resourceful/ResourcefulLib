@@ -38,7 +38,7 @@ public final class TagUtils {
 
     public static <K, V> Map<K, V> mapTag(CompoundTag tag, Function<String, K> keyMapper, BiFunction<String, CompoundTag, V> valueMapper) {
         Map<K, V> map = new HashMap<>();
-        for (String key : tag.getAllKeys()) {
+        for (String key : tag.keySet()) {
             map.put(keyMapper.apply(key), valueMapper.apply(key, tag));
         }
         return map;

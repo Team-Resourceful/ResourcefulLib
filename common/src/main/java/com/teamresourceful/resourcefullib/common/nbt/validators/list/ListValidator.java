@@ -6,9 +6,9 @@ import com.teamresourceful.resourcefullib.common.nbt.validators.Validator;
 import com.teamresourceful.resourcefullib.common.nbt.validators.ValidatorCodec;
 import net.minecraft.nbt.CollectionTag;
 
-public interface ListValidator extends Validator<CollectionTag<?>> {
+public interface ListValidator extends Validator<CollectionTag> {
 
-    Codec<Validator<CollectionTag<?>>> CODEC = new ValidatorCodec<>(
+    Codec<Validator<CollectionTag>> CODEC = new ValidatorCodec<>(
             ExactListValidator.CODEC,
             (adder) -> {
                 adder.add(ExactListValidator.ID, ExactListValidator.CODEC);

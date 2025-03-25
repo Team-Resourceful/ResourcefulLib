@@ -35,7 +35,7 @@ public record ExactListValidator(List<Validator<?>> validators) implements ListV
     }
 
     @Override
-    public boolean test(CollectionTag<?> tag) {
+    public boolean test(CollectionTag tag) {
         if (tag.isEmpty()) return false;
         if (tag.size() != validators.size()) return false;
         for (int i = 0; i < tag.size(); i++) {

@@ -20,16 +20,16 @@ public record ExactNumericValidator(Number number) implements NumericValidator {
     @Override
     public boolean test(NumericTag tag) {
         return switch (tag) {
-            case ByteTag byteTag -> byteTag.getAsByte() == number.byteValue();
-            case ShortTag shortTag -> shortTag.getAsShort() == number.shortValue();
-            case IntTag intTag -> intTag.getAsInt() == number.intValue();
-            case LongTag longTag -> longTag.getAsLong() == number.longValue();
-            case FloatTag floatTag -> floatTag.getAsFloat() == number.floatValue();
-            case DoubleTag doubleTag -> doubleTag.getAsDouble() == number.doubleValue();
+            case ByteTag byteTag -> byteTag.value() == number.byteValue();
+            case ShortTag shortTag -> shortTag.value() == number.shortValue();
+            case IntTag intTag -> intTag.value() == number.intValue();
+            case LongTag longTag -> longTag.value() == number.longValue();
+            case FloatTag floatTag -> floatTag.value() == number.floatValue();
+            case DoubleTag doubleTag -> doubleTag.value() == number.doubleValue();
             case null -> false;
 
             // Should never happen unless someone makes a custom tag that extends NumericTag
-            default -> tag.getAsNumber().equals(number);
+            default -> tag.box().equals(number);
         };
     }
 }

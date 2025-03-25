@@ -25,59 +25,59 @@ public class TagReader<I, T extends Tag> implements NbtReader<I, T> {
     }
 
     public static <I> TagReader<I, ByteTag> byteTag(Function<I, Byte> writer, BiConsumer<I, Byte> reader) {
-        return new TagReader<>(Tag.TAG_BYTE, i -> ByteTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsByte()), null);
+        return new TagReader<>(Tag.TAG_BYTE, i -> ByteTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, ByteTag> byteTag(Function<I, Byte> writer, BiConsumer<I, Byte> reader, byte defaultValue) {
-        return new TagReader<>(Tag.TAG_BYTE, i -> ByteTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsByte()), () -> ByteTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_BYTE, i -> ByteTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> ByteTag.valueOf(defaultValue));
     }
 
     public static <I> TagReader<I, ShortTag> shortTag(Function<I, Short> writer, BiConsumer<I, Short> reader) {
-        return new TagReader<>(Tag.TAG_SHORT, i -> ShortTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsShort()), null);
+        return new TagReader<>(Tag.TAG_SHORT, i -> ShortTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, ShortTag> shortTag(Function<I, Short> writer, BiConsumer<I, Short> reader, short defaultValue) {
-        return new TagReader<>(Tag.TAG_SHORT, i -> ShortTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsShort()), () -> ShortTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_SHORT, i -> ShortTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> ShortTag.valueOf(defaultValue));
     }
 
     public static <I> TagReader<I, IntTag> intTag(Function<I, Integer> writer, BiConsumer<I, Integer> reader) {
-        return new TagReader<>(Tag.TAG_INT, i -> IntTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsInt()), null);
+        return new TagReader<>(Tag.TAG_INT, i -> IntTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, IntTag> intTag(Function<I, Integer> writer, BiConsumer<I, Integer> reader, int defaultValue) {
-        return new TagReader<>(Tag.TAG_INT, i -> IntTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsInt()), () -> IntTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_INT, i -> IntTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> IntTag.valueOf(defaultValue));
     }
 
     public static <I> TagReader<I, LongTag> longTag(Function<I, Long> writer, BiConsumer<I, Long> reader) {
-        return new TagReader<>(Tag.TAG_LONG, i -> LongTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsLong()), null);
+        return new TagReader<>(Tag.TAG_LONG, i -> LongTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, LongTag> longTag(Function<I, Long> writer, BiConsumer<I, Long> reader, long defaultValue) {
-        return new TagReader<>(Tag.TAG_LONG, i -> LongTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsLong()), () -> LongTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_LONG, i -> LongTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> LongTag.valueOf(defaultValue));
     }
 
     public static <I> TagReader<I, FloatTag> floatTag(Function<I, Float> writer, BiConsumer<I, Float> reader) {
-        return new TagReader<>(Tag.TAG_FLOAT, i -> FloatTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsFloat()), null);
+        return new TagReader<>(Tag.TAG_FLOAT, i -> FloatTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, FloatTag> floatTag(Function<I, Float> writer, BiConsumer<I, Float> reader, float defaultValue) {
-        return new TagReader<>(Tag.TAG_FLOAT, i -> FloatTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsFloat()), () -> FloatTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_FLOAT, i -> FloatTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> FloatTag.valueOf(defaultValue));
     }
 
     public static <I> TagReader<I, DoubleTag> doubleTag(Function<I, Double> writer, BiConsumer<I, Double> reader) {
-        return new TagReader<>(Tag.TAG_DOUBLE, i -> DoubleTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsDouble()), null);
+        return new TagReader<>(Tag.TAG_DOUBLE, i -> DoubleTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, DoubleTag> doubleTag(Function<I, Double> writer, BiConsumer<I, Double> reader, double defaultValue) {
-        return new TagReader<>(Tag.TAG_DOUBLE, i -> DoubleTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsDouble()), () -> DoubleTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_DOUBLE, i -> DoubleTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> DoubleTag.valueOf(defaultValue));
     }
 
     public static <I> TagReader<I, StringTag> stringTag(Function<I, String> writer, BiConsumer<I, String> reader) {
-        return new TagReader<>(Tag.TAG_STRING, i -> StringTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsString()), null);
+        return new TagReader<>(Tag.TAG_STRING, i -> StringTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), null);
     }
 
     public static <I> TagReader<I, StringTag> stringTag(Function<I, String> writer, BiConsumer<I, String> reader, String defaultValue) {
-        return new TagReader<>(Tag.TAG_STRING, i -> StringTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.getAsString()), () -> StringTag.valueOf(defaultValue));
+        return new TagReader<>(Tag.TAG_STRING, i -> StringTag.valueOf(writer.apply(i)), (i, t) -> reader.accept(i, t.value()), () -> StringTag.valueOf(defaultValue));
     }
 
     @Override

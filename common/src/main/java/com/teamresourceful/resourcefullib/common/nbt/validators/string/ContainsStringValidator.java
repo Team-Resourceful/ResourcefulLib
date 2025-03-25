@@ -18,6 +18,6 @@ public record ContainsStringValidator(String value) implements StringValidator {
 
     @Override
     public boolean test(StringTag tag) {
-        return tag.getAsString().contains(value);
+        return tag.value().contains(value);
     }
 }

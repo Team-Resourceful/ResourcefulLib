@@ -14,8 +14,10 @@ import java.util.function.Predicate;
 /**
  * Use mixins and extensible enums to create new enum values at runtime.
  */
+@Deprecated
 @ApiStatus.Obsolete
 @SuppressWarnings({"unchecked", "unused"})
+@ApiStatus.ScheduledForRemoval(inVersion = "1.22")
 public class EnumBuilder<T extends Enum<T>> {
 
     private static final Field ENUM_CONSTANTS = UnsafeUtils.getField(Class.class, field -> field.getName().equals("enumConstants"));

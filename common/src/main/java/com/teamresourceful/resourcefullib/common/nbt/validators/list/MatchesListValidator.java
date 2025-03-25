@@ -19,7 +19,7 @@ public record MatchesListValidator(Validator<?> validator) implements ListValida
     }
 
     @Override
-    public boolean test(CollectionTag<?> tag) {
+    public boolean test(CollectionTag tag) {
         if (tag.isEmpty()) return false;
         for (Tag value : tag) {
             if (!validator.testAndValidate(value)) {

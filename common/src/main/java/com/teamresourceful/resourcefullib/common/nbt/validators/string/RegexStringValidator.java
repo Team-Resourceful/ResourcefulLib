@@ -21,6 +21,6 @@ public record RegexStringValidator(Pattern value) implements StringValidator {
 
     @Override
     public boolean test(StringTag tag) {
-        return value.matcher(tag.getAsString()).matches();
+        return value.matcher(tag.value()).matches();
     }
 }

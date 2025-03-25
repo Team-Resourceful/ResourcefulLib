@@ -12,9 +12,7 @@ public final class ItemStackCodec {
 
     private static final Codec<ItemStack> STRING_EITHER = BuiltInRegistries.ITEM.byNameCodec().xmap(ItemStack::new, ItemStack::getItem);
 
-    private static final Codec<ItemStack> STACK_CODEC = ItemStack.CODEC;
-
-    public static final Codec<ItemStack> CODEC = CodecExtras.eitherRight(Codec.either(STRING_EITHER, STACK_CODEC));
+    public static final Codec<ItemStack> CODEC = CodecExtras.eitherRight(Codec.either(STRING_EITHER, ItemStack.CODEC));
 
     private ItemStackCodec() throws UtilityClassException {
         throw new UtilityClassException();

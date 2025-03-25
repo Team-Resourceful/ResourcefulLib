@@ -2,9 +2,10 @@ package com.teamresourceful.resourcefullib.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
+import org.joml.Matrix4fc;
+import org.joml.Quaternionfc;
 
 public class CloseablePoseStack extends PoseStack implements AutoCloseable {
 
@@ -25,6 +26,11 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
     }
 
     @Override
+    public void translate(Vec3 vec3) {
+        stack.translate(vec3);
+    }
+
+    @Override
     public void translate(double d, double e, double f) {
         stack.translate(d, e, f);
     }
@@ -40,13 +46,13 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
     }
 
     @Override
-    public void mulPose(@NotNull Quaternionf quaternion) {
-        stack.mulPose(quaternion);
+    public void mulPose(Quaternionfc quaternionfc) {
+        stack.mulPose(quaternionfc);
     }
 
     @Override
-    public void rotateAround(Quaternionf quaternionf, float f, float g, float h) {
-        stack.rotateAround(quaternionf, f, g, h);
+    public void rotateAround(Quaternionfc quaternionfc, float f, float g, float h) {
+        stack.rotateAround(quaternionfc, f, g, h);
     }
 
     @NotNull
@@ -56,23 +62,23 @@ public class CloseablePoseStack extends PoseStack implements AutoCloseable {
     }
 
     @Override
-    public boolean clear() {
-        return stack.clear();
-    }
-
-    @Override
     public void setIdentity() {
         stack.setIdentity();
     }
 
     @Override
-    public void mulPose(Matrix4f matrix4f) {
-        stack.mulPose(matrix4f);
+    public void mulPose(Matrix4fc matrix4fc) {
+        stack.mulPose(matrix4fc);
     }
 
     @Override
     public void close() {
         stack.popPose();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return stack.isEmpty();
     }
 
     @Override

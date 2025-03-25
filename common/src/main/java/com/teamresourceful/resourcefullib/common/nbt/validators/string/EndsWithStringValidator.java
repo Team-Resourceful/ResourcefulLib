@@ -18,6 +18,6 @@ public record EndsWithStringValidator(String value) implements StringValidator {
 
     @Override
     public boolean test(StringTag tag) {
-        return tag.getAsString().endsWith(value);
+        return tag.value().endsWith(value);
     }
 }

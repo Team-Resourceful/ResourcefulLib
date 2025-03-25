@@ -46,14 +46,14 @@ public record NbtPredicate(CompoundTag tag) {
         } else if (tag2 == null)  {
             return false;
         } else if (tag instanceof NumericTag num1 && tag2 instanceof NumericTag num2) {
-            BigDecimal bigDecimal = new BigDecimal(num1.getAsNumber().toString());
-            BigDecimal bigDecimal2 = new BigDecimal(num2.getAsNumber().toString());
+            BigDecimal bigDecimal = new BigDecimal(num1.box().toString());
+            BigDecimal bigDecimal2 = new BigDecimal(num2.box().toString());
             return bigDecimal.compareTo(bigDecimal2) == 0;
         } else if (!tag.getClass().equals(tag2.getClass())) {
             return false;
         } else if (tag instanceof CompoundTag compound) {
             CompoundTag compound2 = (CompoundTag) tag2;
-            for (String key : compound.getAllKeys()) {
+            for (String key : compound.keySet()) {
                 if (!compareNbt(compound.get(key), compound2.get(key))) {
                     return false;
                 }
@@ -92,7 +92,7 @@ public record NbtPredicate(CompoundTag tag) {
     private static CompoundTag getEntityTagToCompare(Entity entity) {
         CompoundTag compoundtag = entity.saveWithoutId(new CompoundTag());
         if (entity instanceof Player player) {
-            ItemStack itemstack = player.getInventory().getSelected();
+            ItemStack itemstack = player.getInventory().getSelectedItem();
             if (!itemstack.isEmpty()) {
                 compoundtag.put("SelectedItem", itemstack.save(entity.level().registryAccess()));
             }

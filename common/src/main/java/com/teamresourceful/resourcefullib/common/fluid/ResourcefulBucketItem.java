@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.Level;
@@ -35,9 +36,9 @@ public class ResourcefulBucketItem extends BucketItem {
     }
 
     @Override
-    protected void playEmptySound(@Nullable Player player, LevelAccessor level, BlockPos pos) {
+    protected void playEmptySound(@Nullable LivingEntity entity, LevelAccessor level, BlockPos pos) {
         SoundEvent event = this.data.properties().sounds().getOrDefault(FluidSounds.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY);
-        level.playSound(player, pos, event, SoundSource.BLOCKS, 1.0F, 1.0F);
-        level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
+        level.playSound(entity, pos, event, SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.gameEvent(entity, GameEvent.FLUID_PLACE, pos);
     }
 }

@@ -22,33 +22,39 @@ public record BetweenNumericValidator(Optional<Number> min, Optional<Number> max
 
     @Override
     public boolean test(NumericTag tag) {
-        if (tag instanceof ByteTag byteTag) {
-            byte min = this.min.map(Number::byteValue).orElse(Byte.MIN_VALUE);
-            byte max = this.max.map(Number::byteValue).orElse(Byte.MAX_VALUE);
-            return byteTag.getAsByte() >= min && byteTag.getAsByte() <= max;
-        } else if (tag instanceof ShortTag shortTag) {
-            short min = this.min.map(Number::shortValue).orElse(Short.MIN_VALUE);
-            short max = this.max.map(Number::shortValue).orElse(Short.MAX_VALUE);
-            return shortTag.getAsShort() >= min && shortTag.getAsShort() <= max;
-        } else if (tag instanceof IntTag intTag) {
-            int min = this.min.map(Number::intValue).orElse(Integer.MIN_VALUE);
-            int max = this.max.map(Number::intValue).orElse(Integer.MAX_VALUE);
-            return intTag.getAsInt() >= min && intTag.getAsInt() <= max;
-        } else if (tag instanceof LongTag longTag) {
-            long min = this.min.map(Number::longValue).orElse(Long.MIN_VALUE);
-            long max = this.max.map(Number::longValue).orElse(Long.MAX_VALUE);
-            return longTag.getAsLong() >= min && longTag.getAsLong() <= max;
-        } else if (tag instanceof FloatTag floatTag) {
-            float min = this.min.map(Number::floatValue).orElse(Float.MIN_VALUE);
-            float max = this.max.map(Number::floatValue).orElse(Float.MAX_VALUE);
-            return floatTag.getAsFloat() >= min && floatTag.getAsFloat() <= max;
-        } else if (tag instanceof DoubleTag doubleTag) {
-            double min = this.min.map(Number::doubleValue).orElse(Double.MIN_VALUE);
-            double max = this.max.map(Number::doubleValue).orElse(Double.MAX_VALUE);
-            return doubleTag.getAsDouble() >= min && doubleTag.getAsDouble() <= max;
-        } else {
+        return switch (tag) {
+            case ByteTag byteTag -> {
+                byte min = this.min.map(Number::byteValue).orElse(Byte.MIN_VALUE);
+                byte max = this.max.map(Number::byteValue).orElse(Byte.MAX_VALUE);
+                yield byteTag.value() >= min && byteTag.value() <= max;
+            }
+            case ShortTag shortTag -> {
+                short min = this.min.map(Number::shortValue).orElse(Short.MIN_VALUE);
+                short max = this.max.map(Number::shortValue).orElse(Short.MAX_VALUE);
+                yield shortTag.value() >= min && shortTag.value() <= max;
+            }
+            case IntTag intTag -> {
+                int min = this.min.map(Number::intValue).orElse(Integer.MIN_VALUE);
+                int max = this.max.map(Number::intValue).orElse(Integer.MAX_VALUE);
+                yield intTag.value() >= min && intTag.value() <= max;
+            }
+            case LongTag longTag -> {
+                long min = this.min.map(Number::longValue).orElse(Long.MIN_VALUE);
+                long max = this.max.map(Number::longValue).orElse(Long.MAX_VALUE);
+                yield longTag.value() >= min && longTag.value() <= max;
+            }
+            case FloatTag floatTag -> {
+                float min = this.min.map(Number::floatValue).orElse(Float.MIN_VALUE);
+                float max = this.max.map(Number::floatValue).orElse(Float.MAX_VALUE);
+                yield floatTag.value() >= min && floatTag.value() <= max;
+            }
+            case DoubleTag doubleTag -> {
+                double min = this.min.map(Number::doubleValue).orElse(Double.MIN_VALUE);
+                double max = this.max.map(Number::doubleValue).orElse(Double.MAX_VALUE);
+                yield doubleTag.value() >= min && doubleTag.value() <= max;
+            }
             // Should never happen unless someone makes a custom tag that extends NumericTag
-            return false;
-        }
+            case null, default -> false;
+        };
     }
 }

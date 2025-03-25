@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefullib.client.highlights.state;
 
+import com.mojang.math.Quadrant;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
@@ -20,8 +21,8 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
     private static final Vector3f CENTER = new Vector3f(0.5f, 0, 0.5f);
 
     public static final Codec<BlockModelRotation> ROTATION_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.INT.fieldOf("x").orElse(0).forGetter(ignored -> 0),
-            Codec.INT.fieldOf("y").orElse(0).forGetter(ignored -> 0)
+            Quadrant.CODEC.fieldOf("x").orElse(Quadrant.R0).forGetter(ignored -> Quadrant.R0),
+            Quadrant.CODEC.fieldOf("y").orElse(Quadrant.R0).forGetter(ignored -> Quadrant.R0)
     ).apply(instance, BlockModelRotation::by));
 
     public static final Codec<Highlight> TRANSLATED_BOX_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -47,8 +48,8 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
             line.start().sub(CENTER);
             line.end().sub(CENTER);
 
-            line.start().rotate(rotation.getRotation().getLeftRotation());
-            line.end().rotate(rotation.getRotation().getLeftRotation());
+            line.start().rotate(rotation.transformation().getLeftRotation());
+            line.end().rotate(rotation.transformation().getLeftRotation());
 
             line.start().add(CENTER);
             line.end().add(CENTER);

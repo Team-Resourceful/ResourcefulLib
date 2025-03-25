@@ -18,6 +18,6 @@ public record StartsWithStringValidator(String value) implements StringValidator
 
     @Override
     public boolean test(StringTag tag) {
-        return tag.getAsString().startsWith(value);
+        return tag.value().startsWith(value);
     }
 }
