@@ -35,10 +35,27 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
         }
 
         public void render(PoseStack poseStack, VertexConsumer consumer, float x, float y, float z) {
-            PoseStack.Pose last = poseStack.last();
+            render(
+                    poseStack, consumer,
+                    0f, 0f, 0f, 0.4f,
+                    x, y, z,
+                    start.x(), start.y(), start.z(),
+                    end.x(), end.y(), end.z(),
+                    normal.x(), normal.y(), normal.z()
+            );
+        }
 
-            consumer.vertex(last.pose(), x+start.x(), y+start.y(), z+start.z()).color(0f, 0f, 0f, 0.4f).normal(last.normal(), normal.x(), normal.y(), normal.z()).endVertex();
-            consumer.vertex(last.pose(), x+end.x(), y+end.y(), z+end.z()).color(0f, 0f, 0f, 0.4f).normal(last.normal(), normal.x(), normal.y(), normal.z()).endVertex();
+        public static void render(
+            PoseStack stack, VertexConsumer consumer,
+            float r, float g, float b, float a,
+            float x, float y, float z,
+            float x1, float y1, float z1,
+            float x2, float y2, float z2,
+            float normalX, float normalY, float normalZ
+        ) {
+            PoseStack.Pose last = stack.last();
+            consumer.vertex(last.pose(), x + x1, y + y1, z + z1).color(r, g, b, a).normal(last.normal(), normalX, normalY, normalZ).endVertex();
+            consumer.vertex(last.pose(), x + x2, y + y2, z + z2).color(r, g, b, a).normal(last.normal(), normalX, normalY, normalZ).endVertex();
         }
 
         private static Vector3f normal(Vector3f start, Vector3f end) {
