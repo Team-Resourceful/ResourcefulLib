@@ -1,9 +1,9 @@
 [versions]
 
 # Minecraft
-minecraft = "1.21.5"
-fabric-api = "0.119.5"
-neoforge = "21.5.0-beta"
+minecraft = "1.21.6-pre2"
+fabric-api = "0.125.3"
+neoforge = "21.6.0-beta"
 
 # Libraries
 yabn = "1.0.3"
@@ -16,6 +16,8 @@ resourceful-loom = "1.0.4"
 
 yabn = { module = "com.teamresourceful:yabn", version.ref = "yabn" }
 bytecodecs = { module = "com.teamresourceful:bytecodecs", version.ref = "bytecodecs" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version = "0.125.3+1.21.6" }
+# TODO remove the above when actual release as gradle toolkit auto does it
 
 [plugins]
 

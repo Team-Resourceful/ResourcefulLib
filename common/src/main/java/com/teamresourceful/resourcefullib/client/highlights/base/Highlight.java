@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
@@ -32,17 +31,19 @@ public record Highlight(ResourceLocation id, List<HighlightLine> lines) {
         return new Highlight(null, this.lines.stream().map(HighlightLine::copy).toList());
     }
 
-    public void render(VertexConsumer consumer, PoseStack poseStack, Vec3 cameraPos, Vec3 offset, BlockPos blockPos) {
-        try (var ignored = new CloseablePoseStack(poseStack)) {
-            float x = (float) (blockPos.getX() - cameraPos.x());
-            float y = (float) (blockPos.getY() - cameraPos.y());
-            float z = (float) (blockPos.getZ() - cameraPos.z());
-            x += (float) offset.x();
-            y += (float) offset.y();
-            z += (float) offset.z();
+    public void render(VertexConsumer consumer, PoseStack stack, Vec3 cameraPos, Vec3 offset, BlockPos blockPos) {
+        stack.pushPose();
+        float x = (float) (blockPos.getX() - cameraPos.x());
+        float y = (float) (blockPos.getY() - cameraPos.y());
+        float z = (float) (blockPos.getZ() - cameraPos.z());
+        x += (float) offset.x();
+        y += (float) offset.y();
+        z += (float) offset.z();
 
-            for (HighlightLine line : lines) line.render(poseStack, consumer, x, y, z);
+        for (HighlightLine line : lines) {
+            line.render(stack, consumer, x, y, z);
         }
+        stack.popPose();
     }
 
 }

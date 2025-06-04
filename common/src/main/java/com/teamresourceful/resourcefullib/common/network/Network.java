@@ -33,19 +33,6 @@ public class Network implements Networking {
         this.optional = optional;
     }
 
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "22.0")
-    public Network(String modid, int protocolVersion, String channel) {
-        this(modid, protocolVersion, channel, false);
-    }
-
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "22.0")
-    public Network(String modid, int protocolVersion, String channel, boolean optional) {
-        this.networking = getNetwork(ResourceLocation.fromNamespaceAndPath(modid, channel), protocolVersion, optional);
-        this.optional = optional;
-    }
-
     @Override
     public final <T extends Packet<T>> void register(ClientboundPacketType<T> type) {
         this.networking.register(type);

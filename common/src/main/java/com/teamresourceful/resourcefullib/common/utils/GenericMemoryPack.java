@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefullib.common.utils;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +11,6 @@ import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,12 +29,6 @@ public abstract class GenericMemoryPack implements PackResources {
     private final PackType allowedType;
     private final String id;
     private final PackLocationInfo info;
-
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
-    protected GenericMemoryPack(PackType type, String id, JsonObject meta) {
-        this(type, id, PackMetadataSection.CODEC.parse(JsonOps.INSTANCE, meta).getOrThrow());
-    }
 
     protected GenericMemoryPack(PackType type, String id, PackMetadataSection meta) {
         this.metaData = meta;

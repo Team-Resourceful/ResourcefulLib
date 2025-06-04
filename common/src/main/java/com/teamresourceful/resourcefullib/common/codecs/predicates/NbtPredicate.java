@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.*;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,7 @@ public record NbtPredicate(CompoundTag tag) {
 
     public boolean matches(Entity pEntity) {
         if (this == ANY || isEmpty(this.tag)) return true;
-        return this.matches(getEntityTagToCompare(pEntity));
+        return this.matches(net.minecraft.advancements.critereon.NbtPredicate.getEntityTagToCompare(pEntity));
     }
 
     public boolean matches(@Nullable Tag tag) {
@@ -88,17 +87,6 @@ public record NbtPredicate(CompoundTag tag) {
 
     public static boolean isEmpty(Tag tag) {
         return tag == null || (tag instanceof CompoundTag compoundTag && compoundTag.isEmpty()) || (tag instanceof ListTag list && list.isEmpty());
-    }
-    private static CompoundTag getEntityTagToCompare(Entity entity) {
-        CompoundTag compoundtag = entity.saveWithoutId(new CompoundTag());
-        if (entity instanceof Player player) {
-            ItemStack itemstack = player.getInventory().getSelectedItem();
-            if (!itemstack.isEmpty()) {
-                compoundtag.put("SelectedItem", itemstack.save(entity.level().registryAccess()));
-            }
-        }
-
-        return compoundtag;
     }
 
 }

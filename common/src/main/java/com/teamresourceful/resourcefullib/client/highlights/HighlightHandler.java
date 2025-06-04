@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.highlights.base.Highlight;
 import com.teamresourceful.resourcefullib.client.highlights.base.HighlightLine;
 import com.teamresourceful.resourcefullib.client.highlights.base.Highlightable;
@@ -36,7 +35,7 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonEleme
     public static final Codec<Highlight> HIGHLIGHT_CODEC = ResourceLocation.CODEC.xmap(HighlightHandler::getOrThrow, Highlight::id);
 
     public HighlightHandler() {
-        super(ExtraCodecs.JSON,  FileToIdConverter.json("resourcefullib/highlights"));
+        super(ExtraCodecs.JSON, FileToIdConverter.json("resourcefullib/highlights"));
     }
 
     @Override
@@ -90,28 +89,28 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonEleme
         }
         if (STATE_CACHE.containsKey(state)) {
             Vec3 offset = state.getOffset(blockPos);
-            try (var ignored = new CloseablePoseStack(stack)) {
-                float x = (float) (blockPos.getX() - cameraPos.x());
-                float y = (float) (blockPos.getY() - cameraPos.y());
-                float z = (float) (blockPos.getZ() - cameraPos.z());
-                x += (float) offset.x();
-                y += (float) offset.y();
-                z += (float) offset.z();
+            stack.pushPose();
+            float x = (float) (blockPos.getX() - cameraPos.x());
+            float y = (float) (blockPos.getY() - cameraPos.y());
+            float z = (float) (blockPos.getZ() - cameraPos.z());
+            x += (float) offset.x();
+            y += (float) offset.y();
+            z += (float) offset.z();
 
-                float[] lines = STATE_CACHE.get(state);
-                if (lines.length % 9 != 0) return false;
+            float[] lines = STATE_CACHE.get(state);
+            if (lines.length % 9 != 0) return false;
 
-                for (int i = 0; i < lines.length; i += 9) {
-                    HighlightLine.render(
-                            stack, consumer,
-                            color,
-                            x, y, z,
-                            lines[i], lines[i + 1], lines[i + 2],
-                            lines[i + 3], lines[i + 4], lines[i + 5],
-                            lines[i + 6], lines[i + 7], lines[i + 8]
-                    );
-                }
+            for (int i = 0; i < lines.length; i += 9) {
+                HighlightLine.render(
+                        stack, consumer,
+                        color,
+                        x, y, z,
+                        lines[i], lines[i + 1], lines[i + 2],
+                        lines[i + 3], lines[i + 4], lines[i + 5],
+                        lines[i + 6], lines[i + 7], lines[i + 8]
+                );
             }
+            stack.popPose();
 
             return true;
         }

@@ -68,7 +68,7 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
     public void accept(SystemInfoBuilder builder) {
         Minecraft mc = Minecraft.getInstance();
 
-        builder.append("Minecraft Version", SharedConstants.getCurrentVersion().getName());
+        builder.append("Minecraft Version", SharedConstants.getCurrentVersion().name());
         builder.append("Client Brand", ClientBrandRetriever.getClientModName());
         builder.append("Language", mc.getLanguageManager().getSelected());
         tryAppendingFabric(builder);
