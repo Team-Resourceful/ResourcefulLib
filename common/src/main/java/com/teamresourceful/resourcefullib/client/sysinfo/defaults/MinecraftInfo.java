@@ -64,6 +64,26 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
         return sum / values.length;
     }
 
+    private static String getPing(Minecraft mc) {
+        var logger = mc.getDebugOverlay().getPingLogger();
+        long min = Long.MAX_VALUE;
+        long max = Long.MIN_VALUE;
+        long sum = 0L;
+
+        for (int i = 0; i < logger.capacity(); i++) {
+            long sample = logger.get(i);
+            min = Math.min(min, sample);
+            max = Math.max(max, sample);
+            sum += sample;
+        }
+
+        return "%.2f avg ms / %d min ms / %d max ms".formatted(
+                sum / (double) logger.capacity(),
+                min,
+                max
+        );
+    }
+
     @Override
     public void accept(SystemInfoBuilder builder) {
         Minecraft mc = Minecraft.getInstance();
@@ -81,7 +101,7 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
                 "N/A"
         ));
         builder.append("Ping", Optionull.mapOrDefault(mc.getConnection(),
-                connection -> Optionull.mapOrDefault(connection.getServerData(), data -> String.valueOf(data.ping), "No Server Data"),
+                $ -> getPing(mc),
                 "N/A"
         ));
         builder.append("Connection", mc.isSingleplayer() ? "Singleplayer" : mc.isLocalServer() ? "Singleplayer Lan" : "Multiplayer");
