@@ -37,7 +37,7 @@ public final class SystemInfo {
             builder.append("# ").append(infoBuilder.category()).append("\n");
             for (var info : infoBuilder.info()) {
                 builder.append("[").append(info.getFirst()).append("]")
-                    .append("[").append(info.getSecond()).append("]")
+                    .append("[").append(info.getSecond().trim()).append("]")
                     .append("\n");
             }
             builder.append("\n");
