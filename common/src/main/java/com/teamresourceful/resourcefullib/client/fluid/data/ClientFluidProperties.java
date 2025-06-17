@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.FogType;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -70,7 +69,7 @@ public interface ClientFluidProperties {
         return fluidFogColor;
     }
 
-    default FogData modifyFogRender(Camera camera, FogType type, float renderDistance, float partialTick, FogData data) {
+    default FogData modifyFogRender(Camera camera, float renderDistance, float partialTick, FogData data) {
         return data;
     }
 

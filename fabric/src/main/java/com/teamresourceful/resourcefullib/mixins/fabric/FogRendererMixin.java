@@ -28,8 +28,7 @@ public class FogRendererMixin {
             ClientLevel level,
             CallbackInfoReturnable<Vector4f> cir,
 
-            @Local LocalRef<FogData> data,
-            @Local FogType type
+            @Local LocalRef<FogData> data
     ) {
         FluidState state = level.getFluidState(camera.getBlockPosition());
         double fluidY = camera.getBlockPosition().getY() + state.getHeight(level, camera.getBlockPosition());
@@ -39,7 +38,6 @@ public class FogRendererMixin {
         if (properties == null) return;
         data.set(properties.modifyFogRender(
                 camera,
-                type,
                 renderDistance,
                 deltaTracker.getGameTimeDeltaPartialTick(false),
                 data.get()

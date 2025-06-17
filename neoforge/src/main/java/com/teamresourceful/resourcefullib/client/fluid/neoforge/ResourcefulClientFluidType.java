@@ -6,9 +6,9 @@ import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidPropertie
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogParameters;
-import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -102,8 +102,14 @@ public record ResourcefulClientFluidType(ClientFluidProperties properties) imple
     }
 
     @Override
-    public @NotNull FogParameters modifyFogRender(@NotNull Camera camera, FogRenderer.@NotNull FogMode mode, float renderDistance, float partialTick, @NotNull FogParameters parameters) {
-        return properties().modifyFogRender(camera, mode, renderDistance, partialTick, parameters);
+    public void modifyFogRender(@NotNull Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, @NotNull FogData data) {
+        var newData = properties().modifyFogRender(camera, renderDistance, partialTick, data);
+        data.environmentalStart = newData.environmentalStart;
+        data.renderDistanceStart = newData.renderDistanceStart;
+        data.environmentalEnd = newData.environmentalEnd;
+        data.renderDistanceEnd = newData.renderDistanceEnd;
+        data.skyEnd = newData.skyEnd;
+        data.cloudEnd = newData.cloudEnd;
     }
 
 }
