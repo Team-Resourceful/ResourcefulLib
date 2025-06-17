@@ -8,12 +8,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 public class HiddenGenericMemoryPack extends GenericMemoryPack {
 
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
-    protected HiddenGenericMemoryPack(PackType type, String id, JsonObject meta) {
-        super(type, id, meta);
-    }
-
     protected HiddenGenericMemoryPack(PackType type, String id, PackMetadataSection meta) {
         super(type, id, meta);
     }

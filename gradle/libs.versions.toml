@@ -1,9 +1,9 @@
 [versions]
 
 # Minecraft
-minecraft = "1.21.5"
-fabric-api = "0.119.5"
-neoforge = "21.5.0-beta"
+minecraft = "1.21.6"
+fabric-api = "0.127.0"
+neoforge = "21.6.0-beta"
 
 # Libraries
 yabn = "1.0.3"

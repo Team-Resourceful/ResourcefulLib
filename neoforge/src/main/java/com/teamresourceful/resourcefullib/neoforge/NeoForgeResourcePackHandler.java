@@ -99,7 +99,7 @@ public final class NeoForgeResourcePackHandler {
 
     private static Pack.Metadata getInfo(PackLocationInfo locationInfo, Pack.ResourcesSupplier supplier, PackType type, boolean hidden) {
         if (!hidden) {
-            Pack.Metadata info = Pack.readPackMetadata(locationInfo, supplier, SharedConstants.getCurrentVersion().getPackVersion(type));
+            Pack.Metadata info = Pack.readPackMetadata(locationInfo, supplier, SharedConstants.getCurrentVersion().packVersion(type));
             if (info != null) {
                 return info;
             }

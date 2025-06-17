@@ -7,7 +7,10 @@ import com.mojang.datafixers.util.Function6;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -66,8 +69,8 @@ public interface ClientFluidProperties {
         return fluidFogColor;
     }
 
-    default FogParameters modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, FogParameters parameters) {
-        return parameters;
+    default FogData modifyFogRender(Camera camera, float renderDistance, float partialTick, FogData data) {
+        return data;
     }
 
     static ClientFluidProperties.Builder builder() {

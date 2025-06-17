@@ -1,17 +1,16 @@
 package com.teamresourceful.resourcefullib.client.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
-import com.teamresourceful.resourcefullib.client.scissor.ClosingScissorBox;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = ">1.21.6")
 public final class RenderUtils {
 
     private RenderUtils() throws UtilityClassException {
@@ -35,33 +34,5 @@ public final class RenderUtils {
     public static Vector2ic getTranslation(PoseStack stack) {
         Matrix4f pose = stack.last().pose();
         return new Vector2i((int) pose.m30(), (int) pose.m31());
-    }
-
-    /**
-     * Returns a scissor box using the stack's translation and the given bounds.
-     * <br>
-     * You likely want to use {@link #createScissor(Minecraft, GuiGraphics, int, int, int, int)} instead.
-     */
-    public static ClosingScissorBox createScissorBox(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
-        Rect2i bound = getScissorRect(minecraft, stack, x, y, width, height);
-        return new ClosingScissorBox(bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight());
-    }
-
-    /**
-     * Returns a scissor box stack using the stack's translation and the given bounds.
-     * <br>
-     * You likely want to use {@link #createScissor(Minecraft, GuiGraphics, int, int, int, int)} instead.
-     */
-    public static CloseableScissorStack createScissorBoxStack(ScissorBoxStack scissorStack, Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
-        Rect2i bound = getScissorRect(minecraft, stack, x, y, width, height);
-        return new CloseableScissorStack(scissorStack, bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight());
-    }
-
-    /**
-     * Returns a scissor box stack using the stack's translation and the given bounds.
-     */
-    public static CloseableScissorStack createScissor(Minecraft minecraft, GuiGraphics graphics, int x, int y, int width, int height) {
-        Rect2i bound = getScissorRect(minecraft, graphics.pose(), x, y, width, height);
-        return new CloseableScissorStack(new ScissorBoxStack(), bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight());
     }
 }
