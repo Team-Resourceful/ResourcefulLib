@@ -30,8 +30,8 @@ public class LevelRendererMixin {
     @WrapOperation(
             method = "extractBlockOutline",
             at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/state/BlockOutlineRenderState;<init>(Lnet/minecraft/core/BlockPos;ZZLnet/minecraft/world/phys/shapes/VoxelShape;)V"
+                    value = "NEW",
+                    target = "(Lnet/minecraft/core/BlockPos;ZZLnet/minecraft/world/phys/shapes/VoxelShape;)Lnet/minecraft/client/renderer/state/BlockOutlineRenderState;"
             )
     )
     private BlockOutlineRenderState resourcefullib$extractBlockOutline(BlockPos pos, boolean b1, boolean b2, VoxelShape shape, Operation<BlockOutlineRenderState> original, @Local(ordinal = 0) BlockState state) {
