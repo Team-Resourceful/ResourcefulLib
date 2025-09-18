@@ -66,11 +66,15 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
 
     private static String getPing(Minecraft mc) {
         var logger = mc.getDebugOverlay().getPingLogger();
+        if (logger.size() == 0) {
+            return "N/A";
+        }
+
         long min = Long.MAX_VALUE;
         long max = Long.MIN_VALUE;
         long sum = 0L;
 
-        for (int i = 0; i < logger.capacity(); i++) {
+        for (int i = 0; i < logger.size(); i++) {
             long sample = logger.get(i);
             min = Math.min(min, sample);
             max = Math.max(max, sample);
@@ -78,7 +82,7 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
         }
 
         return "%.2f avg ms / %d min ms / %d max ms".formatted(
-                sum / (double) logger.capacity(),
+                sum / (double) logger.size(),
                 min,
                 max
         );
