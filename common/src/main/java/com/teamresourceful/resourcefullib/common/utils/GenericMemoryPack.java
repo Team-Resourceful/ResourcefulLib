@@ -83,7 +83,7 @@ public abstract class GenericMemoryPack implements PackResources {
 
     @Override
     public @Nullable <T> T getMetadataSection(MetadataSectionType<T> type) {
-        if (type.equals(PackMetadataSection.TYPE)) {
+        if (type.equals(PackMetadataSection.forPackType(this.allowedType))) {
             return (T) this.metaData;
         }
         return null;

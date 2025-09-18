@@ -6,6 +6,15 @@
     "injectors": {
         "defaultRequire": 1
     },
-    "client": [ "FogRendererMixin", "MixinLevelRenderer", "ScreenEffectRendererMixin" ],
-    "mixins": [ "DedicatedServerMixin", "EntityMixin", "MinecraftServerMixin" ]
+    "client": [
+        "FogRendererMixin",
+        "LevelRendererMixin",
+        "ScreenEffectRendererMixin"
+    ],
+    "mixins": [
+        "BlockOutlineRenderStateMixin",
+        "DedicatedServerMixin",
+        "EntityMixin",
+        "MinecraftServerMixin"
+    ]
 }

@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefullib.client.screens;
 
+import com.mojang.blaze3d.platform.cursor.CursorType;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
@@ -10,36 +13,34 @@ import java.util.List;
 
 public interface CursorScreen {
 
-    void setCursor(Cursor cursor);
-
-
-    default void setCursor(List<? extends GuiEventListener> listeners, double mouseX, double mouseY) {
+    default void applyCursor(GuiGraphics graphics, List<? extends GuiEventListener> listeners, double mouseX, double mouseY) {
         for (GuiEventListener child : listeners) {
-            boolean hovered = child.isMouseOver(mouseX, mouseY);
-            if (child instanceof CursorWidget widget && hovered) {
-                setCursor(widget.getCursor());
-                break;
-            } else if (child instanceof AbstractWidget widget && hovered && widget.visible) {
-                if (widget.active) {
-                    setCursor(widget instanceof EditBox || widget instanceof MultiLineEditBox ? Cursor.TEXT : Cursor.POINTER);
-                } else {
-                    setCursor(Cursor.DISABLED);
-                }
+            if (child instanceof CursorWidget widget && child.isMouseOver(mouseX, mouseY)) {
+                widget.getCursor().apply(graphics);
                 break;
             }
         }
     }
 
     enum Cursor {
-        DEFAULT,
-        POINTER,
-        DISABLED,
-        TEXT,
-        CROSSHAIR,
-        RESIZE_EW,
-        RESIZE_NS,
-        RESIZE_NWSE,
-        RESIZE_NESW,
-        RESIZE_ALL
+        DEFAULT(CursorType.DEFAULT),
+        POINTER(CursorTypes.POINTING_HAND),
+        DISABLED(CursorTypes.NOT_ALLOWED),
+        TEXT(CursorTypes.IBEAM),
+        CROSSHAIR(CursorTypes.CROSSHAIR),
+        RESIZE_EW(CursorTypes.RESIZE_EW),
+        RESIZE_NS(CursorTypes.RESIZE_NS),
+        RESIZE_ALL(CursorTypes.RESIZE_ALL),
+        ;
+
+        private final CursorType type;
+
+        Cursor(CursorType type) {
+            this.type = type;
+        }
+
+        public void apply(GuiGraphics graphics) {
+            graphics.requestCursor(this.type);
+        }
     }
 }
