@@ -12,11 +12,10 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
-import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -36,17 +35,19 @@ public class ResourcefulLibNeoForgeClient {
         event.addListener(ResourceLocation.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"), new HighlightHandler());
     }
 
-    public static void onHighlight(RenderHighlightEvent.Block event) {
-        BlockState state = event.getCamera().getEntity().level().getBlockState(event.getTarget().getBlockPos());
-        int color = Minecraft.getInstance().options.highContrastBlockOutline().get() ? 0xff57ffe1 : ARGB.color(102, 0xff000000);
-        event.setCanceled(HighlightHandler.onBlockHighlight(
+    public static void onHighlight(ExtractBlockOutlineRenderStateEvent event) {
+        final var pos = event.getBlockPos();
+        final var state = HighlightHandler.extractState(event.getLevel(), pos, event.getBlockState());
+
+        if (state == null) return;
+
+        event.addCustomRenderer((outlineState, buffer, stack, pass, levelState) -> HighlightHandler.onBlockHighlight(
                 event.getCamera().getPosition(),
-                event.getCamera().getEntity(),
-                event.getPoseStack(),
-                event.getTarget().getBlockPos(),
+                stack,
+                pos,
                 state,
-                event.getMultiBufferSource().getBuffer(RenderType.lines()),
-                color
+                buffer.getBuffer(RenderType.lines()),
+                outlineState.highContrast() ? 0xff57ffe1 : ARGB.color(102, 0xff000000)
         ));
     }
 

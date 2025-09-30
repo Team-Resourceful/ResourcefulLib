@@ -1,22 +1,21 @@
 [versions]
 
 # Minecraft
-minecraft = "1.21.9-pre1"
-fabric-api = "0.129.0"
-neoforge = "21.6.0-beta"
+minecraft = "1.21.9"
+fabric-api = "0.133.14"
+neoforge = "21.9.0-beta"
 
 # Libraries
 yabn = "1.0.3"
 bytecodecs = "1.1.3"
 
 # Plugins
-resourceful-loom = "1.0.5"
+resourceful-loom = "1.0.6"
 
 [libraries]
 
 yabn = { module = "com.teamresourceful:yabn", version.ref = "yabn" }
 bytecodecs = { module = "com.teamresourceful:bytecodecs", version.ref = "bytecodecs" }
-fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version = "0.133.7+1.21.9" }
 
 [plugins]
 
