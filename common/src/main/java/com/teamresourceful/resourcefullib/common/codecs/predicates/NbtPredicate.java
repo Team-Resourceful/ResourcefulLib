@@ -17,8 +17,7 @@ public record NbtPredicate(CompoundTag tag) {
 
     public boolean matches(ItemStack stack) {
         if (this == ANY || isEmpty(this.tag)) return true;
-        //noinspection deprecation
-        return this.matches(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).getUnsafe());
+        return this.matches(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
     }
 
     public boolean matches(Entity pEntity) {

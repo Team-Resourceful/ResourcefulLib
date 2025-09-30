@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
@@ -26,7 +27,7 @@ public class ScreenEffectRendererMixin {
     @Shadow @Final private MultiBufferSource bufferSource;
 
     @Inject(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z", shift = At.Shift.BEFORE))
-    private void rlib_renderScreenEffect(boolean bl, float f, CallbackInfo ci, @Local PoseStack stack) {
+    private void rlib_renderScreenEffect(boolean bl, float f, SubmitNodeCollector submitNodeCollector, CallbackInfo ci, @Local PoseStack stack) {
         Player player = this.minecraft.player;
         if (player instanceof EntityFluidEyesHook hook && hook.rlib$getEyesFluid() != null && hook.rlib$getEyesFluid().getType() instanceof ResourcefulFlowingFluid fluid) {
             ResourceLocation id = fluid.getData().id();

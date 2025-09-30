@@ -19,10 +19,11 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,26 +80,31 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonEleme
         BOX_CACHE.clear();
     }
 
-    public static boolean onBlockHighlight(Vec3 cameraPos, Entity cameraEntity, PoseStack stack, BlockPos blockPos, BlockState state, VertexConsumer consumer, int color) {
+    public static @Nullable HighlightRenderState extractState(Level level, BlockPos pos, BlockState state) {
         if (state.getBlock() instanceof Highlightable highlightable) {
-            var highlight = highlightable.getHighlight(cameraEntity.level(), blockPos, state);
+            var highlight = highlightable.getHighlight(level, pos, state);
             if (highlight != null) {
-                highlight.render(consumer, stack, cameraPos, state.getOffset(blockPos), blockPos);
-                return true;
+                return new HighlightRenderState.Dynamic(highlight, state.getOffset(pos));
             }
         }
         if (STATE_CACHE.containsKey(state)) {
-            Vec3 offset = state.getOffset(blockPos);
+            return new HighlightRenderState.Cached(STATE_CACHE.get(state), state.getOffset(pos));
+        }
+        return null;
+    }
+
+    public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color) {
+        if (state instanceof HighlightRenderState.Dynamic(var highlight, var offset)) {
+            highlight.render(consumer, stack, cameraPos, offset, pos);
+            return true;
+        } else if (state instanceof HighlightRenderState.Cached(var lines, var offset) && lines.length % 9 == 0) {
             stack.pushPose();
-            float x = (float) (blockPos.getX() - cameraPos.x());
-            float y = (float) (blockPos.getY() - cameraPos.y());
-            float z = (float) (blockPos.getZ() - cameraPos.z());
+            float x = (float) (pos.getX() - cameraPos.x());
+            float y = (float) (pos.getY() - cameraPos.y());
+            float z = (float) (pos.getZ() - cameraPos.z());
             x += (float) offset.x();
             y += (float) offset.y();
             z += (float) offset.z();
-
-            float[] lines = STATE_CACHE.get(state);
-            if (lines.length % 9 != 0) return false;
 
             for (int i = 0; i < lines.length; i += 9) {
                 HighlightLine.render(

@@ -71,7 +71,9 @@ public final class NeoForgeResourcePackHandler {
         for (ResourcePack resourcePack : RESOURCE_PACKS) {
             try {
                 Path path = resourcePack.mod().getOwningFile()
-                    .getFile().findResource("resourcepacks/" + resourcePack.name());
+                        .getFile()
+                        .getFilePath()
+                        .resolve("resourcepacks/" + resourcePack.name());
 
                 if (!Files.isDirectory(path.resolve(event.getPackType().getDirectory()))) continue;
 
@@ -92,14 +94,14 @@ public final class NeoForgeResourcePackHandler {
 
                 event.addRepositorySource((source) -> source.accept(pack));
             } catch (Exception ignored) {
-                Constants.LOGGER.error("Resourceful Lib failed to init resource pack for mod: " + resourcePack.mod().getDisplayName());
+                Constants.LOGGER.error("Resourceful Lib failed to init resource pack for mod: {}", resourcePack.mod().getDisplayName());
             }
         }
     }
 
     private static Pack.Metadata getInfo(PackLocationInfo locationInfo, Pack.ResourcesSupplier supplier, PackType type, boolean hidden) {
         if (!hidden) {
-            Pack.Metadata info = Pack.readPackMetadata(locationInfo, supplier, SharedConstants.getCurrentVersion().packVersion(type));
+            Pack.Metadata info = Pack.readPackMetadata(locationInfo, supplier, SharedConstants.getCurrentVersion().packVersion(type), type);
             if (info != null) {
                 return info;
             }

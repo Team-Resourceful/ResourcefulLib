@@ -13,7 +13,7 @@ public class ResourcefulLibNeoForge {
 
     public ResourcefulLibNeoForge(IEventBus bus) {
         ResourcefulLib.init();
-        if (FMLLoader.getDist().isClient()) {
+        if (FMLLoader.getCurrent().getDist().isClient()) {
             ResourcefulLibNeoForgeClient.init(bus);
             ApiProxy.setInstance(NeoForgeClientApiProxy.INSTANCE);
         } else {

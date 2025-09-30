@@ -22,8 +22,8 @@ public final class FabricResourcePackHandler {
             if (metadata.containsCustomValue(RESOURCE_PACK_KEY)) {
                 try {
                     initMod(mod, metadata);
-                }catch (Exception e) {
-                    Constants.LOGGER.error("Resourceful Lib failed to load resource pack for mod: " + metadata.getName(), e);
+                } catch (Exception e) {
+                    Constants.LOGGER.error("Resourceful Lib failed to load resource pack for mod: {}", metadata.getName(), e);
                 }
             }
         }
