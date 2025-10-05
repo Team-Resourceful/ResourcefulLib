@@ -12,6 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.CommonColors;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
@@ -41,14 +42,27 @@ public class ResourcefulLibNeoForgeClient {
 
         if (state == null) return;
 
-        event.addCustomRenderer((outlineState, buffer, stack, pass, levelState) -> HighlightHandler.onBlockHighlight(
-                event.getCamera().getPosition(),
-                stack,
-                pos,
-                state,
-                buffer.getBuffer(RenderType.lines()),
-                outlineState.highContrast() ? 0xff57ffe1 : ARGB.color(102, 0xff000000)
-        ));
+        event.addCustomRenderer((outlineState, buffer, stack, pass, levelState) -> {
+            if (outlineState.highContrast()) {
+                HighlightHandler.onBlockHighlight(
+                        event.getCamera().getPosition(),
+                        stack,
+                        pos,
+                        state,
+                        buffer.getBuffer(RenderType.secondaryBlockOutline()),
+                        CommonColors.BLACK
+                );
+            }
+
+            return HighlightHandler.onBlockHighlight(
+                    event.getCamera().getPosition(),
+                    stack,
+                    pos,
+                    state,
+                    buffer.getBuffer(RenderType.lines()),
+                    outlineState.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK)
+            );
+        });
     }
 
     public static void onClientCommandRegister(RegisterClientCommandsEvent event) {

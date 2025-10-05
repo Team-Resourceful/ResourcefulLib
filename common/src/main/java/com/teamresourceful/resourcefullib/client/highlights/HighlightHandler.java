@@ -93,6 +93,10 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonEleme
         return null;
     }
 
+    public static boolean canRender(HighlightRenderState state) {
+        return state instanceof HighlightRenderState.Dynamic || (state instanceof HighlightRenderState.Cached(var lines, var offset) && lines.length % 9 == 0);
+    }
+
     public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color) {
         if (state instanceof HighlightRenderState.Dynamic(var highlight, var offset)) {
             highlight.render(consumer, stack, cameraPos, offset, pos);
