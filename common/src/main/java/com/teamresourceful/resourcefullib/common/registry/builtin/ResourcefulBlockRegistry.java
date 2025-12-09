@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefullib.common.registry.builtin.base.ItemLikeH
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Collection;
@@ -31,7 +31,7 @@ public class ResourcefulBlockRegistry implements ResourcefulRegistry<Block> {
     }
 
     public <I extends Block> ItemLikeEntry<I> register(String id, Function<Block.Properties, I> factory, Supplier<Block.Properties> getter) {
-        ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.namespace, id));
+        var key = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(this.namespace, id));
         return this.register(id, () -> factory.apply(getter.get().setId(key)));
     }
 

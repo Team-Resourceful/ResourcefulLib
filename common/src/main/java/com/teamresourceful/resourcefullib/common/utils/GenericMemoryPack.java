@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefullib.common.utils;
 import com.google.gson.JsonElement;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 public abstract class GenericMemoryPack implements PackResources {
 
-    private final Map<ResourceLocation, IoSupplier<InputStream>> data = new HashMap<>();
+    private final Map<Identifier, IoSupplier<InputStream>> data = new HashMap<>();
 
     private final PackMetadataSection metaData;
     private final PackType allowedType;
@@ -42,17 +42,17 @@ public abstract class GenericMemoryPack implements PackResources {
         return allowedType.equals(type);
     }
 
-    public void putData(PackType type, ResourceLocation location, IoSupplier<InputStream> supplier){
+    public void putData(PackType type, Identifier location, IoSupplier<@NotNull InputStream> supplier){
         if (!isTypeAllowed(type)) return;
         data.put(location, supplier);
     }
 
-    public void putJson(PackType type, ResourceLocation location, JsonElement json) {
+    public void putJson(PackType type, Identifier location, JsonElement json) {
         putData(type, location, () -> new ByteArrayInputStream(Constants.GSON.toJson(json).getBytes(StandardCharsets.UTF_8)));
     }
 
     @Override
-    public @Nullable IoSupplier<InputStream> getRootResource(String @NotNull ... files) {
+    public @Nullable IoSupplier<@NotNull InputStream> getRootResource(String @NotNull ... files) {
         String file = String.join("/", files);
         if(file.contains("/") || file.contains("\\")) {
             throw new IllegalArgumentException("Root resources can only be filenames, not paths (no / allowed!)");
@@ -61,7 +61,7 @@ public abstract class GenericMemoryPack implements PackResources {
     }
 
     @Override
-    public @Nullable IoSupplier<InputStream> getResource(@NotNull PackType type, @NotNull ResourceLocation location) {
+    public @Nullable IoSupplier<@NotNull InputStream> getResource(@NotNull PackType type, @NotNull Identifier location) {
         if (!isTypeAllowed(type)) return null;
         return this.data.getOrDefault(location, null);
     }
@@ -78,7 +78,7 @@ public abstract class GenericMemoryPack implements PackResources {
     @Override
     public @NotNull Set<String> getNamespaces(@NotNull PackType type) {
         if (!isTypeAllowed(type)) return Collections.emptySet();
-        return data.keySet().stream().map(ResourceLocation::getNamespace).collect(Collectors.toSet());
+        return data.keySet().stream().map(Identifier::getNamespace).collect(Collectors.toSet());
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class GenericMemoryPack implements PackResources {
 
     @Override
     public void close() {
-        for (IoSupplier<InputStream> value : data.values()) {
+        for (IoSupplier<@NotNull InputStream> value : data.values()) {
             try {
                 value.get().close();
             } catch (IOException e) {

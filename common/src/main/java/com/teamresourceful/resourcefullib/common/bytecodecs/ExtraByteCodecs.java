@@ -16,7 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -33,7 +33,7 @@ public final class ExtraByteCodecs {
         throw new UtilityClassException();
     }
 
-    public static final ByteCodec<ResourceLocation> RESOURCE_LOCATION = ByteCodec.STRING.map(ResourceLocation::parse, ResourceLocation::toString);
+    public static final ByteCodec<Identifier> IDENTIFIER = ByteCodec.STRING.map(Identifier::parse, Identifier::toString);
     public static final ByteCodec<ResourceKey<Level>> DIMENSION = resourceKey(Registries.DIMENSION);
 
     public static final ByteCodec<BlockPos> BLOCK_POS = ByteCodec.LONG.map(BlockPos::of, BlockPos::asLong);
@@ -66,7 +66,7 @@ public final class ExtraByteCodecs {
     public static final ByteCodec<Ingredient> INGREDIENT = StreamCodecByteCodec.ofRegistry(Ingredient.CONTENTS_STREAM_CODEC);
 
     public static <T, R extends Registry<T>> ByteCodec<ResourceKey<T>> resourceKey(ResourceKey<R> registry) {
-        return RESOURCE_LOCATION.map(id -> ResourceKey.create(registry, id), ResourceKey::location);
+        return IDENTIFIER.map(id -> ResourceKey.create(registry, id), ResourceKey::identifier);
     }
 
     public static <T> ByteCodec<T> registry(IdMap<T> map) {

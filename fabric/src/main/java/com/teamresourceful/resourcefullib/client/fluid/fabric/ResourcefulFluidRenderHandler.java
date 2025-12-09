@@ -9,11 +9,12 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -21,14 +22,14 @@ import java.util.function.Function;
 public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
 
 
-    protected final ResourceLocation id;
+    protected final Identifier id;
     protected ClientFluidProperties properties;
-    private Function<ResourceLocation, TextureAtlasSprite> spriteCache = id -> {
+    private Function<Identifier, TextureAtlasSprite> spriteCache = id -> {
         throw new IllegalStateException("TextureAtlas not loaded");
     };
     protected TextureAtlasSprite[] sprites;
 
-    private ResourcefulFluidRenderHandler(ResourceLocation id) {
+    private ResourcefulFluidRenderHandler(Identifier id) {
         this.id = id;
         this.sprites = new TextureAtlasSprite[2];
     }
@@ -40,7 +41,7 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
         return properties;
     }
 
-    public static void register(ResourceLocation id, FluidData data) {
+    public static void register(Identifier id, FluidData data) {
         FlowingFluid still = data.still().get();
         FlowingFluid flowing = data.flowing().get();
 
@@ -50,7 +51,7 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
     }
 
     @Override
-    public TextureAtlasSprite[] getFluidSprites(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
+    public TextureAtlasSprite @NotNull [] getFluidSprites(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @NotNull FluidState state) {
         if (sprites == null) {
             var overlay = properties().overlay(view, pos, state);
             sprites = new TextureAtlasSprite[overlay == null ? 2 : 3];
@@ -68,12 +69,12 @@ public class ResourcefulFluidRenderHandler implements FluidRenderHandler {
     }
 
     @Override
-    public int getFluidColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, FluidState state) {
+    public int getFluidColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @NotNull FluidState state) {
         return properties().tintColor(view, pos, state);
     }
 
     @Override
-    public void renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
+    public void renderFluid(@NotNull BlockPos pos, @NotNull BlockAndTintGetter world, @NotNull VertexConsumer vertexConsumer, @NotNull BlockState blockState, @NotNull FluidState fluidState) {
         if (!properties().renderFluid(pos, world, vertexConsumer, blockState, fluidState, this.spriteCache)) {
             FluidRenderHandler.super.renderFluid(pos, world, vertexConsumer, blockState, fluidState);
         }

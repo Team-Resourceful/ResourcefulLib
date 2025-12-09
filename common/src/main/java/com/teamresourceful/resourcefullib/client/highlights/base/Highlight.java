@@ -5,19 +5,19 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
 import java.util.List;
 
-public record Highlight(ResourceLocation id, List<HighlightLine> lines) {
+public record Highlight(Identifier id, List<HighlightLine> lines) {
 
-    public static Highlight of(ResourceLocation id, List<HighlightLine> lines) {
+    public static Highlight of(Identifier id, List<HighlightLine> lines) {
         return new Highlight(id, Collections.unmodifiableList(lines));
     }
 
-    public static Codec<Highlight> codec(ResourceLocation id) {
+    public static Codec<Highlight> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 HighlightLine.CODEC.listOf().fieldOf("lines").forGetter(Highlight::lines)

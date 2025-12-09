@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
@@ -77,7 +77,7 @@ public final class NeoForgeResourcePackHandler {
 
                 if (!Files.isDirectory(path.resolve(event.getPackType().getDirectory()))) continue;
 
-                final String id = ResourceLocation.fromNamespaceAndPath(resourcePack.mod().getModId(), resourcePack.name()).toString();
+                final String id = Identifier.fromNamespaceAndPath(resourcePack.mod().getModId(), resourcePack.name()).toString();
                 final Pack.ResourcesSupplier supplier = new PathPackResources.PathResourcesSupplier(path);
                 final PackLocationInfo locationInfo = new PackLocationInfo(
                     id,

@@ -11,7 +11,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.FogType;
 import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,15 +23,15 @@ public class FogRendererMixin {
     @Inject(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/fog/FogRenderer;updateBuffer(Ljava/nio/ByteBuffer;ILorg/joml/Vector4f;FFFFFF)V"))
     private void setupFog(
             Camera camera,
-            int renderDistance, boolean cameraFoggy, DeltaTracker deltaTracker, float darkenWorldAmount,
+            int renderDistance, DeltaTracker deltaTracker, float darkenWorldAmount,
             ClientLevel level,
             CallbackInfoReturnable<Vector4f> cir,
 
             @Local LocalRef<FogData> data
     ) {
-        FluidState state = level.getFluidState(camera.getBlockPosition());
-        double fluidY = camera.getBlockPosition().getY() + state.getHeight(level, camera.getBlockPosition());
-        if (camera.getPosition().y >= fluidY) return;
+        FluidState state = level.getFluidState(camera.blockPosition());
+        double fluidY = camera.blockPosition().getY() + state.getHeight(level, camera.blockPosition());
+        if (camera.position().y >= fluidY) return;
         if (!(state.getType() instanceof ResourcefulFlowingFluid fluid)) return;
         var properties = ResourcefulClientFluidRegistry.get(fluid.getData().id());
         if (properties == null) return;
@@ -49,12 +48,12 @@ public class FogRendererMixin {
             Camera camera,
             float partialTicks,
             ClientLevel clientLevel,
-            int renderDistance, float darkenWorldAmount, boolean cameraFoggy,
+            int renderDistance, float darkenWorldAmount,
             CallbackInfoReturnable<Vector4f> cir
     ) {
-        FluidState state = camera.getEntity().level().getFluidState(camera.getBlockPosition());
-        double fluidY = camera.getBlockPosition().getY() + state.getHeight(camera.getEntity().level(), camera.getBlockPosition());
-        if (camera.getPosition().y >= fluidY) return;
+        FluidState state = camera.entity().level().getFluidState(camera.blockPosition());
+        double fluidY = camera.blockPosition().getY() + state.getHeight(camera.entity().level(), camera.blockPosition());
+        if (camera.position().y >= fluidY) return;
         if (!(state.getType() instanceof ResourcefulFlowingFluid fluid)) return;
         FluidData data = fluid.getData();
         var properties = ResourcefulClientFluidRegistry.get(data.id());

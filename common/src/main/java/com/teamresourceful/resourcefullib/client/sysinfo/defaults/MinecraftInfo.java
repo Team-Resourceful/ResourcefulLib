@@ -6,9 +6,9 @@ import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfo;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import net.minecraft.Optionull;
 import net.minecraft.SharedConstants;
-import net.minecraft.Util;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Util;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

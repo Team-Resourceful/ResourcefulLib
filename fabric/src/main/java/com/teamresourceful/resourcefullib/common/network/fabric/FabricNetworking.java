@@ -10,16 +10,16 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
 public class FabricNetworking implements Networking {
 
     private static final boolean IS_CLIENT = FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT);
 
-    private final ResourceLocation channel;
+    private final Identifier channel;
 
-    public FabricNetworking(ResourceLocation channel, int protocolVersion) {
+    public FabricNetworking(Identifier channel, int protocolVersion) {
         this.channel = channel.withSuffix("/v" + protocolVersion);
     }
 

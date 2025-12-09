@@ -1,14 +1,14 @@
 package com.teamresourceful.resourcefullib.common.fluid.neoforge;
 
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidProperties;
-import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.neoforged.neoforge.common.SoundAction;
 import net.neoforged.neoforge.fluids.FluidType;
 
 public class ResourcefulFluidType extends FluidType {
 
-    public ResourcefulFluidType(ResourceLocation id, FluidProperties props) {
+    public ResourcefulFluidType(Identifier id, FluidProperties props) {
         super(Util.make(Properties.create(), properties -> {
             properties.descriptionId(Util.makeDescriptionId("fluid_type", id));
             properties.adjacentPathType(props.adjacentPathType());

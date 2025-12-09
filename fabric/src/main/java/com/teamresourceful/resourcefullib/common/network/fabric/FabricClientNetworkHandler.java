@@ -7,19 +7,20 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class FabricClientNetworkHandler {
 
-    public static <T extends Packet<T>> void register(CustomPacketPayload.Type<NetworkPacketPayload<T>> payloadType, ClientboundPacketType<T> type) {
+    public static <T extends Packet<T>> void register(CustomPacketPayload.Type<@NotNull NetworkPacketPayload<T>> payloadType, ClientboundPacketType<T> type) {
         ClientPlayNetworking.registerGlobalReceiver(
             payloadType,
             (payload, context) -> type.handle(payload.packet()).run()
         );
     }
 
-    public static <T extends Packet<T>> void send(ResourceLocation channel, T message) {
+    public static <T extends Packet<T>> void send(Identifier channel, T message) {
         ClientPlayNetworking.send(new NetworkPacketPayload<>(message, channel));
     }
 }

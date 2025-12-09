@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,11 +24,11 @@ public class Network implements Networking {
     private final Networking networking;
     private final boolean optional;
 
-    public Network(ResourceLocation channel, int protocolVersion) {
+    public Network(Identifier channel, int protocolVersion) {
         this(channel, protocolVersion, false);
     }
 
-    public Network(ResourceLocation channel, int protocolVersion, boolean optional) {
+    public Network(Identifier channel, int protocolVersion, boolean optional) {
         this.networking = getNetwork(channel, protocolVersion, optional);
         this.optional = optional;
     }
@@ -105,7 +105,7 @@ public class Network implements Networking {
     @ExpectPlatform
     @ApiStatus.Internal
     @Contract(pure = true)
-    public static Networking getNetwork(ResourceLocation channel, int protocolVersion, boolean optional) {
+    public static Networking getNetwork(Identifier channel, int protocolVersion, boolean optional) {
         throw new NotImplementedException();
     }
 }

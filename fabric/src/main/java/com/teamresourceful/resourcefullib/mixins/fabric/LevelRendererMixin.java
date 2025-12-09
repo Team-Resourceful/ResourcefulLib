@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.BlockOutlineRenderState;
 import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.core.BlockPos;
@@ -73,7 +73,7 @@ public class LevelRendererMixin {
                             poseStack,
                             state.pos(),
                             highlight,
-                            bufferSource.getBuffer(RenderType.secondaryBlockOutline()),
+                            bufferSource.getBuffer(RenderTypes.secondaryBlockOutline()),
                             CommonColors.BLACK
                     );
                 }
@@ -83,7 +83,7 @@ public class LevelRendererMixin {
                         poseStack,
                         state.pos(),
                         highlight,
-                        bufferSource.getBuffer(RenderType.lines()),
+                        bufferSource.getBuffer(RenderTypes.lines()),
                         state.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK)
                 );
                 ci.cancel();

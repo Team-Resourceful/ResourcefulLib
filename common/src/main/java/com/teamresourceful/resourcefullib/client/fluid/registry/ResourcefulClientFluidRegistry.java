@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<ClientFluidProperties> {
 
-    private static final Map<ResourceLocation, ClientFluidProperties> REGISTRY = new ConcurrentHashMap<>();
+    private static final Map<Identifier, ClientFluidProperties> REGISTRY = new ConcurrentHashMap<>();
 
     private final String modid;
     private final RegistryEntries<ClientFluidProperties> entries = new RegistryEntries<>();
@@ -35,8 +35,8 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
 
     @Override
     public <I extends ClientFluidProperties> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-        REGISTRY.put(ResourceLocation.fromNamespaceAndPath(this.modid, id), supplier.get());
-        return entries.add(new Entry<>(ResourceLocation.fromNamespaceAndPath(this.modid, id), supplier.get()));
+        REGISTRY.put(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get());
+        return entries.add(new Entry<>(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get()));
     }
 
     /**
@@ -60,11 +60,11 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
     }
 
     @ApiStatus.Internal
-    public static ClientFluidProperties get(ResourceLocation id) {
+    public static ClientFluidProperties get(Identifier id) {
         return REGISTRY.get(id);
     }
 
-    private record Entry<T extends ClientFluidProperties>(ResourceLocation id, T data) implements RegistryEntry<T> {
+    private record Entry<T extends ClientFluidProperties>(Identifier id, T data) implements RegistryEntry<T> {
 
         @Override
         public T get() {
@@ -72,7 +72,7 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
         }
 
         @Override
-        public ResourceLocation getId() {
+        public Identifier getId() {
             return this.id;
         }
     }

@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefullib.client.highlights.base;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
-import net.minecraft.Util;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import org.joml.Vector3f;
 
 import java.util.List;

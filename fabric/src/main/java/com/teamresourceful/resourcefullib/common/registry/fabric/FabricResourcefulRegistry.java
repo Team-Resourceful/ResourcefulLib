@@ -5,7 +5,8 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -13,10 +14,10 @@ import java.util.function.Supplier;
 public class FabricResourcefulRegistry<T> implements ResourcefulRegistry<T> {
 
     private final RegistryEntries<T> entries = new RegistryEntries<>();
-    private final Registry<T> registry;
+    private final Registry<@NotNull T> registry;
     private final String id;
 
-    public FabricResourcefulRegistry(Registry<T> registry, String id) {
+    public FabricResourcefulRegistry(Registry<@NotNull T> registry, String id) {
         this.registry = registry;
         this.id = id;
     }
@@ -28,12 +29,12 @@ public class FabricResourcefulRegistry<T> implements ResourcefulRegistry<T> {
 
     @Override
     public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-        return entries.add(FabricRegistryEntry.of(this.registry, ResourceLocation.fromNamespaceAndPath(this.id, id), supplier));
+        return entries.add(FabricRegistryEntry.of(this.registry, Identifier.fromNamespaceAndPath(this.id, id), supplier));
     }
 
     @Override
     public HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier) {
-        return entries.add(FabricHolderRegistryEntry.of(this.registry, ResourceLocation.fromNamespaceAndPath(this.id, id), supplier));
+        return entries.add(FabricHolderRegistryEntry.of(this.registry, Identifier.fromNamespaceAndPath(this.id, id), supplier));
     }
 
     @Override

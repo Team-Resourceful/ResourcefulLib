@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefullib.common.fluid.data.FluidProperties;
 import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Supplier;
@@ -42,7 +42,7 @@ public interface ResourcefulFluidRegistry extends ResourcefulRegistry<FluidData>
      * @hidden For internal use only.
      */
     @ApiStatus.Internal
-    record Entry(ResourceLocation id, FluidData data) implements RegistryEntry<FluidData> {
+    record Entry(Identifier id, FluidData data) implements RegistryEntry<FluidData> {
 
         @Override
         public FluidData get() {
@@ -50,7 +50,7 @@ public interface ResourcefulFluidRegistry extends ResourcefulRegistry<FluidData>
         }
 
         @Override
-        public ResourceLocation getId() {
+        public Identifier getId() {
             return this.id;
         }
     }

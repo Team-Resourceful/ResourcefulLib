@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collection;
 
@@ -29,7 +29,7 @@ public class FabricResourcefulFluidRegistry implements ResourcefulFluidRegistry 
 
     @Override
     public RegistryEntry<FluidData> register(String name, FluidProperties properties) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.id, name);
+        Identifier id = Identifier.fromNamespaceAndPath(this.id, name);
         return this.entries.add(new Entry(id, new InternalFluidData(id, properties)));
     }
 

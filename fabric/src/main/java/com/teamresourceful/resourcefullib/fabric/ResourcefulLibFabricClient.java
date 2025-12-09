@@ -1,15 +1,18 @@
 package com.teamresourceful.resourcefullib.fabric;
 
+import com.teamresourceful.resourcefullib.ResourcefulLib;
+import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import com.teamresourceful.resourcefullib.client.sysinfo.SystemInfo;
 import com.teamresourceful.resourcefullib.common.ApiProxy;
 import com.teamresourceful.resourcefullib.common.utils.files.GlobalStorage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 
 import java.nio.file.Files;
@@ -20,7 +23,10 @@ public class ResourcefulLibFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ApiProxy.setInstance(FabricClientProxy.INSTANCE);
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new FabricHighlightHandler());
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
+                Identifier.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"),
+                new HighlightHandler()
+        );
         FabricResourcePackHandler.load();
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
