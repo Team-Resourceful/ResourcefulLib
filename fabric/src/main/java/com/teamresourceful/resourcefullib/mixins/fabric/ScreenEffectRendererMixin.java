@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +30,7 @@ public class ScreenEffectRendererMixin {
     private void rlib_renderScreenEffect(boolean bl, float f, SubmitNodeCollector submitNodeCollector, CallbackInfo ci, @Local PoseStack stack) {
         Player player = this.minecraft.player;
         if (player instanceof EntityFluidEyesHook hook && hook.rlib$getEyesFluid() != null && hook.rlib$getEyesFluid().getType() instanceof ResourcefulFlowingFluid fluid) {
-            ResourceLocation id = fluid.getData().id();
+            Identifier id = fluid.getData().id();
             ClientFluidProperties properties = ResourcefulClientFluidRegistry.get(id);
             if (properties != null) {
                 properties.renderOverlay(this.minecraft, stack, this.bufferSource);

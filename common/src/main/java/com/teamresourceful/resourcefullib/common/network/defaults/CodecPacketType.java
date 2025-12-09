@@ -7,22 +7,23 @@ import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketT
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class CodecPacketType<T extends Packet<T>> extends AbstractPacketType<T> {
 
-    protected StreamCodec<RegistryFriendlyByteBuf, T> codec;
+    protected StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull T> codec;
 
-    public CodecPacketType(ResourceLocation id, StreamCodec<RegistryFriendlyByteBuf, T> codec) {
+    public CodecPacketType(Identifier id, StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull T> codec) {
         super(id);
         this.codec = codec;
     }
 
-    public CodecPacketType(ResourceLocation id, ByteCodec<T> codec) {
+    public CodecPacketType(Identifier id, ByteCodec<T> codec) {
         this(id, StreamCodecByteCodec.toRegistry(codec));
     }
 
@@ -38,17 +39,17 @@ public abstract class CodecPacketType<T extends Packet<T>> extends AbstractPacke
 
     public static abstract class Client<T extends Packet<T>> extends CodecPacketType<T> implements ClientboundPacketType<T> {
 
-        public Client(ResourceLocation id, StreamCodec<RegistryFriendlyByteBuf, T> codec) {
+        public Client(Identifier id, StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull T> codec) {
             super(id, codec);
         }
 
-        public Client(ResourceLocation id, ByteCodec<T> codec) {
+        public Client(Identifier id, ByteCodec<T> codec) {
             super(id, codec);
         }
 
         public static <T extends Packet<T>> Client<T> create(
-                ResourceLocation id,
-                StreamCodec<RegistryFriendlyByteBuf, T> codec,
+                Identifier id,
+                StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull T> codec,
                 Function<T, Runnable> handler
         ) {
             return new Client<>(id, codec) {
@@ -60,7 +61,7 @@ public abstract class CodecPacketType<T extends Packet<T>> extends AbstractPacke
         }
 
         public static <T extends Packet<T>> Client<T> create(
-                ResourceLocation id,
+                Identifier id,
                 ByteCodec<T> codec,
                 Function<T, Runnable> handler
         ) {
@@ -75,17 +76,17 @@ public abstract class CodecPacketType<T extends Packet<T>> extends AbstractPacke
 
     public static abstract class Server<T extends Packet<T>> extends CodecPacketType<T> implements ServerboundPacketType<T> {
 
-        public Server(ResourceLocation id, StreamCodec<RegistryFriendlyByteBuf, T> codec) {
+        public Server(Identifier id, StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull T> codec) {
             super(id, codec);
         }
 
-        public Server(ResourceLocation id, ByteCodec<T> codec) {
+        public Server(Identifier id, ByteCodec<T> codec) {
             super(id, codec);
         }
 
         public static <T extends Packet<T>> Server<T> create(
-                ResourceLocation id,
-                StreamCodec<RegistryFriendlyByteBuf, T> codec,
+                Identifier id,
+                StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull T> codec,
                 Function<T, Consumer<Player>> handler
         ) {
             return new Server<>(id, codec) {
@@ -97,7 +98,7 @@ public abstract class CodecPacketType<T extends Packet<T>> extends AbstractPacke
         }
 
         public static <T extends Packet<T>> Server<T> create(
-                ResourceLocation id,
+                Identifier id,
                 ByteCodec<T> codec,
                 Function<T, Consumer<Player>> handler
         ) {

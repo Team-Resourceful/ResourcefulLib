@@ -9,11 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -27,16 +27,16 @@ import java.util.function.Function;
 
 public interface ClientFluidProperties {
 
-    ResourceLocation still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
+    Identifier still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
-    ResourceLocation flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
+    Identifier flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
-    ResourceLocation overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
+    Identifier overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
 
-    ResourceLocation screenOverlay();
+    Identifier screenOverlay();
 
     default void renderOverlay(Minecraft minecraft, PoseStack stack, MultiBufferSource source) {
-        ResourceLocation texture = screenOverlay();
+        Identifier texture = screenOverlay();
         if (texture != null) {
             Player player = minecraft.player;
             BlockPos blockpos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
@@ -46,7 +46,7 @@ public interface ClientFluidProperties {
             float a = -player.getYRot() / 64.0F;
             float b = player.getXRot() / 64.0F;
             Matrix4f matrix = stack.last().pose();
-            VertexConsumer consumer = source.getBuffer(RenderType.blockScreenEffect(texture));
+            VertexConsumer consumer = source.getBuffer(RenderTypes.blockScreenEffect(texture));
             consumer.addVertex(matrix, -1.0F, -1.0F, -0.5F).setUv(4.0F + a, 4.0F + b).setColor(color);
             consumer.addVertex(matrix, 1.0F, -1.0F, -0.5F).setUv(0.0F + a, 4.0F + b).setColor(color);
             consumer.addVertex(matrix, 1.0F, 1.0F, -0.5F).setUv(0.0F + a, 0.0F + b).setColor(color);
@@ -60,7 +60,7 @@ public interface ClientFluidProperties {
             BlockPos pos,
             BlockAndTintGetter world, VertexConsumer vertexConsumer,
             BlockState blockState, FluidState fluidState,
-            Function<ResourceLocation, TextureAtlasSprite> sprites
+            Function<Identifier, TextureAtlasSprite> sprites
     ) {
         return false;
     }
@@ -79,29 +79,29 @@ public interface ClientFluidProperties {
 
     class Builder {
 
-        private Function3<BlockAndTintGetter, BlockPos, FluidState, ResourceLocation> still = (a, b, c) -> null;
-        private Function3<BlockAndTintGetter, BlockPos, FluidState, ResourceLocation> flowing = (a, b, c) -> null;
-        private Function3<BlockAndTintGetter, BlockPos, FluidState, ResourceLocation> overlay = (a, b, c) -> null;
-        private ResourceLocation screenOverlay = null;
+        private Function3<BlockAndTintGetter, BlockPos, FluidState, Identifier> still = (a, b, c) -> null;
+        private Function3<BlockAndTintGetter, BlockPos, FluidState, Identifier> flowing = (a, b, c) -> null;
+        private Function3<BlockAndTintGetter, BlockPos, FluidState, Identifier> overlay = (a, b, c) -> null;
+        private Identifier screenOverlay = null;
         private Function3<BlockAndTintGetter, BlockPos, FluidState, Integer> tintColor = (a, b, c) -> -1;
-        private Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<ResourceLocation, TextureAtlasSprite>, Boolean> renderFluid = (a, b, c, d, e, f) -> false;
+        private Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<Identifier, TextureAtlasSprite>, Boolean> renderFluid = (a, b, c, d, e, f) -> false;
 
-        public Builder still(ResourceLocation still) {
+        public Builder still(Identifier still) {
             this.still = (a, b, c) -> still;
             return this;
         }
 
-        public Builder flowing(ResourceLocation flowing) {
+        public Builder flowing(Identifier flowing) {
             this.flowing = (a, b, c) -> flowing;
             return this;
         }
 
-        public Builder overlay(ResourceLocation overlay) {
+        public Builder overlay(Identifier overlay) {
             this.overlay = (a, b, c) -> overlay;
             return this;
         }
 
-        public Builder screenOverlay(ResourceLocation screenOverlay) {
+        public Builder screenOverlay(Identifier screenOverlay) {
             this.screenOverlay = screenOverlay;
             return this;
         }
@@ -116,7 +116,7 @@ public interface ClientFluidProperties {
             return this;
         }
 
-        public Builder renderFluid(Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<ResourceLocation, TextureAtlasSprite>, Boolean> renderFluid) {
+        public Builder renderFluid(Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<Identifier, TextureAtlasSprite>, Boolean> renderFluid) {
             this.renderFluid = renderFluid;
             return this;
         }
@@ -125,22 +125,22 @@ public interface ClientFluidProperties {
             return new ClientFluidProperties() {
 
                 @Override
-                public ResourceLocation still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
+                public Identifier still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return still.apply(view, pos, state);
                 }
 
                 @Override
-                public ResourceLocation flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
+                public Identifier flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return flowing.apply(view, pos, state);
                 }
 
                 @Override
-                public ResourceLocation overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
+                public Identifier overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return overlay.apply(view, pos, state);
                 }
 
                 @Override
-                public ResourceLocation screenOverlay() {
+                public Identifier screenOverlay() {
                     return screenOverlay;
                 }
 
@@ -150,7 +150,7 @@ public interface ClientFluidProperties {
                 }
 
                 @Override
-                public boolean renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState, Function<ResourceLocation, TextureAtlasSprite> sprites) {
+                public boolean renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState, Function<Identifier, TextureAtlasSprite> sprites) {
                     return renderFluid.apply(pos, world, vertexConsumer, blockState, fluidState, sprites);
                 }
             };

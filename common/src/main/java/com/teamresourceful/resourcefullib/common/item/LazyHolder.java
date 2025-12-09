@@ -1,35 +1,36 @@
 package com.teamresourceful.resourcefullib.common.item;
 
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public sealed class LazyHolder<T> implements Supplier<T>  {
 
-    protected final ResourceLocation id;
-    protected final Registry<T> registry;
+    protected final Identifier id;
+    protected final Registry<@NotNull T> registry;
     protected T item;
 
-    public LazyHolder(Registry<T> registry, ResourceLocation id) {
+    public LazyHolder(Registry<@NotNull T> registry, Identifier id) {
         this.registry = registry;
         this.id = id;
     }
 
-    public static <R> LazyHolder<R> of(Registry<R> registry, ResourceLocation id) {
+    public static <R> LazyHolder<R> of(Registry<@NotNull R> registry, Identifier id) {
         return new LazyHolder<>(registry, id);
     }
 
-    public static <R> LazyHolder<R> of(Registry<R> registry, R value) {
+    public static <R> LazyHolder<R> of(Registry<@NotNull R> registry, R value) {
         return new StaticHolder<>(registry, value);
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 
-    public Registry<T> getRegistry() {
+    public Registry<@NotNull T> getRegistry() {
         return registry;
     }
 
@@ -41,13 +42,13 @@ public sealed class LazyHolder<T> implements Supplier<T>  {
         return this.item;
     }
 
-    public static <T> Function<ResourceLocation, LazyHolder<T>> map(Registry<T> registry) {
+    public static <T> Function<Identifier, LazyHolder<T>> map(Registry<@NotNull T> registry) {
         return id -> new LazyHolder<>(registry, id);
     }
 
     private static final class StaticHolder<T> extends LazyHolder<T> {
 
-        public StaticHolder(Registry<T> registry, T value) {
+        public StaticHolder(Registry<@NotNull T> registry, T value) {
             super(registry, registry.getKey(value));
             this.item = value;
         }

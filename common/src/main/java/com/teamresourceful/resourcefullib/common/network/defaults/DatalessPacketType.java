@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefullib.common.network.defaults;
 
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Supplier;
 
@@ -10,7 +10,7 @@ public abstract class DatalessPacketType<T extends Packet<T>> extends AbstractPa
 
     protected final Supplier<T> factory;
 
-    public DatalessPacketType(ResourceLocation id, Supplier<T> factory) {
+    public DatalessPacketType(Identifier id, Supplier<T> factory) {
         super(id);
         this.factory = factory;
     }

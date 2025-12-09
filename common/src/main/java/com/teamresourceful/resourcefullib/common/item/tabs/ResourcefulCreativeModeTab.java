@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefullib.common.item.tabs;
 import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -15,14 +15,14 @@ import java.util.stream.Stream;
 
 public class ResourcefulCreativeModeTab {
 
-    public final ResourceLocation id;
+    public final Identifier id;
     public Supplier<ItemStack> icon;
     public boolean hideScrollBar;
     public boolean hideTitle;
 
     public final List<Supplier<Stream<ItemStack>>> contents = new ArrayList<>();
 
-    public ResourcefulCreativeModeTab(ResourceLocation id) {
+    public ResourcefulCreativeModeTab(Identifier id) {
         this.id = id;
     }
 

@@ -14,7 +14,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.ExtraCodecs;
@@ -28,24 +28,24 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonElement> {
+public class HighlightHandler extends SimpleJsonResourceReloadListener<@NotNull JsonElement> {
 
     private static final Reference2ReferenceMap<BlockState, float[]> STATE_CACHE = new Reference2ReferenceOpenHashMap<>();
-    private static final Map<ResourceLocation, Highlight> BOX_CACHE = new HashMap<>();
+    private static final Map<Identifier, Highlight> BOX_CACHE = new HashMap<>();
 
-    public static final Codec<Highlight> HIGHLIGHT_CODEC = ResourceLocation.CODEC.xmap(HighlightHandler::getOrThrow, Highlight::id);
+    public static final Codec<Highlight> HIGHLIGHT_CODEC = Identifier.CODEC.xmap(HighlightHandler::getOrThrow, Highlight::id);
 
     public HighlightHandler() {
         super(ExtraCodecs.JSON, FileToIdConverter.json("resourcefullib/highlights"));
     }
 
     @Override
-    protected void apply(@NotNull Map<ResourceLocation, JsonElement> jsons, @NotNull ResourceManager manager, @NotNull ProfilerFiller profiler) {
+    protected void apply(@NotNull Map<Identifier, JsonElement> jsons, @NotNull ResourceManager manager, @NotNull ProfilerFiller profiler) {
         BOX_CACHE.clear();
         STATE_CACHE.clear();
 
-        Map<ResourceLocation, JsonElement> highlights = new HashMap<>();
-        Map<ResourceLocation, JsonElement> blocks = new HashMap<>();
+        Map<Identifier, JsonElement> highlights = new HashMap<>();
+        Map<Identifier, JsonElement> blocks = new HashMap<>();
         jsons.forEach((key, json) -> (json.isJsonObject() && json.getAsJsonObject().has("lines") ? highlights : blocks).put(key, json));
 
         highlights.forEach((key, value) -> Highlight.codec(key).parse(JsonOps.INSTANCE, value).result().ifPresent(box -> BOX_CACHE.put(key, box)));
@@ -127,7 +127,7 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<JsonEleme
         return false;
     }
 
-    private static Highlight getOrThrow(ResourceLocation id) {
+    private static Highlight getOrThrow(Identifier id) {
         var highlight = BOX_CACHE.get(id);
         if (highlight == null) throw new RuntimeException("No highlight with the id '" + id + "' was found!");
         return highlight;
