@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.common.fluid.neoforge.ResourcefulFluid
 import com.teamresourceful.resourcefullib.common.fluid.registry.ResourcefulFluidRegistry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntries;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -33,7 +33,7 @@ public class NeoForgeResourcefulFluidRegistry implements ResourcefulFluidRegistr
 
     @Override
     public RegistryEntry<FluidData> register(String name, FluidProperties properties) {
-        ResourceLocation rid = ResourceLocation.fromNamespaceAndPath(this.id, name);
+        Identifier rid = Identifier.fromNamespaceAndPath(this.id, name);
         return this.entries.add(new Entry(
                 rid,
                 new InternalFluidData(

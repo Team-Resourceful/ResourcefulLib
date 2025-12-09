@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefullib.common.registry.neoforge;
 
 import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class NeoForgeHolderRegistryEntry<R> implements HolderRegistryEntry<R> {
@@ -19,7 +19,7 @@ public class NeoForgeHolderRegistryEntry<R> implements HolderRegistryEntry<R> {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return object.getId();
     }
 }

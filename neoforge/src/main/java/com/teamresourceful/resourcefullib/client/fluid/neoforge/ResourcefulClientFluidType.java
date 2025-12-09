@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -24,47 +24,47 @@ import org.joml.Vector4f;
 public record ResourcefulClientFluidType(ClientFluidProperties properties) implements IClientFluidTypeExtensions {
 
     @Override
-    public @NotNull ResourceLocation getStillTexture() {
+    public @NotNull Identifier getStillTexture() {
         return properties().still(null, null, null);
     }
 
     @Override
-    public @NotNull ResourceLocation getStillTexture(@NotNull FluidStack stack) {
+    public @NotNull Identifier getStillTexture(@NotNull FluidStack stack) {
         return properties().still(null, null, stack.getFluid().defaultFluidState());
     }
 
     @Override
-    public @NotNull ResourceLocation getStillTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+    public @NotNull Identifier getStillTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
         return properties().still(getter, pos, state);
     }
 
     @Override
-    public @NotNull ResourceLocation getFlowingTexture() {
+    public @NotNull Identifier getFlowingTexture() {
         return properties().flowing(null, null, null);
     }
 
     @Override
-    public @NotNull ResourceLocation getFlowingTexture(@NotNull FluidStack stack) {
+    public @NotNull Identifier getFlowingTexture(@NotNull FluidStack stack) {
         return properties().flowing(null, null, stack.getFluid().defaultFluidState());
     }
 
     @Override
-    public @NotNull ResourceLocation getFlowingTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+    public @NotNull Identifier getFlowingTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
         return properties().flowing(getter, pos, state);
     }
 
     @Override
-    public @Nullable ResourceLocation getOverlayTexture() {
+    public @Nullable Identifier getOverlayTexture() {
         return properties().overlay(null, null, null);
     }
 
     @Override
-    public @NotNull ResourceLocation getOverlayTexture(@NotNull FluidStack stack) {
+    public @NotNull Identifier getOverlayTexture(@NotNull FluidStack stack) {
         return properties().overlay(null, null, stack.getFluid().defaultFluidState());
     }
 
     @Override
-    public @NotNull ResourceLocation getOverlayTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
+    public @NotNull Identifier getOverlayTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
         return properties().overlay(getter, pos, state);
     }
 

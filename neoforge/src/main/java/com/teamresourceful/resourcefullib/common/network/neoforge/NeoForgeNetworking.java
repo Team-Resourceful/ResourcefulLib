@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefullib.common.network.base.Networking;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.internal.NetworkPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -27,11 +27,11 @@ public class NeoForgeNetworking implements Networking {
     private final List<ClientboundPacketType<?>> clientPackets = new ArrayList<>();
     private final List<ServerboundPacketType<?>> serverPackets = new ArrayList<>();
 
-    private final ResourceLocation channel;
+    private final Identifier channel;
     private final String version;
     private final boolean optional;
 
-    public NeoForgeNetworking(ResourceLocation channel, int protocolVersion, boolean optional) {
+    public NeoForgeNetworking(Identifier channel, int protocolVersion, boolean optional) {
         this.channel = channel.withSuffix("/v" + protocolVersion);
         this.version = "v" + protocolVersion;
         this.optional = optional;

@@ -3,7 +3,7 @@
 # Minecraft
 minecraft = "1.21.11"
 fabric-api = "0.139.4"
-neoforge = "21.9.0-beta"
+neoforge = "21.11.0-beta"
 
 # Libraries
 yabn = "1.0.3"

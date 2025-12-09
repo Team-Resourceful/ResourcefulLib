@@ -7,10 +7,10 @@ import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import com.teamresourceful.resourcefullib.client.sysinfo.SystemInfo;
 import com.teamresourceful.resourcefullib.common.fluid.neoforge.ResourcefulFluidType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.CommonColors;
 import net.neoforged.bus.api.IEventBus;
@@ -33,7 +33,7 @@ public class ResourcefulLibNeoForgeClient {
     }
 
     public static void onClientReloadListeners(AddClientReloadListenersEvent event) {
-        event.addListener(ResourceLocation.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"), new HighlightHandler());
+        event.addListener(Identifier.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"), new HighlightHandler());
     }
 
     public static void onHighlight(ExtractBlockOutlineRenderStateEvent event) {
@@ -45,21 +45,21 @@ public class ResourcefulLibNeoForgeClient {
         event.addCustomRenderer((outlineState, buffer, stack, pass, levelState) -> {
             if (outlineState.highContrast()) {
                 HighlightHandler.onBlockHighlight(
-                        event.getCamera().getPosition(),
+                        event.getCamera().position(),
                         stack,
                         pos,
                         state,
-                        buffer.getBuffer(RenderType.secondaryBlockOutline()),
+                        buffer.getBuffer(RenderTypes.secondaryBlockOutline()),
                         CommonColors.BLACK
                 );
             }
 
             return HighlightHandler.onBlockHighlight(
-                    event.getCamera().getPosition(),
+                    event.getCamera().position(),
                     stack,
                     pos,
                     state,
-                    buffer.getBuffer(RenderType.lines()),
+                    buffer.getBuffer(RenderTypes.lines()),
                     outlineState.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK)
             );
         });
@@ -79,7 +79,7 @@ public class ResourcefulLibNeoForgeClient {
 
     public static void onRegisterFluidClient(RegisterClientExtensionsEvent event) {
         for (var entry : NeoForgeRegistries.FLUID_TYPES.entrySet()) {
-            var id = entry.getKey().location();
+            var id = entry.getKey().identifier();
             var type = entry.getValue();
             if (type instanceof ResourcefulFluidType) {
                 var properties = ResourcefulClientFluidRegistry.get(id);
