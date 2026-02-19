@@ -22,7 +22,7 @@ If you would like to contribute to the mod feel free to submit a PR.
 Be sure to add our maven to your `build.gradle`:
 ```gradle
 repositories {
-    maven { url = "https://maven.resourcefulbees.com/repository/maven-public/" }
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" }
     <--- other repositories here --->
 }
 ```
