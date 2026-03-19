@@ -20,12 +20,12 @@ public final class UniformedNumberCodecs {
 
     private static Codec<UniformFloat> getFloatCodec() {
         Codec<UniformFloat> codec = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.FLOAT.fieldOf("min").forGetter(UniformFloat::getMinValue),
-                Codec.FLOAT.fieldOf("max").forGetter(UniformFloat::getMaxValue)
+                Codec.FLOAT.fieldOf("min").forGetter(UniformFloat::min),
+                Codec.FLOAT.fieldOf("max").forGetter(UniformFloat::max)
         ).apply(instance, UniformFloat::of));
         return codec.comapFlatMap(uniformFloat -> {
-            if (uniformFloat.getMaxValue() < uniformFloat.getMinValue()) {
-                return DataResult.error(() -> "Max must be at least min, min: " + uniformFloat.getMinValue()+ ", max: " + uniformFloat.getMaxValue());
+            if (uniformFloat.max() < uniformFloat.min()) {
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformFloat.min()+ ", max: " + uniformFloat.max());
             }
             return DataResult.success(uniformFloat);
         }, Function.identity());
@@ -33,12 +33,12 @@ public final class UniformedNumberCodecs {
 
     public static Codec<UniformInt> getIntCodec() {
         Codec<UniformInt> codec = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.INT.fieldOf("min").forGetter(UniformInt::getMinValue),
-                Codec.INT.fieldOf("max").forGetter(UniformInt::getMaxValue)
+                Codec.INT.fieldOf("min").forGetter(UniformInt::minInclusive),
+                Codec.INT.fieldOf("max").forGetter(UniformInt::maxInclusive)
         ).apply(instance, UniformInt::of));
         return codec.comapFlatMap(uniformInt -> {
-            if (uniformInt.getMaxValue() < uniformInt.getMinValue()) {
-                return DataResult.error(() -> "Max must be at least min, min: " + uniformInt.getMinValue() + ", max: " + uniformInt.getMaxValue());
+            if (uniformInt.maxInclusive() < uniformInt.minInclusive()) {
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformInt.minInclusive() + ", max: " + uniformInt.maxInclusive());
             }
             return DataResult.success(uniformInt);
         }, Function.identity());
@@ -46,12 +46,12 @@ public final class UniformedNumberCodecs {
 
     public static Codec<UniformInt> rangedUniformIntCodec(int min, int max) {
         Codec<UniformInt> codec = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.intRange(min, max).fieldOf("min").forGetter(UniformInt::getMinValue),
-                Codec.intRange(min, max).fieldOf("max").forGetter(UniformInt::getMaxValue)
+                Codec.intRange(min, max).fieldOf("min").forGetter(UniformInt::minInclusive),
+                Codec.intRange(min, max).fieldOf("max").forGetter(UniformInt::maxInclusive)
         ).apply(instance, UniformInt::of));
         return codec.comapFlatMap(uniformInt -> {
-            if (uniformInt.getMaxValue() < uniformInt.getMinValue()) {
-                return DataResult.error(() -> "Max must be at least min, min: " + uniformInt.getMinValue() + ", max: " + uniformInt.getMaxValue());
+            if (uniformInt.maxInclusive() < uniformInt.minInclusive()) {
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformInt.minInclusive() + ", max: " + uniformInt.maxInclusive());
             }
             return DataResult.success(uniformInt);
         }, Function.identity());
@@ -59,12 +59,12 @@ public final class UniformedNumberCodecs {
 
     public static Codec<UniformFloat> rangedUniformFloatCodec(float min, float max) {
         Codec<UniformFloat> codec = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.floatRange(min, max).fieldOf("min").forGetter(UniformFloat::getMinValue),
-                Codec.floatRange(min, max).fieldOf("max").forGetter(UniformFloat::getMaxValue)
+                Codec.floatRange(min, max).fieldOf("min").forGetter(UniformFloat::min),
+                Codec.floatRange(min, max).fieldOf("max").forGetter(UniformFloat::max)
         ).apply(instance, UniformFloat::of));
         return codec.comapFlatMap(uniformFloat -> {
-            if (uniformFloat.getMaxValue() < uniformFloat.getMinValue()) {
-                return DataResult.error(() -> "Max must be at least min, min: " + uniformFloat.getMinValue()+ ", max: " + uniformFloat.getMaxValue());
+            if (uniformFloat.max() < uniformFloat.min()) {
+                return DataResult.error(() -> "Max must be at least min, min: " + uniformFloat.min()+ ", max: " + uniformFloat.max());
             }
             return DataResult.success(uniformFloat);
         }, Function.identity());

@@ -1,19 +1,19 @@
 package com.teamresourceful.resourcefullib.client.screens;
 
 import com.google.common.collect.Lists;
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class PriorityScreen extends BaseCursorScreen {
+public class PriorityScreen extends Screen {
 
     private final Int2ObjectMap<List<GuiEventListener>> sortedChildren = new Int2ObjectRBTreeMap<>(Comparator.naturalOrder());
     private final List<GuiEventListener> cachedChildren = Lists.newArrayList();

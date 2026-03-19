@@ -1,11 +1,9 @@
 package com.teamresourceful.resourcefullib.common.network;
 
-import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.Networking;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
@@ -14,12 +12,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
 
 import java.util.Collection;
 
 public class Network implements Networking {
+
+    private static final NetworkService SERVICE = NetworkService.create();
 
     private final Networking networking;
     private final boolean optional;
@@ -29,7 +27,7 @@ public class Network implements Networking {
     }
 
     public Network(Identifier channel, int protocolVersion, boolean optional) {
-        this.networking = getNetwork(channel, protocolVersion, optional);
+        this.networking = SERVICE.getNetwork(channel, protocolVersion, optional);
         this.optional = optional;
     }
 
@@ -100,12 +98,5 @@ public class Network implements Networking {
 
     public final boolean canSendToPlayer(Player player, PacketType<?> type) {
         return player instanceof ServerPlayer serverPlayer && canSendToPlayer(serverPlayer, type);
-    }
-
-    @ExpectPlatform
-    @ApiStatus.Internal
-    @Contract(pure = true)
-    public static Networking getNetwork(Identifier channel, int protocolVersion, boolean optional) {
-        throw new NotImplementedException();
     }
 }

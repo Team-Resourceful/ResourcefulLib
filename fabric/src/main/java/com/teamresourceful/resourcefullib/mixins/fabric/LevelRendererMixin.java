@@ -10,8 +10,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.BlockOutlineRenderState;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.CommonColors;
@@ -34,18 +34,18 @@ public class LevelRendererMixin {
             method = "extractBlockOutline",
             at = @At(
                     value = "NEW",
-                    target = "(Lnet/minecraft/core/BlockPos;ZZLnet/minecraft/world/phys/shapes/VoxelShape;)Lnet/minecraft/client/renderer/state/BlockOutlineRenderState;"
+                    target = "(Lnet/minecraft/core/BlockPos;ZZLnet/minecraft/world/phys/shapes/VoxelShape;)Lnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;"
             )
     )
     private BlockOutlineRenderState resourcefullib$extractBlockOutline(
             BlockPos pos,
-            boolean b1,
-            boolean b2,
+            boolean isTranslucent,
+            boolean highContrast,
             VoxelShape shape,
             Operation<BlockOutlineRenderState> original,
             @Local(ordinal = 0) BlockState state
     ) {
-        var renderState = original.call(pos, b1, b2, shape);
+        var renderState = original.call(pos, isTranslucent, highContrast, shape);
         //noinspection ConstantValue
         if ((Object) renderState instanceof BlockOutlineRenderStateExtension extension) {
             extension.resourcefullib$setHighlight(HighlightHandler.extractState(this.level, pos, state));
@@ -57,7 +57,7 @@ public class LevelRendererMixin {
     public void onRenderHitOutline(
             MultiBufferSource.BufferSource bufferSource,
             PoseStack poseStack,
-            boolean bl,
+            boolean onlyTranslucentBlocks,
             LevelRenderState levelRenderState,
             CallbackInfo ci
     ) {

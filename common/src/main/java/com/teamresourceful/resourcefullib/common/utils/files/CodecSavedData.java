@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefullib.common.utils.files;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.slf4j.Logger;
 
 import java.util.function.Supplier;
@@ -42,14 +42,14 @@ public final class CodecSavedData<T> extends SavedData implements Supplier<T> {
         this.setDirty();
     }
 
-    public static <T> Factory<T> create(Codec<T> codec, String path) {
-        return new Factory<>(codec, path);
+    public static <T> Factory<T> create(Codec<T> codec, Identifier id) {
+        return new Factory<>(codec, id);
     }
 
     public static class Factory<T> {
 
         private final Codec<T> codec;
-        private final String path;
+        private final Identifier id;
 
         private Supplier<T> defaultValue = () -> null;
         private boolean alwaysDirty = false;
@@ -57,9 +57,9 @@ public final class CodecSavedData<T> extends SavedData implements Supplier<T> {
 
         private SavedDataType<CodecSavedData<T>> type;
 
-        private Factory(Codec<T> codec, String path) {
+        private Factory(Codec<T> codec, Identifier id) {
             this.codec = codec;
-            this.path = path;
+            this.id = id;
         }
 
         /**
@@ -88,12 +88,12 @@ public final class CodecSavedData<T> extends SavedData implements Supplier<T> {
         }
 
         public CodecSavedData<T> create(ServerLevel level) {
-            DimensionDataStorage storage = this.global ? level.getServer().overworld().getDataStorage() : level.getDataStorage();
+            var storage = this.global ? level.getServer().overworld().getDataStorage() : level.getDataStorage();
             if (this.type == null) {
                 // https://github.com/neoforged/NeoForge/blob/1.21.x/patches/net/minecraft/world/level/storage/DimensionDataStorage.java.patch
                 // https://github.com/FabricMC/fabric/blob/1.21.4/fabric-object-builder-api-v1/src/main/java/net/fabricmc/fabric/mixin/object/builder/PersistentStateManagerMixin.java
                 this.type = new SavedDataType<>(
-                        this.path,
+                        this.id,
                         () -> new CodecSavedData<>(this),
                         codec.xmap(data -> new CodecSavedData<>(this, data), data -> data.data),
                         null

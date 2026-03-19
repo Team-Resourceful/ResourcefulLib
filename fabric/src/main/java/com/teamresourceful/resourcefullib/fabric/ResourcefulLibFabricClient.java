@@ -6,8 +6,8 @@ import com.teamresourceful.resourcefullib.client.sysinfo.SystemInfo;
 import com.teamresourceful.resourcefullib.common.ApiProxy;
 import com.teamresourceful.resourcefullib.common.utils.files.GlobalStorage;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
@@ -23,15 +23,15 @@ public class ResourcefulLibFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ApiProxy.setInstance(FabricClientProxy.INSTANCE);
-        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(
                 Identifier.fromNamespaceAndPath(ResourcefulLib.MOD_ID, "highlights"),
                 new HighlightHandler()
         );
         FabricResourcePackHandler.load();
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-            var command = ClientCommandManager.literal("rlib");
-            command.then(ClientCommandManager.literal("info")
+            var command = ClientCommands.literal("rlib");
+            command.then(ClientCommands.literal("info")
                     .executes(context -> {
                         String info = SystemInfo.buildForDiscord();
                         Minecraft.getInstance().keyboardHandler.setClipboard(info);
@@ -40,8 +40,8 @@ public class ResourcefulLibFabricClient implements ClientModInitializer {
                     })
             );
             if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-                command.then(ClientCommandManager.literal("teststorage")
-                        .executes(context -> {
+                command.then(ClientCommands.literal("teststorage")
+                        .executes(_ -> {
                             try {
                                 Path file = GlobalStorage.getCacheDirectory("test").resolve("test.txt");
                                 Files.deleteIfExists(file);

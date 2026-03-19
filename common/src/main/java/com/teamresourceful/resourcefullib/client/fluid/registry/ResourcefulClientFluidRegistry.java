@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<ClientFluidProperties> {
 
-    private static final Map<Identifier, ClientFluidProperties> REGISTRY = new ConcurrentHashMap<>();
+    private static final Map<Identifier, ClientFluidProperties> GLOBAL_REGISTRY = new ConcurrentHashMap<>();
 
     private final String modid;
     private final RegistryEntries<ClientFluidProperties> entries = new RegistryEntries<>();
@@ -24,18 +24,18 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
         this.modid = modid;
     }
 
-    public RegistryEntry<ClientFluidProperties> register(String id, ClientFluidProperties.Builder builder) {
-        return register(id, builder::build);
-    }
-
     @Override
     public String namespace() {
         return this.modid;
     }
 
+    public RegistryEntry<ClientFluidProperties> register(String id, ClientFluidProperties.Builder builder) {
+        return register(id, builder::build);
+    }
+
     @Override
     public <I extends ClientFluidProperties> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-        REGISTRY.put(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get());
+        GLOBAL_REGISTRY.put(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get());
         return entries.add(new Entry<>(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get()));
     }
 
@@ -61,7 +61,7 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
 
     @ApiStatus.Internal
     public static ClientFluidProperties get(Identifier id) {
-        return REGISTRY.get(id);
+        return GLOBAL_REGISTRY.get(id);
     }
 
     private record Entry<T extends ClientFluidProperties>(Identifier id, T data) implements RegistryEntry<T> {

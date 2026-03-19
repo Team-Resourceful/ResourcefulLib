@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import com.teamresourceful.resourcefullib.client.highlights.base.Highlight;
 import com.teamresourceful.resourcefullib.client.highlights.base.HighlightLine;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
-import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,8 +52,8 @@ public record HighlightStates(Map<List<BlockState>, Highlight> states) {
             line.start().sub(CENTER);
             line.end().sub(CENTER);
 
-            line.start().rotate(rotation.transformation().getLeftRotation());
-            line.end().rotate(rotation.transformation().getLeftRotation());
+            line.start().rotate(rotation.transformation().leftRotation());
+            line.end().rotate(rotation.transformation().leftRotation());
 
             line.start().add(CENTER);
             line.end().add(CENTER);

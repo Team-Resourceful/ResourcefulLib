@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityFluidEyesHook {
@@ -26,8 +27,8 @@ public abstract class EntityMixin implements EntityFluidEyesHook {
     @Unique
     private FluidState rlibEyesFluid;
 
-    @Inject(method = "updateFluidOnEyes", at = @At("HEAD"))
-    private void rlib_resetEyesFluid(CallbackInfo ci) {
+    @Inject(method = "updateFluidInteraction", at = @At("HEAD"))
+    private void rlib_resetEyesFluid(CallbackInfoReturnable<Boolean> ci) {
         rlibEyesFluid = null;
         BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
         FluidState fluidState = this.level().getFluidState(blockPos);

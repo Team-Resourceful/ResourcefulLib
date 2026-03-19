@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefullib.common.item.tabs;
 
-import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +12,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ResourcefulCreativeModeTab {
+
+    private static final ResourcefulCreativeModeTabService SERVICE = ResourcefulCreativeModeTabService.create();
 
     public final Identifier id;
     public Supplier<ItemStack> icon;
@@ -67,13 +67,7 @@ public class ResourcefulCreativeModeTab {
     }
 
     public CreativeModeTab build() {
-        return create(this);
+        return SERVICE.register(this);
     }
-
-    @ExpectPlatform
-    private static CreativeModeTab create(ResourcefulCreativeModeTab tab) {
-        throw new NotImplementedException();
-    }
-
 
 }

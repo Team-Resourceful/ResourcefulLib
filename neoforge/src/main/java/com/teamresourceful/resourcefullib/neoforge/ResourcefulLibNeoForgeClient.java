@@ -2,34 +2,48 @@ package com.teamresourceful.resourcefullib.neoforge;
 
 import com.teamresourceful.resourcefullib.ResourcefulLib;
 import com.teamresourceful.resourcefullib.client.fluid.neoforge.ResourcefulClientFluidType;
+import com.teamresourceful.resourcefullib.client.fluid.neoforge.ResourcefulFluidRenderer;
+import com.teamresourceful.resourcefullib.client.fluid.neoforge.ResourcefulFluidTintSource;
 import com.teamresourceful.resourcefullib.client.fluid.registry.ResourcefulClientFluidRegistry;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import com.teamresourceful.resourcefullib.client.sysinfo.SystemInfo;
+import com.teamresourceful.resourcefullib.common.ApiProxy;
 import com.teamresourceful.resourcefullib.common.fluid.neoforge.ResourcefulFluidType;
+import com.teamresourceful.resourcefullib.common.registry.NeoForgeResourcefulFluidRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.CommonColors;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+@Mod(value = ResourcefulLib.MOD_ID, dist = Dist.CLIENT)
 public class ResourcefulLibNeoForgeClient {
 
-    public static void init(IEventBus modEventBus) {
+    public ResourcefulLibNeoForgeClient(IEventBus bus) {
         NeoForgeResourcePackHandler.load();
         NeoForge.EVENT_BUS.addListener(ResourcefulLibNeoForgeClient::onHighlight);
         NeoForge.EVENT_BUS.addListener(ResourcefulLibNeoForgeClient::onClientCommandRegister);
-        modEventBus.addListener(ResourcefulLibNeoForgeClient::onRegisterFluidClient);
-        modEventBus.addListener(ResourcefulLibNeoForgeClient::onClientReloadListeners);
-        modEventBus.addListener(NeoForgeResourcePackHandler::onRegisterPackFinders);
+        bus.addListener(ResourcefulLibNeoForgeClient::onRegisterFluidClient);
+        bus.addListener(ResourcefulLibNeoForgeClient::onRegisterFluidModel);
+        bus.addListener(ResourcefulLibNeoForgeClient::onClientReloadListeners);
+        bus.addListener(NeoForgeResourcePackHandler::onRegisterPackFinders);
+
+        ApiProxy.setInstance(NeoForgeClientApiProxy.INSTANCE);
     }
 
     public static void onClientReloadListeners(AddClientReloadListenersEvent event) {
@@ -89,6 +103,26 @@ public class ResourcefulLibNeoForgeClient {
                             type
                     );
                 }
+            }
+        }
+    }
+
+    public static void onRegisterFluidModel(RegisterFluidModelsEvent event) {
+        for (var entry : NeoForgeResourcefulFluidRegistry.entries().entrySet()) {
+            var id = entry.getKey();
+            var data = entry.getValue();
+
+            var properties = ResourcefulClientFluidRegistry.get(id);
+            if (properties != null) {
+                var model = new FluidModel.Unbaked(
+                        properties.still(),
+                        properties.flowing(),
+                        properties.overlay(),
+                        new ResourcefulFluidTintSource(properties),
+                        new ResourcefulFluidRenderer(properties)
+                );
+
+                event.register(model, data.still().get(), data.flowing().get());
             }
         }
     }

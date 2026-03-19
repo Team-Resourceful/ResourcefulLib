@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefullib.client.closables;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
-public record CloseablePose(GuiGraphics graphics) implements AutoCloseable {
+public record CloseablePose(GuiGraphicsExtractor graphics) implements AutoCloseable {
 
     public CloseablePose {
         graphics.pose().pushMatrix();

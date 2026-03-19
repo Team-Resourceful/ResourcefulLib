@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefullib.client.closables;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
-public record CloseableScissor(GuiGraphics graphics) implements AutoCloseable {
+public record CloseableScissor(GuiGraphicsExtractor graphics) implements AutoCloseable {
 
-    public CloseableScissor(GuiGraphics graphics, int x, int y, int width, int height) {
+    public CloseableScissor(GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
         this(graphics);
         graphics.enableScissor(x, y, width, height);
     }

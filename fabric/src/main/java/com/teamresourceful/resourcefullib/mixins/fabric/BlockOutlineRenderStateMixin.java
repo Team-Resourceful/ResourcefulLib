@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefullib.mixins.fabric;
 
 import com.teamresourceful.resourcefullib.client.fabric.BlockOutlineRenderStateExtension;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightRenderState;
-import net.minecraft.client.renderer.state.BlockOutlineRenderState;
+import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

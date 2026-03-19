@@ -6,8 +6,8 @@ import com.teamresourceful.utils.getPlatform
 plugins {
     java
     id("maven-publish")
-    alias(libs.plugins.resourceful.loom)
     alias(libs.plugins.resourceful.gradle)
+    alias(libs.plugins.resourceful.minecraft) apply false
 }
 
 subprojects {
@@ -17,17 +17,47 @@ subprojects {
 
     val platform = getPlatform()
 
+    when (platform) {
+        Platform.COMMON -> apply(plugin = "com.teamresourceful.plugins.minecraft-platform-common")
+        Platform.FABRIC -> apply(plugin = "com.teamresourceful.plugins.minecraft-platform-fabric")
+        Platform.NEOFORGE -> apply(plugin = "com.teamresourceful.plugins.minecraft-platform-neoforge")
+    }
+
+    if (platform != Platform.COMMON) {
+        tasks.withType<JavaCompile> {
+            val serviceArgs = listOf(
+                "-Xplugin:ServicePlugin",
+                "--service-plugin-platform=$platform",
+                "--service-plugin-platform-class=com.teamresourceful.resourcefullib.common.lib.Platform",
+            )
+
+            options.encoding = "UTF-8"
+            options.compilerArgs.add(serviceArgs.joinToString(separator = " "))
+        }
+    }
+
+    repositories {
+        maven("https://prmaven.neoforged.net/NeoForge/pr2879")
+    }
+
     dependencies {
         if (platform == Platform.COMMON) {
             "api"(rootProject.libs.yabn)
             "api"(rootProject.libs.bytecodecs)
         } else {
-            implementation(rootProject.libs.yabn) {
-                "include"(this)
-            }
+            annotationProcessor(rootProject.libs.service.plugin)
+
+            implementation(rootProject.libs.yabn)
             implementation(rootProject.libs.bytecodecs) {
                 isTransitive = false
-                "include"(this)
+            }
+
+            if (platform == Platform.FABRIC) {
+                "include"(rootProject.libs.yabn)
+                "include"(rootProject.libs.bytecodecs)
+            } else if (platform == Platform.NEOFORGE) {
+                "jarJar"(rootProject.libs.yabn)
+                "jarJar"(rootProject.libs.bytecodecs)
             }
         }
     }

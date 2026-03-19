@@ -1,7 +1,5 @@
 package com.teamresourceful.resourcefullib.common.menu;
 
-import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -12,14 +10,14 @@ import java.util.Optional;
 
 public final class MenuContentHelper {
 
-    @ExpectPlatform
+    private static final MenuContentHelperService SERVICE = MenuContentHelperService.create();
+
     public static <T extends AbstractContainerMenu, C extends MenuContent<C>> MenuType<T> create(MenuFactory<T, C> factory, MenuContentSerializer<C> serializer) {
-        throw new NotImplementedException();
+        return SERVICE.create(factory, serializer);
     }
 
-    @ExpectPlatform
     public static <C extends MenuContent<C>> void open(ServerPlayer player, ContentMenuProvider<C> provider) {
-        throw new NotImplementedException();
+        SERVICE.open(player, provider);
     }
 
     public interface MenuFactory<T extends AbstractContainerMenu, C extends MenuContent<C>> {

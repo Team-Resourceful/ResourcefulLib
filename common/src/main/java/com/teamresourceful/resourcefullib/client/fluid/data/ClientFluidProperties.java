@@ -7,16 +7,18 @@ import com.mojang.datafixers.util.Function6;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.Lightmap;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.FluidRenderer;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
@@ -27,11 +29,9 @@ import java.util.function.Function;
 
 public interface ClientFluidProperties {
 
-    Identifier still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
-
-    Identifier flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
-
-    Identifier overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state);
+    Material still();
+    Material flowing();
+    Material overlay();
 
     Identifier screenOverlay();
 
@@ -40,7 +40,7 @@ public interface ClientFluidProperties {
         if (texture != null) {
             Player player = minecraft.player;
             BlockPos blockpos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
-            float brightness = LightTexture.getBrightness(player.level().dimensionType(), player.level().getMaxLocalRawBrightness(blockpos));
+            float brightness = Lightmap.getBrightness(player.level().dimensionType(), player.level().getMaxLocalRawBrightness(blockpos));
             int color = ARGB.colorFromFloat(0.1F, brightness, brightness, brightness);
 
             float a = -player.getYRot() / 64.0F;
@@ -58,9 +58,9 @@ public interface ClientFluidProperties {
 
     default boolean renderFluid(
             BlockPos pos,
-            BlockAndTintGetter world, VertexConsumer vertexConsumer,
-            BlockState blockState, FluidState fluidState,
-            Function<Identifier, TextureAtlasSprite> sprites
+            BlockAndTintGetter world,
+            FluidRenderer.Output output,
+            BlockState blockState, FluidState fluidState
     ) {
         return false;
     }
@@ -79,25 +79,25 @@ public interface ClientFluidProperties {
 
     class Builder {
 
-        private Function3<BlockAndTintGetter, BlockPos, FluidState, Identifier> still = (a, b, c) -> null;
-        private Function3<BlockAndTintGetter, BlockPos, FluidState, Identifier> flowing = (a, b, c) -> null;
-        private Function3<BlockAndTintGetter, BlockPos, FluidState, Identifier> overlay = (a, b, c) -> null;
+        private Material still = null;
+        private Material flowing = null;
+        private Material overlay = null;
         private Identifier screenOverlay = null;
         private Function3<BlockAndTintGetter, BlockPos, FluidState, Integer> tintColor = (a, b, c) -> -1;
         private Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<Identifier, TextureAtlasSprite>, Boolean> renderFluid = (a, b, c, d, e, f) -> false;
 
         public Builder still(Identifier still) {
-            this.still = (a, b, c) -> still;
+            this.still = new Material(still);
             return this;
         }
 
         public Builder flowing(Identifier flowing) {
-            this.flowing = (a, b, c) -> flowing;
+            this.flowing = new Material(flowing);
             return this;
         }
 
         public Builder overlay(Identifier overlay) {
-            this.overlay = (a, b, c) -> overlay;
+            this.overlay = new Material(overlay);
             return this;
         }
 
@@ -116,27 +116,22 @@ public interface ClientFluidProperties {
             return this;
         }
 
-        public Builder renderFluid(Function6<BlockPos, BlockAndTintGetter, VertexConsumer, BlockState, FluidState, Function<Identifier, TextureAtlasSprite>, Boolean> renderFluid) {
-            this.renderFluid = renderFluid;
-            return this;
-        }
-
         public ClientFluidProperties build() {
             return new ClientFluidProperties() {
 
                 @Override
-                public Identifier still(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
-                    return still.apply(view, pos, state);
+                public Material still() {
+                    return still;
                 }
 
                 @Override
-                public Identifier flowing(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
-                    return flowing.apply(view, pos, state);
+                public Material flowing() {
+                    return flowing;
                 }
 
                 @Override
-                public Identifier overlay(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
-                    return overlay.apply(view, pos, state);
+                public Material overlay() {
+                    return overlay;
                 }
 
                 @Override
@@ -147,11 +142,6 @@ public interface ClientFluidProperties {
                 @Override
                 public int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
                     return tintColor.apply(view, pos, state);
-                }
-
-                @Override
-                public boolean renderFluid(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState, Function<Identifier, TextureAtlasSprite> sprites) {
-                    return renderFluid.apply(pos, world, vertexConsumer, blockState, fluidState, sprites);
                 }
             };
         }

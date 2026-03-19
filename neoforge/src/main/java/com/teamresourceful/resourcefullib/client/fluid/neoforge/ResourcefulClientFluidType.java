@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefullib.client.fluid.neoforge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -9,14 +8,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.textures.FluidSpriteCache;
-import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4f;
@@ -24,86 +16,18 @@ import org.joml.Vector4f;
 public record ResourcefulClientFluidType(ClientFluidProperties properties) implements IClientFluidTypeExtensions {
 
     @Override
-    public @NotNull Identifier getStillTexture() {
-        return properties().still(null, null, null);
-    }
-
-    @Override
-    public @NotNull Identifier getStillTexture(@NotNull FluidStack stack) {
-        return properties().still(null, null, stack.getFluid().defaultFluidState());
-    }
-
-    @Override
-    public @NotNull Identifier getStillTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
-        return properties().still(getter, pos, state);
-    }
-
-    @Override
-    public @NotNull Identifier getFlowingTexture() {
-        return properties().flowing(null, null, null);
-    }
-
-    @Override
-    public @NotNull Identifier getFlowingTexture(@NotNull FluidStack stack) {
-        return properties().flowing(null, null, stack.getFluid().defaultFluidState());
-    }
-
-    @Override
-    public @NotNull Identifier getFlowingTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
-        return properties().flowing(getter, pos, state);
-    }
-
-    @Override
-    public @Nullable Identifier getOverlayTexture() {
-        return properties().overlay(null, null, null);
-    }
-
-    @Override
-    public @NotNull Identifier getOverlayTexture(@NotNull FluidStack stack) {
-        return properties().overlay(null, null, stack.getFluid().defaultFluidState());
-    }
-
-    @Override
-    public @NotNull Identifier getOverlayTexture(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
-        return properties().overlay(getter, pos, state);
-    }
-
-    @Override
     public void renderOverlay(@NotNull Minecraft mc, @NotNull PoseStack poseStack, @NotNull MultiBufferSource buffers) {
-        properties().renderOverlay(mc, poseStack, buffers);
+        this.properties.renderOverlay(mc, poseStack, buffers);
     }
 
     @Override
-    public int getTintColor() {
-        return properties().tintColor(null, null, null);
-    }
-
-    @Override
-    public int getTintColor(@NotNull FluidStack stack) {
-        return properties().tintColor(null, null, stack.getFluid().defaultFluidState());
-    }
-
-    @Override
-    public int getTintColor(@NotNull FluidState state, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos) {
-        return properties().tintColor(getter, pos, state);
-    }
-
-    @Override
-    public boolean renderFluid(@NotNull FluidState fluidState, @NotNull BlockAndTintGetter getter, @NotNull BlockPos pos, @NotNull VertexConsumer vertexConsumer, @NotNull BlockState blockState) {
-        if (properties().renderFluid(pos, getter, vertexConsumer, blockState, fluidState, FluidSpriteCache::getSprite)) {
-            return true;
-        }
-        return IClientFluidTypeExtensions.super.renderFluid(fluidState, getter, pos, vertexConsumer, blockState);
-    }
-
-    @Override
-    public @NotNull Vector4f modifyFogColor(@NotNull Camera camera, float partialTick, @NotNull ClientLevel level, int renderDistance, float darkenWorldAmount, @NotNull Vector4f color) {
-        return properties().modifyFogColor(camera, partialTick, level, renderDistance, darkenWorldAmount, color);
+    public void modifyFogColor(@NotNull Camera camera, float partialTick, @NotNull ClientLevel level, int renderDistance, float darkenWorldAmount, @NotNull Vector4f color) {
+        color.set(this.properties.modifyFogColor(camera, partialTick, level, renderDistance, darkenWorldAmount, color));
     }
 
     @Override
     public void modifyFogRender(@NotNull Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, @NotNull FogData data) {
-        var newData = properties().modifyFogRender(camera, renderDistance, partialTick, data);
+        var newData = this.properties.modifyFogRender(camera, renderDistance, partialTick, data);
         data.environmentalStart = newData.environmentalStart;
         data.renderDistanceStart = newData.renderDistanceStart;
         data.environmentalEnd = newData.environmentalEnd;
@@ -111,5 +35,4 @@ public record ResourcefulClientFluidType(ClientFluidProperties properties) imple
         data.skyEnd = newData.skyEnd;
         data.cloudEnd = newData.cloudEnd;
     }
-
 }

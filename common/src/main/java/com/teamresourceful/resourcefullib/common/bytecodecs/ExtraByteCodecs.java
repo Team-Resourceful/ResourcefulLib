@@ -15,8 +15,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -37,7 +37,7 @@ public final class ExtraByteCodecs {
     public static final ByteCodec<ResourceKey<Level>> DIMENSION = resourceKey(Registries.DIMENSION);
 
     public static final ByteCodec<BlockPos> BLOCK_POS = ByteCodec.LONG.map(BlockPos::of, BlockPos::asLong);
-    public static final ByteCodec<ChunkPos> CHUNK_POS = ByteCodec.LONG.map(ChunkPos::new, ChunkPos::toLong);
+    public static final ByteCodec<ChunkPos> CHUNK_POS = ByteCodec.LONG.map(ChunkPos::unpack, ChunkPos::pack);
     public static final ByteCodec<SectionPos> SECTION_POS = ByteCodec.LONG.map(SectionPos::of, SectionPos::asLong);
     public static final ByteCodec<GlobalPos> GLOBAL_POS = ObjectByteCodec.create(
             DIMENSION.fieldOf(GlobalPos::dimension),

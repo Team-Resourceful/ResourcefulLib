@@ -27,7 +27,7 @@ public class ScreenEffectRendererMixin {
     @Shadow @Final private MultiBufferSource bufferSource;
 
     @Inject(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z", shift = At.Shift.BEFORE))
-    private void rlib_renderScreenEffect(boolean bl, float f, SubmitNodeCollector submitNodeCollector, CallbackInfo ci, @Local PoseStack stack) {
+    private void rlib_renderScreenEffect(boolean isFirstPerson, boolean isSleeping, float partialTicks, SubmitNodeCollector submitNodeCollector, boolean hideGui, CallbackInfo ci, @Local PoseStack stack) {
         Player player = this.minecraft.player;
         if (player instanceof EntityFluidEyesHook hook && hook.rlib$getEyesFluid() != null && hook.rlib$getEyesFluid().getType() instanceof ResourcefulFlowingFluid fluid) {
             Identifier id = fluid.getData().id();
