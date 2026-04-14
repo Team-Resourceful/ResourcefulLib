@@ -3,8 +3,10 @@ package com.teamresourceful.resourcefullib.client.highlights.base;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -41,7 +43,32 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
                 x, y, z,
                 start.x(), start.y(), start.z(),
                 end.x(), end.y(), end.z(),
-                normal.x(), normal.y(), normal.z()
+                normal.x(), normal.y(), normal.z(),
+                Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth
+        );
+    }
+
+    /**
+     * @deprecated Use the method that takes in a width parameter instead, as the line width can be different based on the render type used.
+     */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "26.2")
+    public static void render(
+            PoseStack stack, VertexConsumer consumer,
+            int color,
+            float x, float y, float z,
+            float x1, float y1, float z1,
+            float x2, float y2, float z2,
+            float normalX, float normalY, float normalZ
+    ) {
+        render(
+                stack, consumer,
+                color,
+                x, y, z,
+                x1, y1, z1,
+                x2, y2, z2,
+                normalX, normalY, normalZ,
+                Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth
         );
     }
 
@@ -51,15 +78,18 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
             float x, float y, float z,
             float x1, float y1, float z1,
             float x2, float y2, float z2,
-            float normalX, float normalY, float normalZ
+            float normalX, float normalY, float normalZ,
+            float width
     ) {
         PoseStack.Pose last = stack.last();
         consumer.addVertex(last.pose(), x + x1, y + y1, z + z1)
                 .setColor(color)
-                .setNormal(last, normalX, normalY, normalZ);
+                .setNormal(last, normalX, normalY, normalZ)
+                .setLineWidth(width);
         consumer.addVertex(last.pose(), x + x2, y + y2, z + z2)
                 .setColor(color)
-                .setNormal(last, normalX, normalY, normalZ);
+                .setNormal(last, normalX, normalY, normalZ)
+                .setLineWidth(width);
     }
 
     private static Vector3f normal(Vector3f start, Vector3f end) {

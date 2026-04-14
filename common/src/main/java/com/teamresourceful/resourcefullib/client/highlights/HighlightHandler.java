@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefullib.client.highlights.base.Highlightable;
 import com.teamresourceful.resourcefullib.client.highlights.state.HighlightStates;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.FileToIdConverter;
@@ -22,6 +23,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,7 +99,16 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<@NotNull 
         return state instanceof HighlightRenderState.Dynamic || (state instanceof HighlightRenderState.Cached(var lines, var offset) && lines.length % 9 == 0);
     }
 
+    /**
+     * @deprecated Use the method that takes in a width parameter instead, as the line width can be different based on the render type used.
+     */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "26.2")
     public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color) {
+        return onBlockHighlight(cameraPos, stack, pos, state, consumer, color, Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth);
+    }
+
+    public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color, float width) {
         if (state instanceof HighlightRenderState.Dynamic(var highlight, var offset)) {
             highlight.render(consumer, stack, cameraPos, offset, pos);
             return true;
@@ -117,7 +128,8 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<@NotNull 
                         x, y, z,
                         lines[i], lines[i + 1], lines[i + 2],
                         lines[i + 3], lines[i + 4], lines[i + 5],
-                        lines[i + 6], lines[i + 7], lines[i + 8]
+                        lines[i + 6], lines[i + 7], lines[i + 8],
+                        width
                 );
             }
             stack.popPose();
