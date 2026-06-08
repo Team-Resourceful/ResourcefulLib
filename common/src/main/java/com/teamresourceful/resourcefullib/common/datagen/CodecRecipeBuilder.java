@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefullib.common.datagen;
 
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -12,6 +12,8 @@ import com.teamresourceful.resourcefullib.client.highlights.state.HighlightState
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.FileToIdConverter;
@@ -99,44 +101,37 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<@NotNull 
         return state instanceof HighlightRenderState.Dynamic || (state instanceof HighlightRenderState.Cached(var lines, var offset) && lines.length % 9 == 0);
     }
 
-    /**
-     * @deprecated Use the method that takes in a width parameter instead, as the line width can be different based on the render type used.
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "26.2")
-    public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color) {
-        return onBlockHighlight(cameraPos, stack, pos, state, consumer, color, Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth);
-    }
+    public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, SubmitNodeCollector collector, RenderType renderType, int color, float width) {
+        if (!canRender(state)) return false;
 
-    public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color, float width) {
-        if (state instanceof HighlightRenderState.Dynamic(var highlight, var offset)) {
-            highlight.render(consumer, stack, cameraPos, offset, pos);
-            return true;
-        } else if (state instanceof HighlightRenderState.Cached(var lines, var offset) && lines.length % 9 == 0) {
-            stack.pushPose();
-            float x = (float) (pos.getX() - cameraPos.x());
-            float y = (float) (pos.getY() - cameraPos.y());
-            float z = (float) (pos.getZ() - cameraPos.z());
-            x += (float) offset.x();
-            y += (float) offset.y();
-            z += (float) offset.z();
+        collector.submitCustomGeometry(stack, renderType, (pose, consumer) -> {
+            if (state instanceof HighlightRenderState.Dynamic(var highlight, var offset)) {
+                highlight.render(consumer, stack, cameraPos, offset, pos);
+            } else if (state instanceof HighlightRenderState.Cached(var lines, var offset)) {
+                stack.pushPose();
+                float x = (float) (pos.getX() - cameraPos.x());
+                float y = (float) (pos.getY() - cameraPos.y());
+                float z = (float) (pos.getZ() - cameraPos.z());
+                x += (float) offset.x();
+                y += (float) offset.y();
+                z += (float) offset.z();
 
-            for (int i = 0; i < lines.length; i += 9) {
-                HighlightLine.render(
-                        stack, consumer,
-                        color,
-                        x, y, z,
-                        lines[i], lines[i + 1], lines[i + 2],
-                        lines[i + 3], lines[i + 4], lines[i + 5],
-                        lines[i + 6], lines[i + 7], lines[i + 8],
-                        width
-                );
+                for (int i = 0; i < lines.length; i += 9) {
+                    HighlightLine.render(
+                            stack, consumer,
+                            color,
+                            x, y, z,
+                            lines[i], lines[i + 1], lines[i + 2],
+                            lines[i + 3], lines[i + 4], lines[i + 5],
+                            lines[i + 6], lines[i + 7], lines[i + 8],
+                            width
+                    );
+                }
+                stack.popPose();
             }
-            stack.popPose();
+        });
 
-            return true;
-        }
-        return false;
+        return true;
     }
 
     private static Highlight getOrThrow(Identifier id) {
