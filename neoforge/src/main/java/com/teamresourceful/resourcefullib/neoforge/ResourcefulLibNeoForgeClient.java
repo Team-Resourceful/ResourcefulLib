@@ -56,14 +56,15 @@ public class ResourcefulLibNeoForgeClient {
 
         if (state == null) return;
 
-        event.addCustomRenderer((outlineState, buffer, stack, pass, levelState) -> {
+        event.addCustomRenderer((outlineState, collector, stack, levelState) -> {
             if (outlineState.highContrast()) {
                 HighlightHandler.onBlockHighlight(
                         event.getCamera().position(),
                         stack,
                         pos,
                         state,
-                        buffer.getBuffer(RenderTypes.secondaryBlockOutline()),
+                        collector,
+                        RenderTypes.secondaryBlockOutline(),
                         CommonColors.BLACK,
                         7f
                 );
@@ -74,9 +75,10 @@ public class ResourcefulLibNeoForgeClient {
                     stack,
                     pos,
                     state,
-                    buffer.getBuffer(RenderTypes.lines()),
+                    collector,
+                    RenderTypes.lines(),
                     outlineState.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK),
-                    Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth
+                    Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth
             );
         });
     }
