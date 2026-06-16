@@ -2,9 +2,9 @@
 
 # Minecraft
 minecraft = "26.2"
-neoform = "26.2"
+neoform = "26.2-1"
 fabric-api = "0.152.1+26.2"
-neoforge = "26.2.0"
+neoforge = "26.2.0.0-beta"
 
 # Libraries
 yabn = "1.0.3"
