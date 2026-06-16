@@ -1,10 +1,10 @@
 [versions]
 
 # Minecraft
-minecraft = "26.2-rc-1"
-neoform = "26.2-rc-1-1"
-fabric-api = "0.152.0+26.2"
-neoforge = "26.2.0-alpha.0+rc-1.20260611.132638"
+minecraft = "26.2"
+neoform = "26.2"
+fabric-api = "0.152.1+26.2"
+neoforge = "26.2.0"
 
 # Libraries
 yabn = "1.0.3"
