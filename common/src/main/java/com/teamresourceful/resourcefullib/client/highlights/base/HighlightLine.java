@@ -44,7 +44,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
                 start.x(), start.y(), start.z(),
                 end.x(), end.y(), end.z(),
                 normal.x(), normal.y(), normal.z(),
-                Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth
+                Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth
         );
     }
 
@@ -68,7 +68,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
                 x1, y1, z1,
                 x2, y2, z2,
                 normalX, normalY, normalZ,
-                Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth
+                Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth
         );
     }
 

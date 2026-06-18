@@ -22,7 +22,7 @@ public record NbtPredicate(CompoundTag tag) {
 
     public boolean matches(Entity pEntity) {
         if (this == ANY || isEmpty(this.tag)) return true;
-        return this.matches(net.minecraft.advancements.criterion.NbtPredicate.getEntityTagToCompare(pEntity));
+        return this.matches(net.minecraft.advancements.predicates.NbtPredicate.getEntityTagToCompare(pEntity));
     }
 
     public boolean matches(@Nullable Tag tag) {

@@ -31,7 +31,7 @@ public interface ScreenHistory {
         if (this.canGoBack()) {
             Screen lastScreen = this.getLastScreen();
             if (lastScreen != null) {
-                Minecraft.getInstance().setScreen(lastScreen);
+                Minecraft.getInstance().gui.setScreen(lastScreen);
             }
         }
     }

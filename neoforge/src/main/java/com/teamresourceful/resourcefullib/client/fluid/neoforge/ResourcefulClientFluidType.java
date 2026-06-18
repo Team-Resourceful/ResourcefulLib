@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidPropertie
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -16,8 +16,8 @@ import org.joml.Vector4f;
 public record ResourcefulClientFluidType(ClientFluidProperties properties) implements IClientFluidTypeExtensions {
 
     @Override
-    public void renderOverlay(@NotNull Minecraft mc, @NotNull PoseStack poseStack, @NotNull MultiBufferSource buffers) {
-        this.properties.renderOverlay(mc, poseStack, buffers);
+    public void renderOverlay(@NotNull Minecraft mc, @NotNull PoseStack poseStack, @NotNull SubmitNodeCollector submitNodeCollector) {
+        this.properties.renderOverlay(mc, poseStack, submitNodeCollector);
     }
 
     @Override

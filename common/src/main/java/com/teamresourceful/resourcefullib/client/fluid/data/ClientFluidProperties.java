@@ -8,7 +8,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.Lightmap;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidRenderer;
 import net.minecraft.client.renderer.fog.FogData;
@@ -35,7 +35,7 @@ public interface ClientFluidProperties {
 
     Identifier screenOverlay();
 
-    default void renderOverlay(Minecraft minecraft, PoseStack stack, MultiBufferSource source) {
+    default void renderOverlay(Minecraft minecraft, PoseStack stack, SubmitNodeCollector submitNodeCollector) {
         Identifier texture = screenOverlay();
         if (texture != null) {
             Player player = minecraft.player;
@@ -45,12 +45,14 @@ public interface ClientFluidProperties {
 
             float a = -player.getYRot() / 64.0F;
             float b = player.getXRot() / 64.0F;
-            Matrix4f matrix = stack.last().pose();
-            VertexConsumer consumer = source.getBuffer(RenderTypes.blockScreenEffect(texture));
-            consumer.addVertex(matrix, -1.0F, -1.0F, -0.5F).setUv(4.0F + a, 4.0F + b).setColor(color);
-            consumer.addVertex(matrix, 1.0F, -1.0F, -0.5F).setUv(0.0F + a, 4.0F + b).setColor(color);
-            consumer.addVertex(matrix, 1.0F, 1.0F, -0.5F).setUv(0.0F + a, 0.0F + b).setColor(color);
-            consumer.addVertex(matrix, -1.0F, 1.0F, -0.5F).setUv(4.0F + a, 0.0F + b).setColor(color);
+
+            submitNodeCollector.submitCustomGeometry(stack, RenderTypes.blockScreenEffect(texture), (pose, builder) -> {
+                Matrix4f matrix = pose.pose();
+                builder.addVertex(matrix, -1.0F, -1.0F, -0.5F).setUv(4.0F + a, 4.0F + b).setColor(color);
+                builder.addVertex(matrix, 1.0F, -1.0F, -0.5F).setUv(0.0F + a, 4.0F + b).setColor(color);
+                builder.addVertex(matrix, 1.0F, 1.0F, -0.5F).setUv(0.0F + a, 0.0F + b).setColor(color);
+                builder.addVertex(matrix, -1.0F, 1.0F, -0.5F).setUv(4.0F + a, 0.0F + b).setColor(color);
+            });
         }
     }
 

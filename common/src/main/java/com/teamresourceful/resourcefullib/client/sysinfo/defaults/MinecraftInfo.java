@@ -108,7 +108,7 @@ public record MinecraftInfo() implements Consumer<SystemInfoBuilder> {
                 $ -> getPing(mc),
                 "N/A"
         ));
-        builder.append("Connection", mc.isSingleplayer() ? "Singleplayer" : mc.isLocalServer() ? "Singleplayer Lan" : "Multiplayer");
+        builder.append("Connection", mc.isMultiplayerServer() ? (mc.isLocalServer() ? "Singleplayer Lan" : "Multiplayer") : "Singleplayer");
         builder.append("Loaded Mods", ModInfoUtils.getLoadedMods());
     }
 }
