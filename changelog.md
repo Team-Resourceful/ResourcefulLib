@@ -1,3 +1,7 @@
+# -----{ 5.0.0 }-----
+
+Update to 26.2
+
 # -----{ 4.0.1 }-----
 
 Fix crash when highlights being rendered
