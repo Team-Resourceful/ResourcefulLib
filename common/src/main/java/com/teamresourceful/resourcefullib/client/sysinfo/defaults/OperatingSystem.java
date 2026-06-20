@@ -31,7 +31,7 @@ public record OperatingSystem(oshi.SystemInfo info) implements Consumer<SystemIn
                 var matcher = INFO_PATTERN.matcher(info);
                 if (matcher.matches()) {
                     builder.append("GPU #%d %s".formatted(i, matcher.group(1)), matcher.group(2));
-                } else {
+                } else if (!info.equalsIgnoreCase("unknown")) {
                     builder.append("GPU #%d Version Info".formatted(i), info);
                 }
             }
