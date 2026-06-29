@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefullib.client.highlights.base;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import org.joml.Vector3f;
@@ -37,7 +38,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
     public void render(PoseStack poseStack, VertexConsumer consumer, float x, float y, float z) {
         render(
                 poseStack, consumer,
-                0x00000066,
+                0x00000066, Minecraft.getInstance().getWindow().getAppropriateLineWidth(),
                 x, y, z,
                 start.x(), start.y(), start.z(),
                 end.x(), end.y(), end.z(),
@@ -45,6 +46,7 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
         );
     }
 
+    @Deprecated(forRemoval = true)
     public static void render(
             PoseStack stack, VertexConsumer consumer,
             int color,
@@ -53,13 +55,33 @@ public record HighlightLine(Vector3f start, Vector3f end, Vector3f normal) {
             float x2, float y2, float z2,
             float normalX, float normalY, float normalZ
     ) {
+        render(
+                stack, consumer,
+                color, Minecraft.getInstance().getWindow().getAppropriateLineWidth(),
+                x, y, z,
+                x1, y1, z1,
+                x2, y2, z2,
+                normalX, normalY, normalZ
+        );
+    }
+
+    public static void render(
+            PoseStack stack, VertexConsumer consumer,
+            int color, float width,
+            float x, float y, float z,
+            float x1, float y1, float z1,
+            float x2, float y2, float z2,
+            float normalX, float normalY, float normalZ
+    ) {
         PoseStack.Pose last = stack.last();
         consumer.addVertex(last.pose(), x + x1, y + y1, z + z1)
                 .setColor(color)
-                .setNormal(last, normalX, normalY, normalZ);
+                .setNormal(last, normalX, normalY, normalZ)
+                .setLineWidth(width);
         consumer.addVertex(last.pose(), x + x2, y + y2, z + z2)
                 .setColor(color)
-                .setNormal(last, normalX, normalY, normalZ);
+                .setNormal(last, normalX, normalY, normalZ)
+                .setLineWidth(width);
     }
 
     private static Vector3f normal(Vector3f start, Vector3f end) {

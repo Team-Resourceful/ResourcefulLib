@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefullib.client.highlights.base.Highlightable;
 import com.teamresourceful.resourcefullib.client.highlights.state.HighlightStates;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.FileToIdConverter;
@@ -97,7 +98,12 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<@NotNull 
         return state instanceof HighlightRenderState.Dynamic || (state instanceof HighlightRenderState.Cached(var lines, var offset) && lines.length % 9 == 0);
     }
 
+    @Deprecated(forRemoval = true)
     public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color) {
+        return onBlockHighlight(cameraPos, stack, pos, state, consumer, color, Minecraft.getInstance().getWindow().getAppropriateLineWidth());
+    }
+
+    public static boolean onBlockHighlight(Vec3 cameraPos, PoseStack stack, BlockPos pos, HighlightRenderState state, VertexConsumer consumer, int color, float width) {
         if (state instanceof HighlightRenderState.Dynamic(var highlight, var offset)) {
             highlight.render(consumer, stack, cameraPos, offset, pos);
             return true;
@@ -113,7 +119,7 @@ public class HighlightHandler extends SimpleJsonResourceReloadListener<@NotNull 
             for (int i = 0; i < lines.length; i += 9) {
                 HighlightLine.render(
                         stack, consumer,
-                        color,
+                        color, width,
                         x, y, z,
                         lines[i], lines[i + 1], lines[i + 2],
                         lines[i + 3], lines[i + 4], lines[i + 5],

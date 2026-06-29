@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.fabric.BlockOutlineRenderStateExtension;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,6 +19,7 @@ import net.minecraft.util.CommonColors;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,6 +31,10 @@ public class LevelRendererMixin {
 
     @Shadow
     private @Nullable ClientLevel level;
+
+    @Shadow
+    @Final
+    private Minecraft minecraft;
 
     @WrapOperation(
             method = "extractBlockOutline",
@@ -74,7 +80,8 @@ public class LevelRendererMixin {
                             state.pos(),
                             highlight,
                             bufferSource.getBuffer(RenderTypes.secondaryBlockOutline()),
-                            CommonColors.BLACK
+                            CommonColors.BLACK,
+                            7f
                     );
                 }
 
@@ -84,7 +91,8 @@ public class LevelRendererMixin {
                         state.pos(),
                         highlight,
                         bufferSource.getBuffer(RenderTypes.lines()),
-                        state.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK)
+                        state.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK),
+                        this.minecraft.getWindow().getAppropriateLineWidth()
                 );
                 ci.cancel();
             }

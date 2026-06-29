@@ -50,7 +50,8 @@ public class ResourcefulLibNeoForgeClient {
                         pos,
                         state,
                         buffer.getBuffer(RenderTypes.secondaryBlockOutline()),
-                        CommonColors.BLACK
+                        CommonColors.BLACK,
+                        7f
                 );
             }
 
@@ -60,7 +61,8 @@ public class ResourcefulLibNeoForgeClient {
                     pos,
                     state,
                     buffer.getBuffer(RenderTypes.lines()),
-                    outlineState.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK)
+                    outlineState.highContrast() ? CommonColors.HIGH_CONTRAST_DIAMOND : ARGB.color(102, CommonColors.BLACK),
+                    Minecraft.getInstance().getWindow().getAppropriateLineWidth()
             );
         });
     }
