@@ -12,8 +12,11 @@ public final class Scheduling {
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
-    private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(10, runnable -> new Thread(runnable, "Scheduler-" + COUNTER.getAndIncrement()));
-
+    private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(10, runnable -> {
+        var thread = new Thread(runnable, "Scheduler-" + COUNTER.getAndIncrement());
+        thread.setDaemon(false);
+        return thread;
+    });
     private Scheduling() throws UtilityClassException {
         throw new UtilityClassException();
     }
