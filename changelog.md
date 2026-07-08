@@ -1,3 +1,8 @@
+# -----{ 5.0.1 }-----
+
+Fix client watchdog hanging up on scheduler
+Update to 26.2
+
 # -----{ 5.0.0 }-----
 
 Update to 26.2
