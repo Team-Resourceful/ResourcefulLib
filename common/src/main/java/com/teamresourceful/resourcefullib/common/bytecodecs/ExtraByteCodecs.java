@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefullib.common.ApiProxy;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.*;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.material.Fluid;
 import org.joml.Vector3f;
 
 import java.util.Optional;
+import java.util.function.ToDoubleFunction;
 
 public final class ExtraByteCodecs {
 
@@ -88,6 +90,10 @@ public final class ExtraByteCodecs {
             value -> value ? left : right,
             either -> either.map(l -> true, r -> false)
         );
+    }
+
+    public static <T> ByteCodec<WeightedCollection<T>> weightedCollection(ByteCodec<T> codec, ToDoubleFunction<T> weighter) {
+        return codec.listOf().map(set -> WeightedCollection.of(set, weighter), collection -> collection.stream().toList());
     }
 
     public static FriendlyByteBuf toFriendly(ByteBuf buffer) {

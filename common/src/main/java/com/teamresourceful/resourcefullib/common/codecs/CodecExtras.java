@@ -48,6 +48,7 @@ public final class CodecExtras {
     public static <O, A> Function<O, Optional<A>> optionalFor(final Function<O, @Nullable A> getter) {
         return o -> Optional.ofNullable(getter.apply(o));
     }
+
     public static <T> Codec<WeightedCollection<T>> weightedCollection(Codec<T> codec, ToDoubleFunction<T> weighter) {
         return codec.listOf().xmap(set -> WeightedCollection.of(set, weighter), collection -> collection.stream().toList());
     }

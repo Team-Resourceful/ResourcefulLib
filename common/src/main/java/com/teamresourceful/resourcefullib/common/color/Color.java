@@ -223,6 +223,10 @@ public class Color {
         return value;
     }
 
+    public int getOpaqueValue() {
+        return value | 0xFF000000;
+    }
+
     public boolean isDefault() {
         return defaultValue;
     }
