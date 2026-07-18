@@ -1,3 +1,7 @@
+# -----{ 5.0.3 }-----
+
+Added getOpaqueValue on the Color class and a byte codec in ExtraByteCodecs for WeightCollection
+
 # -----{ 5.0.1 }-----
 
 Fix client watchdog hanging up on scheduler
