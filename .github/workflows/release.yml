@@ -69,7 +69,7 @@ jobs:
 
       - name: Upload NeoForge Releases (Curse/Modrinth/Github)
         id: forge_release
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3.3.1
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
           curseforge-token: ${{ secrets.CURSE_API_KEY }}
@@ -90,7 +90,7 @@ jobs:
 
       - name: Upload Fabric Releases (Curse/Modrinth/Github)
         id: fabric_release
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3.3.1
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
           curseforge-token: ${{ secrets.CURSE_API_KEY }}
