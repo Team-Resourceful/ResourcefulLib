@@ -22,7 +22,7 @@ If you would like to contribute to the mod feel free to submit a PR.
 Be sure to add our maven to your `build.gradle`:
 ```gradle
 repositories {
-    maven { url = "https://maven.resourcefulbees.com/repository/maven-public/" }
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" }
     <--- other repositories here --->
 }
 ```
@@ -32,7 +32,7 @@ You can then add our mod as a dependency:
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.21.11:3.11.0")
+    implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.21.11:3.11.1")
 }
 ```
 
@@ -40,7 +40,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    implementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.11:3.11.0"
+    implementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.11:3.11.1"
 }
 ```
 
@@ -50,7 +50,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-1.21.11:3.11.0"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-1.21.11:3.11.1"
 }
 ```
 
@@ -58,7 +58,7 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.11:3.11.0"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.11:3.11.1"
 }
 ```
 
@@ -66,6 +66,6 @@ dependencies {
 ```gradle
 dependencies {
     <--- Other dependencies here --->
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-forge-1.21.11:3.11.0"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-forge-1.21.11:3.11.1"
 }
 ```
