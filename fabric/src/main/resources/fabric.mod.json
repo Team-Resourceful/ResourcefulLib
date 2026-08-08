@@ -18,7 +18,7 @@
       "com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabricClient"
     ],
     "main": [
-      "com.teamresourceful.resourcefullib.ResourcefulLib::init"
+      "com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabric"
     ],
     "server": [
       "com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabricServer"
