@@ -22,6 +22,8 @@ public interface FluidProperties {
 
     boolean supportsBoating();
 
+    boolean isWaterLike();
+
     PathType pathType();
 
     PathType adjacentPathType();
@@ -64,6 +66,7 @@ public interface FluidProperties {
         private boolean canExtinguish = false;
         private boolean canConvertToSource = true;
         private boolean supportsBoating = false;
+        private boolean isWaterLike = false;
         private PathType pathType = PathType.WATER;
         private PathType adjacentPathType = PathType.WATER_BORDER;
         private boolean canHydrate = true;
@@ -120,6 +123,11 @@ public interface FluidProperties {
 
         public Builder supportsBoating(boolean supportsBoating) {
             this.supportsBoating = supportsBoating;
+            return this;
+        }
+
+        public Builder isWaterLike(boolean isWaterLike) {
+            this.isWaterLike = isWaterLike;
             return this;
         }
 
@@ -196,7 +204,7 @@ public interface FluidProperties {
         public FluidProperties build() {
             return new ImmutableFluidProperties(
                     motionScale, canPushEntity, canSwim, canDrown, fallDistanceModifier,
-                    canExtinguish, canConvertToSource, supportsBoating,
+                    canExtinguish, canConvertToSource, supportsBoating, isWaterLike,
                     pathType, adjacentPathType, canHydrate, lightLevel, density,
                     temperature, viscosity, rarity, sounds, tickRate, slopeFindDistance,
                     dropOff, explosionResistance, canPlace
