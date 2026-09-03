@@ -1,3 +1,8 @@
+# -----{ 5.0.4 }-----
+
+added convenience method to ResourcefulCreativeModeTab for sorting multiple registries
+fixed missing fluid properties
+
 # -----{ 5.0.3 }-----
 
 Added getOpaqueValue on the Color class and a byte codec in ExtraByteCodecs for WeightCollection
