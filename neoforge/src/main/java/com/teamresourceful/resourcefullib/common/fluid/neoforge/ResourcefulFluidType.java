@@ -16,6 +16,8 @@ public class ResourcefulFluidType extends FluidType {
             properties.canDrown(props.canDrown());
             properties.canExtinguish(props.canExtinguish());
             properties.canHydrate(props.canHydrate());
+            properties.supportsBoating(props.supportsBoating());
+            properties.isWaterLike(props.isWaterLike());
             properties.canPushEntity(props.canPushEntity());
             properties.canSwim(props.canSwim());
             properties.density(props.density());

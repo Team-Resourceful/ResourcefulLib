@@ -14,6 +14,7 @@ public record ImmutableFluidProperties(
         boolean canExtinguish,
         boolean canConvertToSource,
         boolean supportsBoating,
+        boolean isWaterLike,
         PathType pathType,
         PathType adjacentPathType,
         boolean canHydrate,
@@ -29,6 +30,4 @@ public record ImmutableFluidProperties(
         float explosionResistance,
         boolean canPlace
 ) implements FluidProperties {
-
-
 }
