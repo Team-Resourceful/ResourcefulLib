@@ -10,8 +10,7 @@
     "FogRendererMixin",
     "LevelExtractorMixin",
     "LevelRendererMixin",
-    "ScreenEffectRendererMixin",
-    "GameRendererAccessor"
+    "ScreenEffectRendererMixin"
   ],
   "mixins": [
     "BlockOutlineRenderStateMixin",

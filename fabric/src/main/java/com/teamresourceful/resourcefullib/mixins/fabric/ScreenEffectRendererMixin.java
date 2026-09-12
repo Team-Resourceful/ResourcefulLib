@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import com.teamresourceful.resourcefullib.fabric.ResourcefulLibFabricClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -39,6 +40,6 @@ public class ScreenEffectRendererMixin {
             return;
         }
 
-        properties.renderOverlay(((GameRendererAccessor) gameRenderer).resourcefullib$minecraft(), poseStack, submitNodeCollector);
+        properties.renderOverlay(Minecraft.getInstance(), poseStack, submitNodeCollector);
     }
 }
