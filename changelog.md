@@ -1,3 +1,8 @@
+# -----{ 6.0.0 }-----
+
+Update to 26.3
+added convenience method to ResourcefulCreativeModeTab for sorting multiple registries
+
 # -----{ 5.0.4 }-----
 
 added convenience method to ResourcefulCreativeModeTab for sorting multiple registries
