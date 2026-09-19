@@ -5,19 +5,31 @@ import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidPropertie
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
+import net.minecraft.client.renderer.state.level.PlayerRenderState;
+import net.minecraft.core.BlockPos;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4f;
+import org.jspecify.annotations.NonNull;
 
 public record ResourcefulClientFluidType(ClientFluidProperties properties) implements IClientFluidTypeExtensions {
 
     @Override
-    public void renderOverlay(@NotNull Minecraft mc, @NotNull PoseStack poseStack, @NotNull SubmitNodeCollector submitNodeCollector) {
-        this.properties.renderOverlay(mc, poseStack, submitNodeCollector);
+    public void extractOverlay(
+        @NonNull Minecraft minecraft,
+        @NonNull LocalPlayer player,
+        @NonNull PlayerRenderState playerRenderState,
+        @NonNull BlockPos eyePos,
+        float brightness) {
+        playerRenderState.customFluidOverlayRenderer = (_, _, submitNodeCollector, poseStack, _, _, _) -> {
+            this.properties.renderOverlay(minecraft, poseStack, submitNodeCollector);
+            return true;
+        };
     }
 
     @Override

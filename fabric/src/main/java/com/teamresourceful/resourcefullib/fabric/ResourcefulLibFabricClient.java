@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefullib.fabric;
 
 import com.teamresourceful.resourcefullib.ResourcefulLib;
+import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import com.teamresourceful.resourcefullib.client.highlights.HighlightHandler;
 import com.teamresourceful.resourcefullib.client.sysinfo.SystemInfo;
 import com.teamresourceful.resourcefullib.common.ApiProxy;
@@ -8,6 +9,7 @@ import com.teamresourceful.resourcefullib.common.utils.files.GlobalStorage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
@@ -19,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ResourcefulLibFabricClient implements ClientModInitializer {
+
+    public static RenderStateDataKey<ClientFluidProperties> FLUID_DATA_KEY = RenderStateDataKey.create(() -> "Resourceful Lib Client Fluid Properties");
 
     @Override
     public void onInitializeClient() {
