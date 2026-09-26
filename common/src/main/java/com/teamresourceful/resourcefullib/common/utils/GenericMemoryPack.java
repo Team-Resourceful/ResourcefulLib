@@ -5,14 +5,17 @@ import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackMetadataResources;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,6 +23,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class GenericMemoryPack implements PackResources {
 
@@ -108,6 +112,40 @@ public abstract class GenericMemoryPack implements PackResources {
                 Constants.LOGGER.error("Failed to close input stream", e);
             }
         }
+    }
+
+    public Pack.ResourcesSupplier asResourcesSupplier() {
+        return new Pack.ResourcesSupplier() {
+            @Override
+            public @NonNull PackMetadataResources openMetadata(@NonNull PackLocationInfo location) {
+                return new PackMetadataResources() {
+                    @Override
+                    public @NonNull PackLocationInfo location() {
+                        return location;
+                    }
+
+                    @Override
+                    public @Nullable IoSupplier<InputStream> getRootResource(String @NonNull ... files) {
+                        return GenericMemoryPack.this.getRootResource(files);
+                    }
+
+                    @Override
+                    public <T> @Nullable T getMetadataSection(@NonNull MetadataSectionType<T> type) {
+                        return GenericMemoryPack.this.getMetadataSection(type);
+                    }
+
+                    @Override
+                    public void close() {
+                        // Nothing owned by this metadata view.
+                    }
+                };
+            }
+
+            @Override
+            public @NonNull Stream<PackResources> openResources(@NonNull PackLocationInfo location, Pack.@NonNull Metadata metadata) {
+                return Stream.of(GenericMemoryPack.this);
+            }
+        };
     }
 }
 
