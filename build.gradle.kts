@@ -24,6 +24,10 @@ subprojects {
     }
 
     if (platform != Platform.COMMON) {
+        tasks.withType<Jar>().configureEach {
+            archiveBaseName.set("${rootProject.name}-${platform.name.lowercase()}")
+        }
+
         tasks.withType<JavaCompile> {
             val serviceArgs = listOf(
                 "-Xplugin:ServicePlugin",

@@ -79,6 +79,7 @@ jobs:
 
           github-tag: "v${{ steps.properties.outputs.version }}"
           github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+          github-name: "Resourceful Lib ${{ steps.properties.outputs.version }}"
 
           files: ./neoforge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
           name: "[NeoForge] Resourceful Lib ${{ steps.properties.outputs.version }}"
@@ -100,6 +101,7 @@ jobs:
 
           github-tag: "v${{ steps.properties.outputs.version }}"
           github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+          github-name: "Resourceful Lib ${{ steps.properties.outputs.version }}"
 
           files: ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
           name: "[Fabric] Resourceful Lib ${{ steps.properties.outputs.version }}"
