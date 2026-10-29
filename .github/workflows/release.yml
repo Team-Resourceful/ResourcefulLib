@@ -26,22 +26,16 @@ jobs:
   publish-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         with:
-          distribution: 'zulu'
+          distribution: microsoft
           java-version: 25
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          cache: gradle
 
       - name: Set Gradle Perms
         run: chmod +x gradlew
@@ -69,17 +63,13 @@ jobs:
 
       - name: Upload NeoForge Releases (Curse/Modrinth/Github)
         id: forge_release
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3.3.1
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
           curseforge-token: ${{ secrets.CURSE_API_KEY }}
 
           modrinth-id: ${{ vars.MODRINTH_ID }}
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
-
-          github-tag: "v${{ steps.properties.outputs.version }}"
-          github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
-          github-name: "Resourceful Lib ${{ steps.properties.outputs.version }}"
 
           files: ./neoforge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
           name: "[NeoForge] Resourceful Lib ${{ steps.properties.outputs.version }}"
@@ -91,7 +81,7 @@ jobs:
 
       - name: Upload Fabric Releases (Curse/Modrinth/Github)
         id: fabric_release
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3.3.1
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
           curseforge-token: ${{ secrets.CURSE_API_KEY }}
@@ -99,15 +89,30 @@ jobs:
           modrinth-id: ${{ vars.MODRINTH_ID }}
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
 
-          github-tag: "v${{ steps.properties.outputs.version }}"
-          github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
-          github-name: "Resourceful Lib ${{ steps.properties.outputs.version }}"
-
           files: ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
           name: "[Fabric] Resourceful Lib ${{ steps.properties.outputs.version }}"
           version: ${{ steps.properties.outputs.version }}
           changelog-file: changelog.md
           loaders: fabric
+          game-versions: ${{ steps.properties.outputs.mcVersion }}
+          version-resolver: exact
+
+      - name: Upload GitHub Release
+        uses: Kir-Antipov/mc-publish@v3.3.1
+        with:
+          github-tag: "v${{ steps.properties.outputs.version }}"
+          github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+
+          files: |
+            ./neoforge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
+            ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
+
+          name: "Resourceful Lib ${{ steps.properties.outputs.version }}"
+          version: ${{ steps.properties.outputs.version }}
+          changelog-file: changelog.md
+          loaders: |
+            neoforge
+            fabric
           game-versions: ${{ steps.properties.outputs.mcVersion }}
           version-resolver: exact
 
