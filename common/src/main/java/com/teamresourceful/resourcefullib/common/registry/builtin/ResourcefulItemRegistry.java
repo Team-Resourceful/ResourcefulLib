@@ -33,11 +33,19 @@ public class ResourcefulItemRegistry implements ResourcefulRegistry<Item> {
     }
 
     public <I extends Item> ItemLikeEntry<I> register(String id, Function<Item.Properties, I> factory, Supplier<Item.Properties> getter) {
-        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(this.namespace, id));
+        return register(Identifier.fromNamespaceAndPath(namespace, id), factory, getter);
+    }
+
+    public <I extends Item> ItemLikeEntry<I> register(Identifier id, Function<Item.Properties, I> factory, Supplier<Item.Properties> getter) {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
         return this.register(id, () -> factory.apply(getter.get().setId(key)));
     }
 
     public ItemLikeEntry<BlockItem> register(String id, Supplier<? extends Block> supplier, Supplier<Item.Properties> getter) {
+        return register(id, properties -> new BlockItem(supplier.get(), properties.useBlockDescriptionPrefix()), getter);
+    }
+
+    public ItemLikeEntry<BlockItem> register(Identifier id, Supplier<? extends Block> supplier, Supplier<Item.Properties> getter) {
         return register(id, properties -> new BlockItem(supplier.get(), properties.useBlockDescriptionPrefix()), getter);
     }
 
@@ -49,6 +57,20 @@ public class ResourcefulItemRegistry implements ResourcefulRegistry<Item> {
     @Override
     public <I extends Item> ItemLikeEntry<I> register(String id, Supplier<I> supplier) {
         return new ItemLikeEntry<>(this.registry.register(id, supplier));
+    }
+
+    @Override
+    public <I extends Item> ItemLikeEntry<I> register(Identifier id, Supplier<I> supplier) {
+        return new ItemLikeEntry<>(
+                this.registry.register(id, supplier)
+        );
+    }
+
+    @Override
+    public ItemLikeHolderEntry<Item> registerHolder(Identifier id, Supplier<Item> supplier) {
+        return new ItemLikeHolderEntry<>(
+                this.registry.registerHolder(id, supplier)
+        );
     }
 
     @Override

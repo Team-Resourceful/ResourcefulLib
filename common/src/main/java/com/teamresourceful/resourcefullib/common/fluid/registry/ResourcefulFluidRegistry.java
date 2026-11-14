@@ -28,13 +28,41 @@ public interface ResourcefulFluidRegistry extends ResourcefulRegistry<FluidData>
     @ApiStatus.Internal
     @Deprecated
     @Override
+    default <I extends FluidData> RegistryEntry<I> register(Identifier id, Supplier<I> supplier) {
+        throw new UnsupportedOperationException("Use register(Identifier, FluidProperties.Builder) instead.");
+    }
+
+    /**
+     * @hidden use {@link #register(String, FluidProperties.Builder)} instead
+     */
+    @ApiStatus.Internal
+    @Deprecated
+    @Override
     default HolderRegistryEntry<FluidData> registerHolder(String id, Supplier<FluidData> supplier) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Use register(String, FluidProperties.Builder) instead.");
     }
 
-    RegistryEntry<FluidData> register(String id, FluidProperties properties);
+    /**
+     * @hidden use {@link #register(String, FluidProperties.Builder)} instead
+     */
+    @ApiStatus.Internal
+    @Deprecated
+    @Override
+    default HolderRegistryEntry<FluidData> registerHolder(Identifier id, Supplier<FluidData> supplier) {
+        throw new UnsupportedOperationException("Use register(Identifier, FluidProperties.Builder) instead.");
+    }
+
+    default RegistryEntry<FluidData> register(String id, FluidProperties properties) {
+        return register(Identifier.fromNamespaceAndPath(namespace(), id), properties);
+    }
+
+    RegistryEntry<FluidData> register(Identifier id, FluidProperties properties);
 
     default RegistryEntry<FluidData> register(String id, FluidProperties.Builder builder) {
+        return register(id, builder.build());
+    }
+
+    default RegistryEntry<FluidData> register(Identifier id, FluidProperties.Builder builder) {
         return register(id, builder.build());
     }
 

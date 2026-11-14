@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefullib.common.registry;
 
+import net.minecraft.resources.Identifier;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 
@@ -23,7 +25,17 @@ public class ResourcefulRegistryChild<T> implements ResourcefulRegistry<T> {
     }
 
     @Override
+    public <I extends T> RegistryEntry<I> register(Identifier id, Supplier<I> supplier) {
+        return this.entries.add(parent.register(id, supplier));
+    }
+
+    @Override
     public HolderRegistryEntry<T> registerHolder(String id, Supplier<T> supplier) {
+        return this.entries.add(parent.registerHolder(id, supplier));
+    }
+
+    @Override
+    public HolderRegistryEntry<T> registerHolder(Identifier id, Supplier<T> supplier) {
         return this.entries.add(parent.registerHolder(id, supplier));
     }
 

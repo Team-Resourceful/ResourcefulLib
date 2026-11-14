@@ -33,10 +33,19 @@ public class ResourcefulClientFluidRegistry implements ResourcefulRegistry<Clien
         return register(id, builder::build);
     }
 
+    public RegistryEntry<ClientFluidProperties> register(Identifier id, ClientFluidProperties.Builder builder) {
+        return register(id, builder::build);
+    }
+
     @Override
     public <I extends ClientFluidProperties> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-        GLOBAL_REGISTRY.put(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get());
-        return entries.add(new Entry<>(Identifier.fromNamespaceAndPath(this.modid, id), supplier.get()));
+        return register(Identifier.fromNamespaceAndPath(this.modid, id), supplier);
+    }
+
+    public <I extends ClientFluidProperties> RegistryEntry<I> register(Identifier id, Supplier<I> supplier) {
+        I properties = supplier.get();
+        GLOBAL_REGISTRY.put(id, properties);
+        return entries.add(new Entry<>(id, properties));
     }
 
     /**

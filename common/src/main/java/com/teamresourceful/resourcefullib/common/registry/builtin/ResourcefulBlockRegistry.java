@@ -31,7 +31,11 @@ public class ResourcefulBlockRegistry implements ResourcefulRegistry<Block> {
     }
 
     public <I extends Block> ItemLikeEntry<I> register(String id, Function<Block.Properties, I> factory, Supplier<Block.Properties> getter) {
-        var key = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(this.namespace, id));
+        return this.register(Identifier.fromNamespaceAndPath(this.namespace, id), factory, getter);
+    }
+
+    public <I extends Block> ItemLikeEntry<I> register(Identifier id, Function<Block.Properties, I> factory, Supplier<Block.Properties> getter) {
+        ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
         return this.register(id, () -> factory.apply(getter.get().setId(key)));
     }
 
@@ -43,6 +47,16 @@ public class ResourcefulBlockRegistry implements ResourcefulRegistry<Block> {
     @Override
     public <I extends Block> ItemLikeEntry<I> register(String id, Supplier<I> supplier) {
         return new ItemLikeEntry<>(this.registry.register(id, supplier));
+    }
+
+    @Override
+    public <I extends Block> ItemLikeEntry<I> register(Identifier id, Supplier<I> supplier) {
+        return new ItemLikeEntry<>(this.registry.register(id, supplier));
+    }
+
+    @Override
+    public ItemLikeHolderEntry<Block> registerHolder(Identifier id, Supplier<Block> supplier) {
+        return new ItemLikeHolderEntry<>(this.registry.registerHolder(id, supplier));
     }
 
     @Override
